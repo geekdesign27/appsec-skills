@@ -1,0 +1,55 @@
+{
+  "expectations": [
+    {
+      "text": "La porte G2 et la cible locale (127.0.0.1) sont vérifiées avant de lancer",
+      "passed": true,
+      "evidence": "G2 au journal, labo_verifier vert, 4 contrôles de cohérence verts"
+    },
+    {
+      "text": "Des requêtes ont réellement été envoyées au labo local (matrice exécutée), sans hôte non local",
+      "passed": true,
+      "evidence": "Matrice + tests manuels sur 127.0.0.1:54321"
+    },
+    {
+      "text": "La lecture inter-entreprises est démontrée par un marqueur SECRET-TENANT de l'autre entreprise",
+      "passed": true,
+      "evidence": "Marqueurs SECRET-TENANT-B lus (P-001, P-004)"
+    },
+    {
+      "text": "Au moins une écriture inter-entreprises (création, modification, suppression ou déplacement de tenant) est démontrée",
+      "passed": true,
+      "evidence": "Auto-promotion admin et inscription admin chez B (P-119, P-083)"
+    },
+    {
+      "text": "chantier-pro/security/06-dynamique/ contient les résultats avec un statut par contrôle ou par cas de test",
+      "passed": true,
+      "evidence": "resultats.md : 6 échecs, 1 réussi, 3 bloqués"
+    },
+    {
+      "text": "Aucun jeton JWT complet n'apparaît dans les livrables (caviardés)",
+      "passed": true,
+      "evidence": "Jetons caviardés"
+    },
+    {
+      "text": "La réponse rappelle de remettre le labo à zéro (labo.sh reset) après les écritures de test",
+      "passed": true,
+      "evidence": "Reset demandé"
+    },
+    {
+      "text": "La réponse passe le relais à appsec-rapports (ou à la cotation des findings)",
+      "passed": true,
+      "evidence": "Relais appsec-rapports"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  }
+}
