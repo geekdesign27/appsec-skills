@@ -1,0 +1,17 @@
+{
+  "eval_name": "findings-depuis-resultats",
+  "prompt": "/finding le lot 1 de chantier-pro est fini (dossier ./chantier-pro, résultats dans security/06-dynamique). Transforme ça en fiches finding cotées et priorisées, je veux savoir ce qui bloque la mise en prod.\n\nInput files: chantier-pro/",
+  "assertions": [
+    "chantier-pro/security/07-findings/ contient des fiches F-xxx.md au format partagé et finding_tool.py valider ne renvoie aucune erreur",
+    "Chaque score CVSS 4.0 écrit correspond au calcul du vecteur écrit",
+    "La lecture des accidents par tous (using true) et l'escalade via membres sans RLS sont des findings Confirmé en P0 ou P1",
+    "Les points non prouvés (Realtime, export-pdf, bloqués) ne sont pas présentés comme confirmés",
+    "Une cause racine donne un finding (pas une fiche par test ou par identité)",
+    "Les données de santé sont prises en compte dans la cotation ou la priorité (CR:H ou justification)",
+    "Un tableau de synthèse (index.md ou équivalent) trie les findings par priorité",
+    "La réponse donne un verdict sur la mise en prod",
+    "Aucun jeton ou secret en clair dans les fiches",
+    "La réponse ne contient aucun tiret cadratin (—)",
+    "Aucun vecteur ne fixe la métrique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseigné que sur une preuve publique ou un renseignement de menace, ou reste non défini"
+  ]
+}

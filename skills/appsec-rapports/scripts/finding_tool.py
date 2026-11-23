@@ -128,7 +128,7 @@ def cmd_valider(a):
                 err.append(f"section manquante : {s}")
         if not re.search(r"\bM-\d{3}\b", t):
             err.append("pas de renvoi à une mesure M-xxx")
-        if c.get("Statut") == "Confirmé" and not re.search(r"\bTC-[A-Z]+-\d{3}\b", c.get("Tests", "")):
+        if c.get("Statut") == "Confirmé" and not re.search(r"\bTC-[A-Z0-9]+-\d{2,3}\b", c.get("Tests", "")):
             err.append("finding confirmé sans cas de test TC-xxx")
         for x in re.findall(r"v5\.0\.0-(\d+\.\d+\.\d+)", t):
             if asvs_ok is not None and "V" + x not in asvs_ok:

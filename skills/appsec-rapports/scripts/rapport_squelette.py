@@ -94,7 +94,9 @@ def main():
     cov = couverture(sec)
     T = tests(sec)
     try:
-        sha = subprocess.run(["git", "-C", R, "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip() or "<commit>"
+        top = subprocess.run(["git", "-C", R, "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+        sha = (subprocess.run(["git", "-C", R, "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
+               if top and os.path.realpath(top) == os.path.realpath(R) else "") or "<commit de l'app : dépôt git absent>"
     except Exception:
         sha = "<commit>"
     cad = open(os.path.join(sec, "00-cadrage.md"), encoding="utf-8").read() if os.path.exists(os.path.join(sec, "00-cadrage.md")) else ""

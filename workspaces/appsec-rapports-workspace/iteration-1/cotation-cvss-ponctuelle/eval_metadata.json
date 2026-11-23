@@ -7,6 +7,7 @@
     "Les métriques clés sont justifiées (réseau, compte simple requis, confidentialité élevée, autres entreprises)",
     "La sensibilité des données de santé est prise en compte (CR:H ou justification explicite)",
     "Une priorité P0 ou P1 est proposée et justifiée par le contexte",
-    "La réponse ne contient aucun tiret cadratin (—)"
+    "La réponse ne contient aucun tiret cadratin (—)",
+    "Aucun vecteur ne fixe la métrique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseigné que sur une preuve publique ou un renseignement de menace, ou reste non défini"
   ]
 }

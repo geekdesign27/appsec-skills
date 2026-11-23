@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "chantier-pro/security/07-findings/ contient des fiches F-xxx.md au format partagé et finding_tool.py valider ne renvoie aucune erreur",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Chaque score CVSS 4.0 écrit correspond au calcul du vecteur écrit",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "La lecture des accidents par tous (using true) et l'escalade via membres sans RLS sont des findings Confirmé en P0 ou P1",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Les points non prouvés (Realtime, export-pdf, bloqués) ne sont pas présentés comme confirmés",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Une cause racine donne un finding (pas une fiche par test ou par identité)",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Les données de santé sont prises en compte dans la cotation ou la priorité (CR:H ou justification)",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Un tableau de synthèse (index.md ou équivalent) trie les findings par priorité",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "La réponse donne un verdict sur la mise en prod",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Aucun jeton ou secret en clair dans les fiches",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    },
+    {
+      "text": "Aucun vecteur ne fixe la métrique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseigné que sur une preuve publique ou un renseignement de menace, ou reste non défini",
+      "passed": true,
+      "evidence": "Vérifié (validateur, vecteurs sans E, fichiers produits)"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  }
+}

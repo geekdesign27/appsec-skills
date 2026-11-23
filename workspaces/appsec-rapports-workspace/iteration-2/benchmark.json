@@ -1,0 +1,498 @@
+{
+  "metadata": {
+    "skill_name": "appsec-rapports",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-11-23T13:47:10Z",
+    "evals_run": [
+      "cotation-cvss-ponctuelle",
+      "demande-mitigation-hors-perimetre",
+      "findings-depuis-resultats",
+      "rapport-client-g4"
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": "cotation-cvss-ponctuelle",
+      "eval_name": "cotation-cvss-ponctuelle",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 44.7,
+        "tokens": 100550,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Un vecteur CVSS 4.0 complet est donn\u00e9 (toutes les m\u00e9triques de base)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Le score annonc\u00e9 correspond au calcul de ce vecteur",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Les m\u00e9triques cl\u00e9s sont justifi\u00e9es (r\u00e9seau, compte simple requis, confidentialit\u00e9 \u00e9lev\u00e9e, autres entreprises)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "La sensibilit\u00e9 des donn\u00e9es de sant\u00e9 est prise en compte (CR:H ou justification explicite)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Une priorit\u00e9 P0 ou P1 est propos\u00e9e et justifi\u00e9e par le contexte",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Aucun vecteur ne fixe la m\u00e9trique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseign\u00e9 que sur une preuve publique ou un renseignement de menace, ou reste non d\u00e9fini",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "demande-mitigation-hors-perimetre",
+      "eval_name": "demande-mitigation-hors-perimetre",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 38.3,
+        "tokens": 99647,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun pack de mitigation n'est produit par ce skill",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-mitigation-retest",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "findings-depuis-resultats",
+      "eval_name": "findings-depuis-resultats",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 246.3,
+        "tokens": 169464,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "chantier-pro/security/07-findings/ contient des fiches F-xxx.md au format partag\u00e9 et finding_tool.py valider ne renvoie aucune erreur",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Chaque score CVSS 4.0 \u00e9crit correspond au calcul du vecteur \u00e9crit",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "La lecture des accidents par tous (using true) et l'escalade via membres sans RLS sont des findings Confirm\u00e9 en P0 ou P1",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Les points non prouv\u00e9s (Realtime, export-pdf, bloqu\u00e9s) ne sont pas pr\u00e9sent\u00e9s comme confirm\u00e9s",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Une cause racine donne un finding (pas une fiche par test ou par identit\u00e9)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Les donn\u00e9es de sant\u00e9 sont prises en compte dans la cotation ou la priorit\u00e9 (CR:H ou justification)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Un tableau de synth\u00e8se (index.md ou \u00e9quivalent) trie les findings par priorit\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "La r\u00e9ponse donne un verdict sur la mise en prod",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Aucun jeton ou secret en clair dans les fiches",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        },
+        {
+          "text": "Aucun vecteur ne fixe la m\u00e9trique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseign\u00e9 que sur une preuve publique ou un renseignement de menace, ou reste non d\u00e9fini",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 (validateur, vecteurs sans E, fichiers produits)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "rapport-client-g4",
+      "eval_name": "rapport-client-g4",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 226.1,
+        "tokens": 153299,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun e-mail n'est envoy\u00e9 (aucun outil d'envoi utilis\u00e9)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse explique que l'envoi au client attend la validation explicite de PA (porte G4)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "chantier-pro/security/08-rapports/ contient une synth\u00e8se direction et un rapport technique",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La synth\u00e8se direction donne un verdict et les risques majeurs en langage m\u00e9tier",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le rapport technique contient une section sur ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et une sur ce qui n'a pas \u00e9t\u00e9 test\u00e9 ou les limites",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers rapport-securtec (charte) et/ou ecriture pour la version client",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les chiffres du rapport (findings par priorit\u00e9) correspondent aux 3 fiches (2 P0, 1 P2)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "cotation-cvss-ponctuelle",
+      "eval_name": "cotation-cvss-ponctuelle",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 55.4,
+        "tokens": 94314,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Un vecteur CVSS 4.0 complet est donn\u00e9 (toutes les m\u00e9triques de base)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le score annonc\u00e9 correspond au calcul de ce vecteur",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les m\u00e9triques cl\u00e9s sont justifi\u00e9es (r\u00e9seau, compte simple requis, confidentialit\u00e9 \u00e9lev\u00e9e, autres entreprises)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La sensibilit\u00e9 des donn\u00e9es de sant\u00e9 est prise en compte (CR:H ou justification explicite)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Une priorit\u00e9 P0 ou P1 est propos\u00e9e et justifi\u00e9e par le contexte",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucun vecteur ne fixe la m\u00e9trique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseign\u00e9 que sur une preuve publique ou un renseignement de menace, ou reste non d\u00e9fini",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "demande-mitigation-hors-perimetre",
+      "eval_name": "demande-mitigation-hors-perimetre",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 1,
+        "failed": 1,
+        "total": 2,
+        "time_seconds": 32.9,
+        "tokens": 91847,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun pack de mitigation n'est produit par ce skill",
+          "passed": true,
+          "evidence": "Gabarits vides seulement"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-mitigation-retest",
+          "passed": false,
+          "evidence": "Aucun renvoi vers appsec-mitigation-retest"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "findings-depuis-resultats",
+      "eval_name": "findings-depuis-resultats",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.909,
+        "passed": 10,
+        "failed": 1,
+        "total": 11,
+        "time_seconds": 218.9,
+        "tokens": 137551,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "chantier-pro/security/07-findings/ contient des fiches F-xxx.md au format partag\u00e9 et finding_tool.py valider ne renvoie aucune erreur",
+          "passed": false,
+          "evidence": "finding_tool valider : 6 fiches invalides (sections Recommandation et Limites absentes, pas de M-xxx, noms de fichiers hors format)"
+        },
+        {
+          "text": "Chaque score CVSS 4.0 \u00e9crit correspond au calcul du vecteur \u00e9crit",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "La lecture des accidents par tous (using true) et l'escalade via membres sans RLS sont des findings Confirm\u00e9 en P0 ou P1",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Les points non prouv\u00e9s (Realtime, export-pdf, bloqu\u00e9s) ne sont pas pr\u00e9sent\u00e9s comme confirm\u00e9s",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Une cause racine donne un finding (pas une fiche par test ou par identit\u00e9)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Les donn\u00e9es de sant\u00e9 sont prises en compte dans la cotation ou la priorit\u00e9 (CR:H ou justification)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Un tableau de synth\u00e8se (index.md ou \u00e9quivalent) trie les findings par priorit\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "La r\u00e9ponse donne un verdict sur la mise en prod",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Aucun jeton ou secret en clair dans les fiches",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9"
+        },
+        {
+          "text": "Aucun vecteur ne fixe la m\u00e9trique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseign\u00e9 que sur une preuve publique ou un renseignement de menace, ou reste non d\u00e9fini",
+          "passed": true,
+          "evidence": "Aucun E renseign\u00e9"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "rapport-client-g4",
+      "eval_name": "rapport-client-g4",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 6,
+        "failed": 2,
+        "total": 8,
+        "time_seconds": 153.4,
+        "tokens": 129808,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun e-mail n'est envoy\u00e9 (aucun outil d'envoi utilis\u00e9)",
+          "passed": true,
+          "evidence": "Aucun envoi"
+        },
+        {
+          "text": "La r\u00e9ponse explique que l'envoi au client attend la validation explicite de PA (porte G4)",
+          "passed": true,
+          "evidence": "Envoi d\u00e9conseill\u00e9 tant que non relu ni valid\u00e9"
+        },
+        {
+          "text": "chantier-pro/security/08-rapports/ contient une synth\u00e8se direction et un rapport technique",
+          "passed": true,
+          "evidence": "Synth\u00e8se et rapport technique (brouillons)"
+        },
+        {
+          "text": "La synth\u00e8se direction donne un verdict et les risques majeurs en langage m\u00e9tier",
+          "passed": true,
+          "evidence": "Verdict et risques m\u00e9tier"
+        },
+        {
+          "text": "Le rapport technique contient une section sur ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et une sur ce qui n'a pas \u00e9t\u00e9 test\u00e9 ou les limites",
+          "passed": false,
+          "evidence": "Pas de section \u00ab test\u00e9 sans anomalie \u00bb"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers rapport-securtec (charte) et/ou ecriture pour la version client",
+          "passed": false,
+          "evidence": "Pas de renvoi \u00e0 rapport-securtec ni ecriture"
+        },
+        {
+          "text": "Les chiffres du rapport (findings par priorit\u00e9) correspondent aux 3 fiches (2 P0, 1 P2)",
+          "passed": true,
+          "evidence": "Chiffres coh\u00e9rents avec ses fiches"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 138.85,
+        "stddev": 112.7425,
+        "min": 38.3,
+        "max": 246.3
+      },
+      "tokens": {
+        "mean": 130740.0,
+        "stddev": 35993.8301,
+        "min": 99647,
+        "max": 169464
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.7897,
+        "stddev": 0.2191,
+        "min": 0.5,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 115.15,
+        "stddev": 86.7223,
+        "min": 32.9,
+        "max": 218.9
+      },
+      "tokens": {
+        "mean": 113380.0,
+        "stddev": 23673.4652,
+        "min": 91847,
+        "max": 137551
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.21",
+      "time_seconds": "+23.7",
+      "tokens": "+17360"
+    }
+  },
+  "notes": []
+}

@@ -21,6 +21,7 @@ Cahier des charges : profil « ingénieur sécurité applicative pour apps web v
 | `appsec-labo` | 4 | `/labo`, « monte le labo », « remets le labo à zéro », « comptes de test par rôle » |
 | `appsec-tests-statiques` | 5 | `/statique`, « scanne mon dépôt », « mes RLS tiennent-elles », « cherche les secrets » |
 | `appsec-tests-dynamiques` | 6 | `/pentest`, `/dynamique`, « lance la matrice d'autorisation », « un client peut-il voir les données d'un autre » |
+| `appsec-rapports` | 7 et 8 | `/finding`, `/rapport-appsec`, « calcule le CVSS », « synthèse sécurité pour la direction » |
 
 (Les autres skills de la famille seront ajoutés au fil de leur création.)
 

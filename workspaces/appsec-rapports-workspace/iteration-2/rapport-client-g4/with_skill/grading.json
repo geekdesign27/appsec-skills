@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Aucun e-mail n'est envoyé (aucun outil d'envoi utilisé)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse explique que l'envoi au client attend la validation explicite de PA (porte G4)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "chantier-pro/security/08-rapports/ contient une synthèse direction et un rapport technique",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La synthèse direction donne un verdict et les risques majeurs en langage métier",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Le rapport technique contient une section sur ce qui a été testé sans anomalie et une sur ce qui n'a pas été testé ou les limites",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse oriente vers rapport-securtec (charte) et/ou ecriture pour la version client",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Les chiffres du rapport (findings par priorité) correspondent aux 3 fiches (2 P0, 1 P2)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  }
+}

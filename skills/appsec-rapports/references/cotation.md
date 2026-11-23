@@ -26,8 +26,8 @@ Créer la fiche : `python3 scripts/finding_tool.py nouveau security/07-findings 
 ## 2. Coter avec CVSS 4.0
 
 1. Choisir les métriques de base à partir de **ce qui a été démontré**, pas du pire imaginable. L'aide-mémoire : `python3 scripts/cvss_calc.py --metriques`.
-2. Ajouter la métrique de menace `E` quand on la connaît (PoC dans le labo = au moins P).
-3. Ajouter l'environnement quand il est connu : `CR:H` pour des données sensibles nLPD (santé), `IR`/`AR` selon l'enjeu.
+2. **Ne pas renseigner `E` par défaut** (E:X, que le calcul traite comme le pire cas A). Selon la spécification FIRST, `E:P` exige un code de preuve de concept **publiquement disponible** : une preuve faite dans notre labo ne suffit pas. `E:A` exige des attaques signalées. `E:U` (rien de public) est techniquement applicable à une faille propre à l'app, mais il fait fortement baisser le score : ne l'utiliser qu'avec l'accord de PA, en le disant dans la fiche.
+3. Environnement : `CR`, `IR`, `AR` non renseignés valent déjà « élevé » (H) dans le calcul. Écrire `CR:H` pour des données sensibles nLPD **documente** le contexte sans changer le score. Ce qui fait bouger le score, c'est d'abaisser une exigence (`CR:M` ou `CR:L`) pour des données réellement peu sensibles : le justifier.
 4. Calculer : `python3 scripts/cvss_calc.py "<vecteur>"`. Recopier dans la fiche **le vecteur complet et le score calculés**, avec la nomenclature (CVSS-B, BT, BE, BTE).
 5. Justifier en une ligne chaque métrique discutable dans la section Impact (« PR:L : un compte de n'importe quel tenant suffit »).
 
@@ -47,7 +47,7 @@ Points de départ, à adapter au cas démontré :
 | XSS stockée | UI:P ou UI:A, impact sur le système suivant (SC/SI) | |
 | En-têtes manquants, durcissement | Souvent Info ou P3 | Pas de CVSS gonflé |
 
-Données de santé ou autres données sensibles nLPD : ajouter `CR:H` (environnement), et le mentionner dans l'Impact.
+Données de santé ou autres données sensibles nLPD : écrire `CR:H` (pour documenter, score inchangé) et le dire dans l'Impact. La sensibilité pèse surtout sur la **priorité** (section 4).
 
 ## 4. De la sévérité à la priorité
 

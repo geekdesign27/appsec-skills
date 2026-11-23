@@ -90,9 +90,10 @@ Plan de test exécuté (`03-plan.yaml`), résultats bruts (`05-statique/`, `06-d
 
 ## 6. Rapport pour un client (porte G4)
 
-1. Produire d'abord les rapports internes ci-dessus.
-2. Passer le style par le skill `ecriture`.
-3. Mettre à la charte SecurTec avec `rapport-securtec` (ou `securtec-documents`) : ce skill-là produit le Word et le PDF.
-4. **Porte G4** : ne rien envoyer à un tiers sans la validation explicite de PA, notée au journal. Vérifier qu'aucune preuve ne contient de secret ou de donnée réelle.
-5. Si le rapport engage SecurTec (attestation, conclusions de conformité), faire relire par `juriste-suisse`.
-6. Un rapport de tests internes en boîte grise n'est pas un pentest tiers indépendant : le dire si le client en a besoin pour un RSSI.
+1. **Vérifier qui est le destinataire** avant d'écrire pour lui : propriétaire de l'app (il a signé les règles d'engagement) ou simple client d'une plateforme multi-tenant ? Un client de la plateforme ne reçoit jamais le détail des failles qui exposent les autres clients, surtout avant correction. En cas de doute, demander à PA et le noter au journal.
+2. Produire d'abord les rapports internes ci-dessus.
+3. Passer le style par le skill `ecriture`.
+4. Mettre à la charte SecurTec avec `rapport-securtec` (ou `securtec-documents`) : ce skill-là produit le Word et le PDF.
+5. **Porte G4** : ne rien envoyer à un tiers sans la validation explicite de PA, notée au journal. Vérifier qu'aucune preuve ne contient de secret ou de donnée réelle.
+6. Si le rapport engage SecurTec (attestation, conclusions de conformité), faire relire par `juriste-suisse`.
+7. Un rapport de tests internes en boîte grise n'est pas un pentest tiers indépendant : le dire si le client en a besoin pour un RSSI.

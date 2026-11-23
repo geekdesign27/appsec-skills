@@ -23,12 +23,15 @@ AIDE = """Métriques de base (exploitabilité)
   UI  interaction            N aucune | P passive | A active (la victime doit agir)
 Impact sur le système vulnérable (l'app)          VC VI VA   H élevé | L faible | N aucun
 Impact sur les systèmes suivants (autres tenants, SI) SC SI SA H | L | N   (SI/SA : S = sécurité des personnes, en env.)
-Menace  E  exploit : A attaqué/PoC public fiable | P PoC | U non signalé | X non défini (= A, pire cas)
-Environnement  CR IR AR exigences C/I/D : H | M | L ;  MAV, MAC, MAT, MPR, MUI, MVC, MVI, MVA, MSC, MSI, MSA (métriques modifiées)
+Menace  E  X non défini (défaut, calculé comme A) | A attaques signalées | P PoC PUBLIC disponible | U rien de public
+           Une preuve faite dans notre labo ne justifie PAS E:P (FIRST exige un code public). Par défaut : ne pas renseigner E.
+Environnement  CR IR AR exigences C/I/D : X (défaut, calculé comme H) | H | M | L
+           CR:H documente des données sensibles sans changer le score ; CR:M ou CR:L l'abaissent (à justifier).
+           MAV, MAC, MAT, MPR, MUI, MVC, MVI, MVA, MSC, MSI, MSA : métriques modifiées
 Repères pour les apps de PA (à justifier dans chaque finding) :
   - Lecture inter-tenant par API avec un compte simple : AV:N/AC:L/AT:N/PR:L/UI:N, VC:H (données d'un autre client).
   - Même chose sans compte (clé publishable seule) : PR:N.
-  - Données de santé (nLPD sensibles) : CR:H dans l'environnement.
+  - Données de santé (nLPD sensibles) : CR:H (documente, score inchangé) ; la sensibilité joue surtout sur la priorité.
   - XSS stockée : UI:P ou UI:A selon le déclenchement ; impact surtout sur le système suivant (navigateur) SC/SI.
 """
 

@@ -11,6 +11,7 @@
     "Un tableau de synthèse (index.md ou équivalent) trie les findings par priorité",
     "La réponse donne un verdict sur la mise en prod",
     "Aucun jeton ou secret en clair dans les fiches",
-    "La réponse ne contient aucun tiret cadratin (—)"
+    "La réponse ne contient aucun tiret cadratin (—)",
+    "Aucun vecteur ne fixe la métrique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseigné que sur une preuve publique ou un renseignement de menace, ou reste non défini"
   ]
 }

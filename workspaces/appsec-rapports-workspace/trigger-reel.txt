@@ -1,0 +1,21 @@
+OK  attendu=oui taux=1.00 autres=[] | /finding transforme les échecs de la matrice de prevens en fiches find
+OK  attendu=oui taux=1.00 autres=[] | calcule le CVSS 4.0 de la fuite inter-tenant de flameup : un membre li
+OK  attendu=oui taux=1.00 autres=[] | quelle priorité tu mettrais à ce bucket public de photos d'accidents t
+OK  attendu=oui taux=1.00 autres=[] | /rapport-appsec fais le rapport de la mission sécu de cap5km, synthèse
+OK  attendu=oui taux=1.00 autres=[] | rédige la fiche finding pour la clé secrète trouvée dans l'historique 
+KO  attendu=oui taux=0.33 autres=[] | fais-moi la synthèse sécurité pour la direction de la commune, 2 pages
+OK  attendu=oui taux=1.00 autres=[] | cote ces 4 failles en cvss 4 et trie-les par priorité, voilà les résul
+OK  attendu=oui taux=1.00 autres=[] | les findings de suivi-sante sont prêts, fais le rapport technique avec
+OK  attendu=non taux=0.00 autres=[] | c'est quoi la différence entre CVSS 3.1 et CVSS 4.0, en gros ?
+OK  attendu=non taux=0.00 autres=['anthropic-skills:rapport-securtec'] | rédige-moi un rapport SecurTec d'avis sécurité sur l'échafaudage du ch
+OK  attendu=non taux=0.00 autres=[] | prépare le pack de mitigation et le prompt pour l'IA de dev à partir d
+OK  attendu=non taux=0.00 autres=['appsec-tests-dynamiques'] | lance la matrice d'autorisation sur le labo de prevens
+OK  attendu=non taux=0.00 autres=[] | corrige la policy RLS de la table accidents qui laisse tout le monde l
+OK  attendu=non taux=0.00 autres=['anthropic-skills:analyse-8d-accident'] | fais un rapport d'accident 8D pour la chute dans l'atelier de Bulle
+OK  attendu=non taux=0.00 autres=['appsec-tests-statiques'] | scanne le dépôt de auditapp pour trouver les secrets
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | /appsec démarre une mission sur evacecole
+OK  attendu=non taux=0.00 autres=[] | écris le plan de retest et intègre les tests pgTAP en CI pour les corr
+OK  attendu=non taux=0.00 autres=['anthropic-skills:bibliotheque-diapositives'] | fais-moi une présentation powerpoint SecurTec sur la sécurité des apps
+OK  attendu=non taux=0.00 autres=['anthropic-skills:email-redaction-pa'] | rédige un mail à mon client pour lui dire que l'audit est fini et qu'o
+OK  attendu=non taux=0.00 autres=[] | explique-moi ce qu'est une RLS supabase avec un exemple simple
+Score : 19/20

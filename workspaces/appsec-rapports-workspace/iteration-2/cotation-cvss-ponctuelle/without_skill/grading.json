@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Un vecteur CVSS 4.0 complet est donné (toutes les métriques de base)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Le score annoncé correspond au calcul de ce vecteur",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Les métriques clés sont justifiées (réseau, compte simple requis, confidentialité élevée, autres entreprises)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La sensibilité des données de santé est prise en compte (CR:H ou justification explicite)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Une priorité P0 ou P1 est proposée et justifiée par le contexte",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Aucun vecteur ne fixe la métrique E (P, A ou U) sur la base d'une preuve faite dans le labo : E n'est renseigné que sur une preuve publique ou un renseignement de menace, ou reste non défini",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}

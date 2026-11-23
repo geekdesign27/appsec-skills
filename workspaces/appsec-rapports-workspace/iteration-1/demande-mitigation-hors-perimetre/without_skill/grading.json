@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "Aucun pack de mitigation n'est produit par ce skill",
+      "passed": true,
+      "evidence": "Gabarits vides seulement"
+    },
+    {
+      "text": "La réponse oriente vers appsec-mitigation-retest",
+      "passed": false,
+      "evidence": "Aucun renvoi vers appsec-mitigation-retest"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  }
+}
