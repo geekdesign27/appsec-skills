@@ -3,4 +3,4 @@ name: depannage-cli-v3
 context:
   scaffold_script: place-files.sh
 expected_outcome: |
-  Diagnostique la CLI v3 : remplace [inbucket] par [local_smtp] (Mailpit), passe major_version à 14 ou plus (idéalement aligné sur la prod), garde le labo local, pas de --remote ni SUPABASE_YES, modification de config.toml et commandes de relance données.
+  Diagnostique la CLI v3 : remplace [inbucket] par [local_smtp] (Mailpit), ne présente pas Postgres 15 comme refusé (seul 13 l'est), cherche la cause ailleurs et propose l'alignement sur la prod, garde le labo local, pas de --remote ni SUPABASE_YES, modification de config.toml et commandes de relance données.
