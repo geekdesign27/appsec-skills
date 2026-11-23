@@ -1,0 +1,21 @@
+OK  attendu=oui taux=1.00 autres=[] | /menaces fais le threat model de auditapp, surtout l'isolation entre c
+OK  attendu=oui taux=1.00 autres=[] | fais-moi le STRIDE du flux d'upload des photos d'accidents vers supaba
+OK  attendu=oui taux=1.00 autres=[] | quels tests de sécu je devrais faire sur moncor-dashboard ? je veux un
+OK  attendu=oui taux=1.00 autres=[] | /plan-test le modèle de menaces de prevens est dans security/02-menace
+OK  attendu=oui taux=1.00 autres=[] | prépare-moi les règles d'engagement pour tester le portail odoo d'un c
+OK  attendu=oui taux=1.00 autres=[] | j'ai ajouté un chatbot IA avec RAG dans psstmanager, qu'est-ce qui peu
+OK  attendu=oui taux=1.00 autres=[] | inventorie la surface d'attaque de cap5km : tables exposées, RPC, edge
+OK  attendu=oui taux=1.00 autres=[] | écris-moi les cas d'abus pour flameup : un membre d'une équipe qui ess
+OK  attendu=oui taux=1.00 autres=[] | /cadrage nouvelle app travail-isole, données de géolocalisation des tr
+OK  attendu=non taux=0.00 autres=[] | c'est quoi STRIDE en deux mots ? un collègue m'en a parlé
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | /appsec lance une mission complète sur auditapp, du cadrage au retest,
+OK  attendu=non taux=0.00 autres=[] | monte-moi le labo supabase local avec 2 tenants et des comptes de test
+OK  attendu=non taux=0.00 autres=[] | lance gitleaks et osv-scanner sur mon dépôt flameup et dis-moi ce qui 
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | exécute la matrice d'autorisation sur le labo de prevens avec les comp
+OK  attendu=non taux=0.00 autres=[] | calcule le CVSS 4.0 de F-003 et rédige la fiche finding
+OK  attendu=non taux=0.00 autres=['anthropic-skills:determination-dangers-suva'] | fais la détermination des dangers Suva pour le poste de soudeur à l'at
+OK  attendu=non taux=0.00 autres=['anthropic-skills:architecture-processus'] | modélise le processus de traitement des déclarations d'accident en BPM
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | prépare le pack de mitigation pour l'IA de dev à partir des findings d
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | on en est où de la mission sécu sur cap5km ?
+OK  attendu=non taux=0.00 autres=[] | explique-moi la différence entre ASVS et WSTG simplement
+Score : 20/20

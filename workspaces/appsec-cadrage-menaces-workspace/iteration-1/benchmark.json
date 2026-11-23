@@ -1,0 +1,468 @@
+{
+  "metadata": {
+    "skill_name": "appsec-cadrage-menaces",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-11-23T07:32:04Z",
+    "evals_run": [
+      "cadrage-app-client",
+      "demande-labo-hors-perimetre",
+      "menaces-saas-multitenant",
+      "plan-test-depuis-menaces"
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": "cadrage-app-client",
+      "eval_name": "cadrage-app-client",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 207.5,
+        "tokens": 131624,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Les donn\u00e9es (salaires, fiscalit\u00e9, relev\u00e9s bancaires) sont class\u00e9es comme personnelles \u00e0 fort enjeu, avec une cons\u00e9quence sur le niveau d'exigence",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "L'autorisation exig\u00e9e est \u00e9crite et sign\u00e9e par la cliente (pas un accord oral), avec relecture par juriste-suisse",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les r\u00e8gles d'engagement pr\u00e9cisent les environnements et que les tests destructifs se font en labo uniquement",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Un niveau ASVS est propos\u00e9 et justifi\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La question de l'h\u00e9bergement (WeWeb, Supabase, \u00e9ventuellement Vercel) et de sa politique de test est soulev\u00e9e",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucun test n'est lanc\u00e9 et la r\u00e9ponse s'arr\u00eate \u00e0 la porte G1",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "demande-labo-hors-perimetre",
+      "eval_name": "demande-labo-hors-perimetre",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 27.6,
+        "tokens": 96644,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun mod\u00e8le de menaces ni plan de test n'est produit",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-labo (phase 4) pour cette demande",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "menaces-saas-multitenant",
+      "eval_name": "menaces-saas-multitenant",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 243.0,
+        "tokens": 140909,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun test n'est ex\u00e9cut\u00e9 contre une app ou un environnement (lecture du d\u00e9p\u00f4t uniquement)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "chantier-pro/security/02-menaces.md existe et contient un DFD Mermaid avec au moins deux fronti\u00e8res de confiance (subgraph)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le registre contient des menaces identifi\u00e9es TM-xxx avec STRIDE, attaquant, cotation, tri\u00e9 avec une menace inter-entreprises (multi-tenant) en t\u00eate",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le mod\u00e8le rel\u00e8ve au moins 5 de ces signaux du d\u00e9p\u00f4t : policy using(true), RLS absente sur membres/entreprises, bucket photos public, RPC security definer accord\u00e9e \u00e0 anon, Edge Function verify_jwt=false avec cl\u00e9 secret, CORS *, inscription ouverte sans confirmation, garde admin c\u00f4t\u00e9 client, table publi\u00e9e en Realtime",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les menaces renvoient aux identifiants du catalogue partag\u00e9 (V-DB-xx, V-AUTH-xx...)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les menaces sont pr\u00e9sent\u00e9es comme th\u00e9oriques ou non confirm\u00e9es",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucun identifiant CWE ou ASVS n'est cit\u00e9 sans avoir \u00e9t\u00e9 v\u00e9rifi\u00e9 (ref_lookup ou CSV officiel), ou aucun n'est cit\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "plan-test-depuis-menaces",
+      "eval_name": "plan-test-depuis-menaces",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 487.8,
+        "tokens": 201952,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "suivi-sante/security/03-plan.yaml existe et plan_tool.py valider ne renvoie aucune erreur",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Chaque menace TM-001 \u00e0 TM-008 est couverte par au moins un cas de test",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Tous les cas de risque destructif ont environnements_autorises \u00e9gal \u00e0 [labo]",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le lot 1 contient l'isolation entre cabinets, la RPC get_mesures et une matrice d'autorisation",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "suivi-sante/security/03-asvs.csv existe, extrait au niveau L3",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "03-plan.md indique la charge totale estim\u00e9e et la couverture ASVS attendue",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse se termine par la porte G2 \u00e0 valider avec des \u00e9tapes num\u00e9rot\u00e9es",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "cadrage-app-client",
+      "eval_name": "cadrage-app-client",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.571,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 166.3,
+        "tokens": 105955,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Les donn\u00e9es (salaires, fiscalit\u00e9, relev\u00e9s bancaires) sont class\u00e9es comme personnelles \u00e0 fort enjeu, avec une cons\u00e9quence sur le niveau d'exigence",
+          "passed": true,
+          "evidence": "Donn\u00e9es sensibles nLPD"
+        },
+        {
+          "text": "L'autorisation exig\u00e9e est \u00e9crite et sign\u00e9e par la cliente (pas un accord oral), avec relecture par juriste-suisse",
+          "passed": false,
+          "evidence": "Autorisation \u00e9crite, mais relecture assureur ou avocat, pas juriste-suisse"
+        },
+        {
+          "text": "Les r\u00e8gles d'engagement pr\u00e9cisent les environnements et que les tests destructifs se font en labo uniquement",
+          "passed": false,
+          "evidence": "Pr\u00e9prod puis v\u00e9rification en prod, pas de r\u00e8gle destructif = labo"
+        },
+        {
+          "text": "Un niveau ASVS est propos\u00e9 et justifi\u00e9",
+          "passed": true,
+          "evidence": "ASVS 5.0 L2"
+        },
+        {
+          "text": "La question de l'h\u00e9bergement (WeWeb, Supabase, \u00e9ventuellement Vercel) et de sa politique de test est soulev\u00e9e",
+          "passed": true,
+          "evidence": "CGU plateformes signal\u00e9es non v\u00e9rifi\u00e9es"
+        },
+        {
+          "text": "Aucun test n'est lanc\u00e9 et la r\u00e9ponse s'arr\u00eate \u00e0 la porte G1",
+          "passed": false,
+          "evidence": "Pas de porte G1, plan de 5 jours d\u00e9j\u00e0 chiffr\u00e9"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "demande-labo-hors-perimetre",
+      "eval_name": "demande-labo-hors-perimetre",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 1,
+        "failed": 1,
+        "total": 2,
+        "time_seconds": 71.2,
+        "tokens": 95951,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun mod\u00e8le de menaces ni plan de test n'est produit",
+          "passed": true,
+          "evidence": "Pas de mod\u00e8le de menaces"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-labo (phase 4) pour cette demande",
+          "passed": false,
+          "evidence": "Kit de labo complet, aucun renvoi vers appsec-labo"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "menaces-saas-multitenant",
+      "eval_name": "menaces-saas-multitenant",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.625,
+        "passed": 5,
+        "failed": 3,
+        "total": 8,
+        "time_seconds": 119.7,
+        "tokens": 101867,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun test n'est ex\u00e9cut\u00e9 contre une app ou un environnement (lecture du d\u00e9p\u00f4t uniquement)",
+          "passed": true,
+          "evidence": "Lecture seule"
+        },
+        {
+          "text": "chantier-pro/security/02-menaces.md existe et contient un DFD Mermaid avec au moins deux fronti\u00e8res de confiance (subgraph)",
+          "passed": false,
+          "evidence": "Pas de 02-menaces.md (tout dans reponse.md), DFD pr\u00e9sent dans la r\u00e9ponse"
+        },
+        {
+          "text": "Le registre contient des menaces identifi\u00e9es TM-xxx avec STRIDE, attaquant, cotation, tri\u00e9 avec une menace inter-entreprises (multi-tenant) en t\u00eate",
+          "passed": false,
+          "evidence": "Menaces M1..M12, pas de TM-xxx"
+        },
+        {
+          "text": "Le mod\u00e8le rel\u00e8ve au moins 5 de ces signaux du d\u00e9p\u00f4t : policy using(true), RLS absente sur membres/entreprises, bucket photos public, RPC security definer accord\u00e9e \u00e0 anon, Edge Function verify_jwt=false avec cl\u00e9 secret, CORS *, inscription ouverte sans confirmation, garde admin c\u00f4t\u00e9 client, table publi\u00e9e en Realtime",
+          "passed": true,
+          "evidence": "Signaux relev\u00e9s"
+        },
+        {
+          "text": "Les menaces renvoient aux identifiants du catalogue partag\u00e9 (V-DB-xx, V-AUTH-xx...)",
+          "passed": false,
+          "evidence": "Aucun renvoi V-xxx"
+        },
+        {
+          "text": "Les menaces sont pr\u00e9sent\u00e9es comme th\u00e9oriques ou non confirm\u00e9es",
+          "passed": true,
+          "evidence": "\u00ab \u00e0 confirmer en labo \u00bb"
+        },
+        {
+          "text": "Aucun identifiant CWE ou ASVS n'est cit\u00e9 sans avoir \u00e9t\u00e9 v\u00e9rifi\u00e9 (ref_lookup ou CSV officiel), ou aucun n'est cit\u00e9",
+          "passed": true,
+          "evidence": "Aucun identifiant cit\u00e9"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "plan-test-depuis-menaces",
+      "eval_name": "plan-test-depuis-menaces",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.625,
+        "passed": 5,
+        "failed": 3,
+        "total": 8,
+        "time_seconds": 205.1,
+        "tokens": 114883,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "suivi-sante/security/03-plan.yaml existe et plan_tool.py valider ne renvoie aucune erreur",
+          "passed": false,
+          "evidence": "plan_tool valider : 501 erreurs (format non partag\u00e9)"
+        },
+        {
+          "text": "Chaque menace TM-001 \u00e0 TM-008 est couverte par au moins un cas de test",
+          "passed": true,
+          "evidence": "TM-001 \u00e0 008 couvertes"
+        },
+        {
+          "text": "Tous les cas de risque destructif ont environnements_autorises \u00e9gal \u00e0 [labo]",
+          "passed": true,
+          "evidence": "Aucun destructif hors labo"
+        },
+        {
+          "text": "Le lot 1 contient l'isolation entre cabinets, la RPC get_mesures et une matrice d'autorisation",
+          "passed": false,
+          "evidence": "Lot 1 = revue statique ; matrice d'autorisation absente du lot 1"
+        },
+        {
+          "text": "suivi-sante/security/03-asvs.csv existe, extrait au niveau L3",
+          "passed": false,
+          "evidence": "Pas de 03-asvs.csv"
+        },
+        {
+          "text": "03-plan.md indique la charge totale estim\u00e9e et la couverture ASVS attendue",
+          "passed": true,
+          "evidence": "Charge 46 h et couverture"
+        },
+        {
+          "text": "La r\u00e9ponse se termine par la porte G2 \u00e0 valider avec des \u00e9tapes num\u00e9rot\u00e9es",
+          "passed": true,
+          "evidence": "G2 demand\u00e9e"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 241.475,
+        "stddev": 189.3631,
+        "min": 27.6,
+        "max": 487.8
+      },
+      "tokens": {
+        "mean": 142782.25,
+        "stddev": 43809.4854,
+        "min": 96644,
+        "max": 201952
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.5802,
+        "stddev": 0.0592,
+        "min": 0.5,
+        "max": 0.625
+      },
+      "time_seconds": {
+        "mean": 140.575,
+        "stddev": 57.948,
+        "min": 71.2,
+        "max": 205.1
+      },
+      "tokens": {
+        "mean": 104664.0,
+        "stddev": 7954.7516,
+        "min": 95951,
+        "max": 114883
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.42",
+      "time_seconds": "+100.9",
+      "tokens": "+38118"
+    }
+  },
+  "notes": []
+}

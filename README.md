@@ -17,6 +17,7 @@ Cahier des charges : profil « ingénieur sécurité applicative pour apps web v
 | Skill | Phases | Déclencheurs |
 |---|---|---|
 | `appsec-chef-de-mission` | Toutes | `/appsec`, « Loïc », « audite la sécurité de mon app » |
+| `appsec-cadrage-menaces` | 0 à 3 | `/menaces`, `/cadrage`, `/plan-test`, « fais le STRIDE », « quels tests faire » |
 
 (Les autres skills de la famille seront ajoutés au fil de leur création.)
 

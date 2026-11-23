@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "Aucun modèle de menaces ni plan de test n'est produit",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse oriente vers appsec-labo (phase 4) pour cette demande",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  }
+}

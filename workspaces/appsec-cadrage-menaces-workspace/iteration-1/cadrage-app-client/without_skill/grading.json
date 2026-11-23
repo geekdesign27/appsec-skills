@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Les données (salaires, fiscalité, relevés bancaires) sont classées comme personnelles à fort enjeu, avec une conséquence sur le niveau d'exigence",
+      "passed": true,
+      "evidence": "Données sensibles nLPD"
+    },
+    {
+      "text": "L'autorisation exigée est écrite et signée par la cliente (pas un accord oral), avec relecture par juriste-suisse",
+      "passed": false,
+      "evidence": "Autorisation écrite, mais relecture assureur ou avocat, pas juriste-suisse"
+    },
+    {
+      "text": "Les règles d'engagement précisent les environnements et que les tests destructifs se font en labo uniquement",
+      "passed": false,
+      "evidence": "Préprod puis vérification en prod, pas de règle destructif = labo"
+    },
+    {
+      "text": "Un niveau ASVS est proposé et justifié",
+      "passed": true,
+      "evidence": "ASVS 5.0 L2"
+    },
+    {
+      "text": "La question de l'hébergement (WeWeb, Supabase, éventuellement Vercel) et de sa politique de test est soulevée",
+      "passed": true,
+      "evidence": "CGU plateformes signalées non vérifiées"
+    },
+    {
+      "text": "Aucun test n'est lancé et la réponse s'arrête à la porte G1",
+      "passed": false,
+      "evidence": "Pas de porte G1, plan de 5 jours déjà chiffré"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 3,
+    "total": 7,
+    "pass_rate": 0.571
+  }
+}

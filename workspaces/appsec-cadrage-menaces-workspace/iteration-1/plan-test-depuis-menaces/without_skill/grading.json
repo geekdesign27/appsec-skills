@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "suivi-sante/security/03-plan.yaml existe et plan_tool.py valider ne renvoie aucune erreur",
+      "passed": false,
+      "evidence": "plan_tool valider : 501 erreurs (format non partagé)"
+    },
+    {
+      "text": "Chaque menace TM-001 à TM-008 est couverte par au moins un cas de test",
+      "passed": true,
+      "evidence": "TM-001 à 008 couvertes"
+    },
+    {
+      "text": "Tous les cas de risque destructif ont environnements_autorises égal à [labo]",
+      "passed": true,
+      "evidence": "Aucun destructif hors labo"
+    },
+    {
+      "text": "Le lot 1 contient l'isolation entre cabinets, la RPC get_mesures et une matrice d'autorisation",
+      "passed": false,
+      "evidence": "Lot 1 = revue statique ; matrice d'autorisation absente du lot 1"
+    },
+    {
+      "text": "suivi-sante/security/03-asvs.csv existe, extrait au niveau L3",
+      "passed": false,
+      "evidence": "Pas de 03-asvs.csv"
+    },
+    {
+      "text": "03-plan.md indique la charge totale estimée et la couverture ASVS attendue",
+      "passed": true,
+      "evidence": "Charge 46 h et couverture"
+    },
+    {
+      "text": "La réponse se termine par la porte G2 à valider avec des étapes numérotées",
+      "passed": true,
+      "evidence": "G2 demandée"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 3,
+    "total": 8,
+    "pass_rate": 0.625
+  }
+}

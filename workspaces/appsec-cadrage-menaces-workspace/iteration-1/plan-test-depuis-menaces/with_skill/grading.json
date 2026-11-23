@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "suivi-sante/security/03-plan.yaml existe et plan_tool.py valider ne renvoie aucune erreur",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Chaque menace TM-001 à TM-008 est couverte par au moins un cas de test",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Tous les cas de risque destructif ont environnements_autorises égal à [labo]",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Le lot 1 contient l'isolation entre cabinets, la RPC get_mesures et une matrice d'autorisation",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "suivi-sante/security/03-asvs.csv existe, extrait au niveau L3",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "03-plan.md indique la charge totale estimée et la couverture ASVS attendue",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse se termine par la porte G2 à valider avec des étapes numérotées",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  }
+}
