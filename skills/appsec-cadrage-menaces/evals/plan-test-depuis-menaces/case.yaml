@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: plan-test-depuis-menaces
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  03-plan.yaml valide (plan_tool valider sans erreur), cas de test au format partagé couvrant TM-001 à TM-008, tests destructifs en labo uniquement, lot 1 = RLS, isolation et matrice d'autorisation, identifiants ASVS et WSTG réels, 03-asvs.csv niveau L3, 03-plan.md avec charge et couverture, fin sur la porte G2.

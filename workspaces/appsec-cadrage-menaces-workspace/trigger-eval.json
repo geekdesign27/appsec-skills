@@ -1,0 +1,22 @@
+[
+  {"query": "/menaces fais le threat model de auditapp, surtout l'isolation entre communes, le dépôt est dans ~/dev/auditapp", "should_trigger": true},
+  {"query": "fais-moi le STRIDE du flux d'upload des photos d'accidents vers supabase storage, avec un DFD en mermaid et les frontières de confiance", "should_trigger": true},
+  {"query": "quels tests de sécu je devrais faire sur moncor-dashboard ? je veux un plan priorisé avec le temps que ça prend, je le valide avant que tu lances quoi que ce soit", "should_trigger": true},
+  {"query": "/plan-test le modèle de menaces de prevens est dans security/02-menaces.md, sors-moi le plan au format habituel avec les exigences ASVS L2", "should_trigger": true},
+  {"query": "prépare-moi les règles d'engagement pour tester le portail odoo d'un client, une PME de Romont, avant qu'on signe", "should_trigger": true},
+  {"query": "j'ai ajouté un chatbot IA avec RAG dans psstmanager, qu'est-ce qui peut mal tourner niveau sécurité ? fais l'analyse des menaces", "should_trigger": true},
+  {"query": "inventorie la surface d'attaque de cap5km : tables exposées, RPC, edge functions, buckets, tout ce qui peut être attaqué", "should_trigger": true},
+  {"query": "écris-moi les cas d'abus pour flameup : un membre d'une équipe qui essaie de voir ou modifier les données d'une autre équipe", "should_trigger": true},
+  {"query": "/cadrage nouvelle app travail-isole, données de géolocalisation des travailleurs, c'est la mienne, labo local + preview vercel pro", "should_trigger": true},
+  {"query": "c'est quoi STRIDE en deux mots ? un collègue m'en a parlé", "should_trigger": false},
+  {"query": "/appsec lance une mission complète sur auditapp, du cadrage au retest, et tiens le journal", "should_trigger": false},
+  {"query": "monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro", "should_trigger": false},
+  {"query": "lance gitleaks et osv-scanner sur mon dépôt flameup et dis-moi ce qui sort", "should_trigger": false},
+  {"query": "exécute la matrice d'autorisation sur le labo de prevens avec les comptes a-member et b-owner", "should_trigger": false},
+  {"query": "calcule le CVSS 4.0 de F-003 et rédige la fiche finding", "should_trigger": false},
+  {"query": "fais la détermination des dangers Suva pour le poste de soudeur à l'atelier de Bulle", "should_trigger": false},
+  {"query": "modélise le processus de traitement des déclarations d'accident en BPMN avec les swimlanes RH et sécurité", "should_trigger": false},
+  {"query": "prépare le pack de mitigation pour l'IA de dev à partir des findings de suivi-sante", "should_trigger": false},
+  {"query": "on en est où de la mission sécu sur cap5km ?", "should_trigger": false},
+  {"query": "explique-moi la différence entre ASVS et WSTG simplement", "should_trigger": false}
+]

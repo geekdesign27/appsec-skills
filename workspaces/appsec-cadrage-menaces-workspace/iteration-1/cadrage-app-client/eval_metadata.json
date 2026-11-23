@@ -1,0 +1,13 @@
+{
+  "eval_name": "cadrage-app-client",
+  "prompt": "J'ai une nouvelle cliente, une fiduciaire à Fribourg (6 collaborateurs), qui a fait faire un portail client en WeWeb avec Supabase derrière. Ses clients y déposent fiches de salaire, déclarations d'impôts et relevés bancaires. Elle veut que je teste la sécurité avant de l'ouvrir à tous ses clients. Prépare-moi le cadrage et les règles d'engagement pour qu'on parte sur de bonnes bases.",
+  "assertions": [
+    "Les données (salaires, fiscalité, relevés bancaires) sont classées comme personnelles à fort enjeu, avec une conséquence sur le niveau d'exigence",
+    "L'autorisation exigée est écrite et signée par la cliente (pas un accord oral), avec relecture par juriste-suisse",
+    "Les règles d'engagement précisent les environnements et que les tests destructifs se font en labo uniquement",
+    "Un niveau ASVS est proposé et justifié",
+    "La question de l'hébergement (WeWeb, Supabase, éventuellement Vercel) et de sa politique de test est soulevée",
+    "Aucun test n'est lancé et la réponse s'arrête à la porte G1",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}

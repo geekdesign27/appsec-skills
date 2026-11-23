@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: demande-labo-hors-perimetre
+expected_outcome: |
+  Le skill ne produit ni modèle de menaces ni plan de test ; il indique que le labo relève de appsec-labo (phase 4) et ne s'active pas pour cette demande.

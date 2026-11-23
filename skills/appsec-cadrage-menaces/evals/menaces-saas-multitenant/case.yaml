@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: menaces-saas-multitenant
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  security/02-menaces.md créé avec DFD Mermaid et frontières de confiance, STRIDE par flux, registre TM-xxx trié par cote avec la fuite inter-entreprises en tête, liens au catalogue V-xxx (policy using true, bucket public, RPC security definer accordée à anon, Edge Function verify_jwt false avec clé secret et CORS *, inscription ouverte, garde admin côté client, Realtime). Tout est théorique, aucun test exécuté.

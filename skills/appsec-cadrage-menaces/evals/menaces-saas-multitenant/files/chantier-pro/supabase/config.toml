@@ -1,0 +1,7 @@
+project_id = "chantier-pro"
+[auth]
+enable_signup = true
+[auth.email]
+enable_confirmations = false
+[functions.export-pdf]
+verify_jwt = false

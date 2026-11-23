@@ -1,0 +1,8 @@
+{
+  "eval_name": "demande-labo-hors-perimetre",
+  "prompt": "monte-moi le labo supabase local pour chantier-pro avec 2 entreprises et des comptes de test par rôle, je veux pouvoir le remettre à zéro en une commande",
+  "assertions": [
+    "Aucun modèle de menaces ni plan de test n'est produit",
+    "La réponse oriente vers appsec-labo (phase 4) pour cette demande"
+  ]
+}

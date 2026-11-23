@@ -1,0 +1,14 @@
+{
+  "eval_name": "plan-test-depuis-menaces",
+  "prompt": "le cadrage et le modèle de menaces de suivi-sante sont faits (dossier ./suivi-sante/security). Tu peux me sortir le plan de test pour que je le valide ? Je veux savoir combien de temps ça va prendre et ce que ça couvre.\n\nInput files: suivi-sante/",
+  "assertions": [
+    "suivi-sante/security/03-plan.yaml existe et plan_tool.py valider ne renvoie aucune erreur",
+    "Chaque menace TM-001 à TM-008 est couverte par au moins un cas de test",
+    "Tous les cas de risque destructif ont environnements_autorises égal à [labo]",
+    "Le lot 1 contient l'isolation entre cabinets, la RPC get_mesures et une matrice d'autorisation",
+    "suivi-sante/security/03-asvs.csv existe, extrait au niveau L3",
+    "03-plan.md indique la charge totale estimée et la couverture ASVS attendue",
+    "La réponse se termine par la porte G2 à valider avec des étapes numérotées",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}
