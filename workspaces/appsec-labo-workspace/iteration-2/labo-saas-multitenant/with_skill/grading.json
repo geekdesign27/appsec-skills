@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "chantier-pro/security/labo/identites.yaml référence les vraies tables du dépôt (entreprises, membres, accidents) et les rôles admin, membre, lecteur",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "chantier-pro/supabase/seeds/90_labo_identites.sql existe avec 6 comptes (2 entreprises x 3 rôles) et des marqueurs SECRET-TENANT-A et SECRET-TENANT-B",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "chantier-pro/supabase/config.toml active les seeds du dossier seeds/ (section [db.seed])",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "chantier-pro/security/labo/.env.lab ne contient qu'une URL locale (127.0.0.1 ou localhost) et aucune clé secrète ni URL supabase.co",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "chantier-pro/security/04-labo.md est rempli (sans ligne de gabarit) et contient une section de limites par rapport à la production",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "La réponse indique clairement ce qui a été exécuté et vérifié et ce qui ne l'a pas été",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "Aucun test de sécurité n'est lancé (pas de scan, pas de tentative d'accès inter-tenant)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits (kit standard, labo_fichiers.py utilisé, pas de script maison)"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  }
+}
