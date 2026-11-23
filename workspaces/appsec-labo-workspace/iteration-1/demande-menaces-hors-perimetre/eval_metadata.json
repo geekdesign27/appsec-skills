@@ -1,0 +1,8 @@
+{
+  "eval_name": "demande-menaces-hors-perimetre",
+  "prompt": "fais-moi le modèle de menaces STRIDE de chantier-pro avec le DFD, je veux savoir ce qui est le plus grave",
+  "assertions": [
+    "Aucun labo n'est monté ni aucun fichier de labo généré",
+    "La réponse oriente vers appsec-cadrage-menaces pour le modèle de menaces"
+  ]
+}

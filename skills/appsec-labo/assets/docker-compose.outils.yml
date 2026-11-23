@@ -1,0 +1,37 @@
+# Conteneur d'outils du labo AppSec (généré par appsec-labo).
+# AVANT USAGE : lancer assets/epingler_images.sh pour remplacer chaque tag par un digest (@sha256:...).
+# Réseau host : les outils atteignent la stack locale sur 127.0.0.1. Aucun secret réel n'est monté.
+# Usage : docker compose -f security/labo/docker-compose.outils.yml run --rm <outil> <arguments>
+
+x-commun: &commun
+  network_mode: host
+  volumes:
+    - ../..:/src:ro          # dépôt de l'app en lecture seule
+    - ../:/security          # résultats écrits dans security/
+  working_dir: /src
+
+services:
+  zap:
+    <<: *commun
+    image: ghcr.io/zaproxy/zaproxy:stable
+  nuclei:
+    <<: *commun
+    image: projectdiscovery/nuclei:latest
+  semgrep:
+    <<: *commun
+    image: semgrep/semgrep:latest
+  trufflehog:
+    <<: *commun
+    image: trufflesecurity/trufflehog:latest
+  osv-scanner:
+    <<: *commun
+    image: ghcr.io/google/osv-scanner:latest
+  trivy:
+    <<: *commun
+    image: aquasec/trivy:latest      # exiger ≥ 0.76.2 (compromission 0.69.4 à 0.69.6 en mars 2026)
+  schemathesis:
+    <<: *commun
+    image: schemathesis/schemathesis:stable
+# ffuf et sqlmap : pas d'image officielle vérifiée. Installation locale :
+#   sqlmap : pip install sqlmap==1.10.11   (labo uniquement, jamais vers un hôte non local)
+#   ffuf   : brew install ffuf  ou  go install github.com/ffuf/ffuf/v2@v2.3.0   (labo uniquement)

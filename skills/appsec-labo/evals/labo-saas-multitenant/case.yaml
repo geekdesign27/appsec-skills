@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: labo-saas-multitenant
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  identites.yaml adapté au schéma (entreprises, membres, accidents), seed généré avec 2 entreprises x 3 rôles et marqueurs, lignes [db.seed] ajoutées à config.toml, .env.lab local sans secret, labo.sh, 04-labo.md rempli avec limites par rapport à la prod, journal mis à jour, état honnête sur ce qui a été exécuté ou non, aucun test de sécurité lancé.
