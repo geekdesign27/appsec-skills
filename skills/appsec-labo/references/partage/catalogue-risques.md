@@ -20,7 +20,7 @@
 | V-DB-01 | RLS désactivée sur une table exposée | Advisors Supabase, `pg_tables.rowsecurity = false` |
 | V-DB-02 | Policy trop large | `using (true)`, policy pour `public` au lieu de `authenticated` |
 | V-DB-03 | Policy SELECT présente mais INSERT/UPDATE/DELETE absentes ou laxistes | Policies incomplètes par commande |
-| V-DB-04 | `WITH CHECK` absent : un utilisateur réécrit `tenant_id` ou `owner_id` | UPDATE qui change le tenant |
+| V-DB-04 | `WITH CHECK` absent sur un UPDATE dont le `USING` ne contraint pas le tenant, ou colonnes sensibles (`tenant_id`, `owner_id`) modifiables : un utilisateur déplace une ligne vers un autre tenant. Sans `WITH CHECK`, Postgres réapplique `USING` à la nouvelle ligne. | UPDATE qui change le tenant |
 | V-DB-05 | Tenant déduit d'une donnée fournie par le client au lieu de `auth.uid()` ou d'un claim fiable | Paramètre `tenant_id` dans la requête |
 | V-DB-06 | Policy basée sur `user_metadata` (modifiable par l'utilisateur) au lieu de `app_metadata` | `auth.jwt() -> 'user_metadata'` |
 | V-DB-07 | Vue sans `security_invoker` qui contourne RLS | Vues dans le schéma exposé |
