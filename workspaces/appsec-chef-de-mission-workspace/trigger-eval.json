@@ -1,0 +1,22 @@
+[
+  {"query": "/appsec on démarre l'audit de sécu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, dépôt dans ~/dev/auditapp", "should_trigger": true},
+  {"query": "Loïc, tu peux reprendre la mission sécurité sur cap5km ? on s'était arrêtés après les tests statiques je crois", "should_trigger": true},
+  {"query": "j'ai fini de vibecoder mon app de suivi santé (supabase + vercel), j'aimerais savoir si elle est prête côté sécurité avant que mes potes l'utilisent, tu peux faire tout le process proprement ?", "should_trigger": true},
+  {"query": "un client (fiduciaire à Fribourg) veut que je fasse un audit de sécurité complet de son portail WeWeb + Supabase, comment on s'organise, par quoi on commence ?", "should_trigger": true},
+  {"query": "on en est où sur l'audit sécu de prevens ? quelle est la prochaine étape et qu'est-ce que je dois valider", "should_trigger": true},
+  {"query": "lance une mission AppSec complète sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok", "should_trigger": true},
+  {"query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, ça ira plus vite que de monter un labo", "should_trigger": true},
+  {"query": "je veux une démarche sécu structurée pour mon SaaS multi-tenant avant la démo au client Suva la semaine pro, avec les portes de validation et un journal", "should_trigger": true},
+  {"query": "audite la sécurité de mon app flameup stp, React Vite Supabase, j'ai 40 utilisateurs dessus", "should_trigger": true},
+  {"query": "j'ai reçu une demande d'un RSSI client qui veut savoir si on a fait un audit de sécu de psstmanager. faut lancer quelque chose de sérieux, tu me guides ?", "should_trigger": true},
+  {"query": "c'est quoi la différence entre la clé sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?", "should_trigger": false},
+  {"query": "fais-moi le modèle de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid", "should_trigger": false},
+  {"query": "monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro, je veux pouvoir le remettre à zéro en une commande", "should_trigger": false},
+  {"query": "calcule le score CVSS 4.0 de ce finding : un membre peut lire les audits d'un autre tenant via PostgREST, sans interaction, données perso", "should_trigger": false},
+  {"query": "corrige ma policy RLS sur la table audits, elle laisse passer tout le monde avec using(true), voilà le fichier de migration", "should_trigger": false},
+  {"query": "mon app est-elle RGPD et nLPD compatible ? j'ai un formulaire de contact et Google Analytics", "should_trigger": false},
+  {"query": "rédige-moi un rapport SecurTec d'avis sécurité sur l'échafaudage de la façade nord du chantier de Givisiez, voici mes notes", "should_trigger": false},
+  {"query": "ajoute dans mon CLAUDE.md des règles pour que l'agent ne désactive jamais la RLS et ne mette jamais de clé secrète côté client", "should_trigger": false},
+  {"query": "détermination des dangers Suva pour un poste de travail isolé en station d'épuration, tu peux me faire le tableau ?", "should_trigger": false},
+  {"query": "scanne juste mon dépôt pour voir s'il y a des secrets ou des dépendances vulnérables, pas besoin de tout le tralala", "should_trigger": false}
+]

@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Aucun test de sécurité n'est exécuté (ni requête vers l'app, ni scanner) : la réponse s'arrête au cadrage",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "Le dossier chantier-pro/security/ existe avec 00-cadrage.md et journal.md",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "journal.md contient au moins une entrée datée qui note la vérification des référentiels ou les choix du cadrage",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "La réponse propose un niveau ASVS (L2 ou L3) et le justifie par la classification des données et l'enjeu multi-tenant",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "La réponse signale que les accidents sont des données personnelles (nLPD), voire sensibles",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "La réponse évoque la politique de pentest Vercel (plan Pro/Enterprise requis, Hobby interdit) ou demande le plan Vercel",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "La réponse se termine par une demande explicite de validation de la porte G1 avec des étapes numérotées pour PA",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans reponse.md et les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  }
+}

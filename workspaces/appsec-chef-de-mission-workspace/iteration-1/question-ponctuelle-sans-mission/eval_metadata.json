@@ -1,0 +1,11 @@
+{
+  "eval_name": "question-ponctuelle-sans-mission",
+  "prompt": "petite question rapide : sur Supabase, la nouvelle clé sb_publishable_ je peux la mettre dans mon code front React sans risque ou faut la cacher comme la sb_secret_ ?",
+  "assertions": [
+    "La réponse dit que la clé publishable peut être dans le front et que la sécurité repose sur RLS",
+    "La réponse dit que la clé secret contourne RLS et ne doit jamais être côté client",
+    "Aucun dossier security/ n'a été créé",
+    "La réponse ne lance pas de mission (pas de questions de cadrage G1, pas de règles d'engagement)",
+    "La réponse tient en 15 lignes ou moins"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "La réponse dit que la clé publishable peut être dans le front et que la sécurité repose sur RLS",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "La réponse dit que la clé secret contourne RLS et ne doit jamais être côté client",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "Aucun dossier security/ n'a été créé",
+      "passed": true,
+      "evidence": "Pas de security/"
+    },
+    {
+      "text": "La réponse ne lance pas de mission (pas de questions de cadrage G1, pas de règles d'engagement)",
+      "passed": true,
+      "evidence": "Pas de cadrage"
+    },
+    {
+      "text": "La réponse tient en 15 lignes ou moins",
+      "passed": false,
+      "evidence": "36 lignes"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  }
+}

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: fait-le-point-mission
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Point d'avancement au format prévu : phase 6 en cours (lot 1 fait, lot 2 à faire, lot 3 non validé), dernière porte G2 du 2026-11-06, findings 1 P0 et 1 P2, prochaine étape claire (lot 2 dynamique ou traiter F-001 via rapports), étapes numérotées pour PA. Rappelle que la prod est hors périmètre.

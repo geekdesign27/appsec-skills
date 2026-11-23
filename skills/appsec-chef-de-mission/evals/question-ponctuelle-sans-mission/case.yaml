@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: question-ponctuelle-sans-mission
+expected_outcome: |
+  Réponse directe et courte : la clé publishable est publique par nature et peut aller dans le front, la sécurité repose sur RLS ; la clé secret contourne RLS et ne doit jamais être côté client. Pas de lancement de mission, pas de création de dossier security/, pas de questions de cadrage G1.

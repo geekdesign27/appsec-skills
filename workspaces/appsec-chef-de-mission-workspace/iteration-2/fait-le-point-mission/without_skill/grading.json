@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "La réponse indique que la mission est en phase 6 (tests dynamiques), lot 1 terminé, lot 2 restant, lot 3 non validé",
+      "passed": true,
+      "evidence": "Phase 6, lot 2 pas commencé"
+    },
+    {
+      "text": "La réponse indique G2 comme dernière porte franchie, le 2026-11-06",
+      "passed": true,
+      "evidence": "G2 06.11"
+    },
+    {
+      "text": "La réponse compte les findings par priorité : 1 P0 (F-001) et 1 P2 (F-002)",
+      "passed": true,
+      "evidence": "F-001 P0, F-002 P2"
+    },
+    {
+      "text": "La réponse propose une seule prochaine étape claire en nommant le skill appsec-* concerné",
+      "passed": false,
+      "evidence": "Aucun skill nommé"
+    },
+    {
+      "text": "La réponse contient des étapes numérotées pour PA",
+      "passed": true,
+      "evidence": "Liste numérotée"
+    },
+    {
+      "text": "La réponse rappelle que la production est hors périmètre (autorisation limitée au local et à la preview)",
+      "passed": true,
+      "evidence": "Prod hors périmètre"
+    },
+    {
+      "text": "La réponse signale les écarts entre le journal et le dossier (livrables 01, 02 ou 04 non remplis alors que le journal les dit faits)",
+      "passed": true,
+      "evidence": "Écarts 01/02/04 signalés"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret cadratin"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.875
+  }
+}

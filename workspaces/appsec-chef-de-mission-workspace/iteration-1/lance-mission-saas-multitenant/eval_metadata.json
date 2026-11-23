@@ -1,0 +1,14 @@
+{
+  "eval_name": "lance-mission-saas-multitenant",
+  "prompt": "/appsec salut Loïc, j'aimerais auditer la sécurité de chantier-pro avant de le mettre en prod pour mes 3 premiers clients. C'est mon SaaS SST multi-tenant (React/Vite + Supabase, hébergé sur Vercel), chaque entreprise déclare ses accidents dedans. Le dépôt est dans ./chantier-pro. C'est mon app à moi, j'ai un labo local possible et une preview Vercel. Tu peux démarrer ?\n\nInput files: chantier-pro/",
+  "assertions": [
+    "Aucun test de sécurité n'est exécuté (ni requête vers l'app, ni scanner) : la réponse s'arrête au cadrage",
+    "Le dossier chantier-pro/security/ existe avec 00-cadrage.md et journal.md",
+    "journal.md contient au moins une entrée datée qui note la vérification des référentiels ou les choix du cadrage",
+    "La réponse propose un niveau ASVS (L2 ou L3) et le justifie par la classification des données et l'enjeu multi-tenant",
+    "La réponse signale que les accidents sont des données personnelles (nLPD), voire sensibles",
+    "La réponse évoque la politique de pentest Vercel (plan Pro/Enterprise requis, Hobby interdit) ou demande le plan Vercel",
+    "La réponse se termine par une demande explicite de validation de la porte G1 avec des étapes numérotées pour PA",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}

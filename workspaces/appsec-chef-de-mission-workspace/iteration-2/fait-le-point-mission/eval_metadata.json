@@ -1,0 +1,14 @@
+{
+  "eval_name": "fait-le-point-mission",
+  "prompt": "on en est où de la mission sécu sur suivi-sante ? j'ai un peu perdu le fil avec les vacances. le dossier est dans ./suivi-sante\n\nInput files: suivi-sante/",
+  "assertions": [
+    "La réponse indique que la mission est en phase 6 (tests dynamiques), lot 1 terminé, lot 2 restant, lot 3 non validé",
+    "La réponse indique G2 comme dernière porte franchie, le 2026-11-06",
+    "La réponse compte les findings par priorité : 1 P0 (F-001) et 1 P2 (F-002)",
+    "La réponse propose une seule prochaine étape claire en nommant le skill appsec-* concerné",
+    "La réponse contient des étapes numérotées pour PA",
+    "La réponse rappelle que la production est hors périmètre (autorisation limitée au local et à la preview)",
+    "La réponse signale les écarts entre le journal et le dossier (livrables 01, 02 ou 04 non remplis alors que le journal les dit faits)",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}
