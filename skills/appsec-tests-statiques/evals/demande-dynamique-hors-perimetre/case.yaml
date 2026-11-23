@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: demande-dynamique-hors-perimetre
+expected_outcome: |
+  Ne lance aucun test dynamique ; oriente vers appsec-tests-dynamiques.

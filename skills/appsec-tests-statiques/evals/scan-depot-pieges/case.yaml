@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: scan-depot-pieges
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  security/05-statique/ rempli (revue-sql, config, dependances, synthese) ; trouvés : tables sans RLS, policy true, RPC definer ouverte à anon, bucket public, Realtime, verify_jwt false + clé secrète + CORS *, JWT service_role dans dist, source map, secret dans l'historique git malgré sa suppression (rotation), paquets suspects, HTML brut ; secrets caviardés ; signaux qualifiés ; testé sans anomalie et non couvert listés ; aucun test dynamique.

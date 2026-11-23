@@ -1,0 +1,22 @@
+[
+  {"query": "/statique scanne le dépôt de moncor-dashboard avant les tests sur le labo", "should_trigger": true},
+  {"query": "cherche s'il y a des secrets dans tout l'historique git de flameup, même dans les vieux commits", "should_trigger": true},
+  {"query": "relis mes migrations supabase de prevens côté sécurité, je veux savoir si mes policies RLS tiennent sans lancer l'app", "should_trigger": true},
+  {"query": "est-ce que mes dépendances npm de cap5km sont sûres ? j'ai peur que claude ait inventé un paquet", "should_trigger": true},
+  {"query": "vérifie que la clé service_role n'est pas dans le bundle vite de auditapp, le build est dans dist/", "should_trigger": true},
+  {"query": "lance trufflehog, osv-scanner et semgrep sur psstmanager et fais-moi la synthèse au format habituel", "should_trigger": true},
+  {"query": "mes edge functions et mon config.toml sont-ils bien configurés niveau sécu ? verify_jwt, CORS, inscription", "should_trigger": true},
+  {"query": "j'ai des fonctions security definer dans suivi-sante, est-ce qu'elles sont dangereuses ? voilà le dossier migrations", "should_trigger": true},
+  {"query": "audite le code de travail-isole pour les failles XSS et les secrets en dur avant la mise en prod", "should_trigger": true},
+  {"query": "lance la matrice d'autorisation sur le labo de prevens avec a-member et b-owner", "should_trigger": false},
+  {"query": "corrige la policy RLS de la table audits pour qu'elle filtre par tenant, voici la migration", "should_trigger": false},
+  {"query": "c'est quoi la différence entre SAST et DAST, en deux phrases ?", "should_trigger": false},
+  {"query": "calcule le CVSS 4.0 du secret trouvé hier dans l'historique de flameup et rédige le finding", "should_trigger": false},
+  {"query": "monte le labo supabase local de chantier-pro avec les comptes de test", "should_trigger": false},
+  {"query": "fais le modèle de menaces STRIDE de cap5km", "should_trigger": false},
+  {"query": "mets à jour toutes les dépendances npm de evacecole vers leur dernière version", "should_trigger": false},
+  {"query": "écris-moi un hook pre-commit qui bloque les secrets pour que l'IA ne les commite plus", "should_trigger": false},
+  {"query": "explique-moi comment marche row level security dans supabase pour un débutant", "should_trigger": false},
+  {"query": "/appsec on démarre la mission sur flameup", "should_trigger": false},
+  {"query": "refactorise le composant Rapport.tsx, il est trop long", "should_trigger": false}
+]

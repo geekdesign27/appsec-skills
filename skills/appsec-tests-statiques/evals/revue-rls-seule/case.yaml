@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: revue-rls-seule
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Repère UPDATE sans WITH CHECK sur profils (auto-promotion de rôle possible), policy mesures basée sur user_metadata, vue sans security_invoker, get_mesures security definer sans contrôle ni search_path ; reconnaît mon_cabinet() et les policies qui l'utilisent comme correctes ; statuts confirmés/probables ; dit ce qui est sain ; aucune exécution contre une base.

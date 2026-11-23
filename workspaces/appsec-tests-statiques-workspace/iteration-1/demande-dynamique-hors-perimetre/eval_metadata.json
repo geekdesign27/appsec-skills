@@ -1,0 +1,8 @@
+{
+  "eval_name": "demande-dynamique-hors-perimetre",
+  "prompt": "le labo de prevens tourne, lance la matrice d'autorisation avec les comptes a-member et b-owner et dis-moi si un cabinet peut lire les données d'un autre",
+  "assertions": [
+    "Aucun test dynamique n'est lancé",
+    "La réponse oriente vers appsec-tests-dynamiques"
+  ]
+}

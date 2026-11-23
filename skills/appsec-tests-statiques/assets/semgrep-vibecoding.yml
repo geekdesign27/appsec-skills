@@ -1,0 +1,90 @@
+# Règles maison « vibecoding » pour Semgrep CE ou Opengrep (famille appsec-*).
+# Usage : semgrep scan --config assets/semgrep-vibecoding.yml --metrics=off --sarif -o security/05-statique/semgrep.sarif .
+# Chaque règle renvoie à une entrée du catalogue partagé (metadata.catalogue).
+rules:
+  - id: supabase-cle-secrete-cote-client
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: "Client Supabase créé avec une clé secrète ou service_role dans du code front : elle contourne toute la RLS."
+    metadata: {catalogue: V-SEC-01}
+    paths:
+      include: ["src/**", "app/**", "pages/**", "components/**"]
+    pattern-either:
+      - pattern: createClient($URL, import.meta.env.$K)
+      - pattern: createClient($URL, process.env.$K)
+    metavariable-regex:
+      metavariable: $K
+      regex: (?i).*(SERVICE_ROLE|SECRET).*
+
+  - id: variable-publique-nom-secret
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: "Variable VITE_ / NEXT_PUBLIC_ au nom de secret : elle finit en clair dans le bundle."
+    metadata: {catalogue: V-SEC-02}
+    pattern-either:
+      - pattern: import.meta.env.$K
+      - pattern: process.env.$K
+    metavariable-regex:
+      metavariable: $K
+      regex: ^(VITE_|NEXT_PUBLIC_).*(SECRET|SERVICE_ROLE|PRIVATE|PASSWORD|TOKEN).*$
+
+  - id: react-html-brut
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: "dangerouslySetInnerHTML avec une valeur non désinfectée : XSS possible (contenu utilisateur ou LLM)."
+    metadata: {catalogue: V-FE-01}
+    patterns:
+      - pattern: '<$E dangerouslySetInnerHTML={{__html: $X}} />'
+      - pattern-not: '<$E dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(...)}} />'
+      - pattern-not: '<$E dangerouslySetInnerHTML={{__html: "..."}} />'
+
+  - id: autorisation-cote-client-seulement
+    languages: [typescript, javascript]
+    severity: INFO
+    message: "Garde de rôle côté interface : elle masque, elle ne protège pas. Vérifier que le serveur (RLS, fonction) applique la même règle."
+    metadata: {catalogue: V-AUTH-01}
+    pattern-either:
+      - pattern: if ($P?.role !== $R) return null
+      - pattern: if ($P.role !== $R) return null
+      - pattern: "$P?.role === $R ? $A : $B"
+
+  - id: filtre-tenant-fourni-par-client
+    languages: [typescript, javascript]
+    severity: INFO
+    message: "Filtre de tenant appliqué côté client : sans RLS équivalente, un autre tenant reste lisible par appel direct à l'API."
+    metadata: {catalogue: V-DB-05}
+    pattern-either:
+      - pattern: $Q.eq("tenant_id", $X)
+      - pattern: $Q.eq("entreprise_id", $X)
+      - pattern: $Q.eq("organisation_id", $X)
+      - pattern: $Q.eq("org_id", $X)
+
+  - id: edge-function-cors-joker
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: "CORS « * » sur une fonction serveur : à restreindre aux origines de l'app si la fonction est authentifiée."
+    metadata: {catalogue: V-API-01}
+    pattern-either:
+      - pattern: '{..., "Access-Control-Allow-Origin": "*", ...}'
+      - pattern: "{..., 'Access-Control-Allow-Origin': '*', ...}"
+
+  - id: fetch-url-de-la-requete
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: "fetch d'une URL lue dans la requête : SSRF possible (A01:2025). Restreindre à une liste d'hôtes."
+    metadata: {catalogue: V-API-05}
+    patterns:
+      - pattern-inside: |
+          const { $U, ... } = await $REQ.json()
+          ...
+      - pattern: fetch($U, ...)
+
+  - id: erreur-brute-renvoyee
+    languages: [typescript, javascript]
+    severity: INFO
+    message: "Erreur technique renvoyée telle quelle au client (structure de base, trace) : renvoyer un message générique."
+    metadata: {catalogue: V-API-03}
+    pattern-either:
+      - pattern: new Response(JSON.stringify($E.message), ...)
+      - pattern: "new Response(JSON.stringify({ error: $E.message }), ...)"
+      - pattern: "new Response(JSON.stringify({ error: $E }), ...)"

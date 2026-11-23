@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: secret-trouve-historique
+expected_outcome: |
+  Répond que non : un secret dans l'historique reste exposé, il faut le révoquer/faire tourner dans Supabase, vérifier son usage, éventuellement nettoyer l'historique ; ne recopie pas le secret en clair ; propose de le consigner comme signal confirmé (V-SEC-03) dans security/05-statique/synthese.md et le journal, puis finding via appsec-rapports.

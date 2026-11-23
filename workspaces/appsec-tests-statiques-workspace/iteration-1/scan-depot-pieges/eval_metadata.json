@@ -1,0 +1,15 @@
+{
+  "eval_name": "scan-depot-pieges",
+  "prompt": "/statique scanne le dépôt de chantier-pro (dans ./chantier-pro, le build est déjà dans dist/). Je veux savoir ce qui craint avant de passer aux tests sur le labo.\n\nInput files: chantier-pro/",
+  "assertions": [
+    "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirmé, probable, théorique ou faux positif) avec une preuve fichier:ligne",
+    "Le secret supprimé du .env mais présent dans l'historique git est trouvé, et la réponse demande sa rotation",
+    "Le JWT service_role présent dans dist/ est trouvé",
+    "Au moins 4 de ces signaux base sont relevés : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer exécutable par anon, bucket public, accidents en Realtime",
+    "Au moins 2 de ces signaux sont relevés : export-pdf verify_jwt false avec clé secrète, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)",
+    "Aucune valeur de secret n'apparaît en clair dans les livrables ni la réponse (caviardée)",
+    "La synthèse ou la réponse liste ce qui a été testé sans anomalie et ce qui n'a pas été couvert",
+    "Aucun test dynamique ni requête vers une app n'est lancé",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}

@@ -1,0 +1,1 @@
+(()=>{const u="http://127.0.0.1:54321",k="eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogInNlcnZpY2Vfcm9sZSIsICJpc3MiOiAic3VwYWJhc2UiLCAicmVmIjogImxhYm9maWN0aWYwMDAwMDAwMDAwIn0.c2lnbmF0dXJlLWZpY3RpdmUtcG91ci1sZXMtdGVzdHM";console.log(u,k)})();
