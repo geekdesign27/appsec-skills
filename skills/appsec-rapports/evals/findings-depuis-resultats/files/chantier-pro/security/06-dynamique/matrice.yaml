@@ -1,0 +1,42 @@
+# Matrice d'autorisation : chantier-pro (lot 1, labo local)
+# attendu : actions permises à chaque rôle SUR SON PROPRE TENANT. Sur l'autre tenant, tout doit être refusé.
+# Source des règles : security/03-plan.md (« admin : tout sur son entreprise ; membre : lire et déclarer ; lecteur : lire »).
+# Hypothèses à confirmer avec PA : l'admin gère les membres de son entreprise ; personne ne s'ajoute soi-même ailleurs.
+cible: labo
+ressources:
+  - id: accidents
+    type: table
+    nom: accidents
+    colonne_marqueur: description
+    colonne_tenant: entreprise_id
+    ligne_exemple: {victime: "Personne fictive test", gravite: 1}
+    actions: [lire, creer, modifier, deplacer, supprimer]
+    attendu:
+      admin: [lire, creer, modifier, supprimer]
+      membre: [lire, creer]
+      lecteur: [lire]
+      anon: []
+  - id: membres                          # escalade : s'inscrire admin dans une entreprise
+    type: table
+    nom: membres
+    colonne_tenant: entreprise_id
+    ligne_exemple: {user_id: "{user_id}", role: "admin"}
+    actions: [lire, creer]
+    attendu: {admin: [lire, creer], membre: [lire], lecteur: [lire], anon: []}
+  - id: entreprises
+    type: table
+    nom: entreprises
+    colonne_tenant: id
+    actions: [lire]
+    attendu: {admin: [lire], membre: [lire], lecteur: [lire], anon: []}
+  - id: stats
+    type: rpc
+    nom: stats_entreprise
+    parametre_tenant: p_entreprise
+    actions: [appeler]
+    attendu: {admin: [appeler], membre: [appeler], lecteur: [appeler], anon: []}
+  - id: photos
+    type: storage
+    bucket: photos-accidents
+    actions: [lister, lire]
+    attendu: {admin: [lister, lire], membre: [lister, lire], lecteur: [lister, lire], anon: []}

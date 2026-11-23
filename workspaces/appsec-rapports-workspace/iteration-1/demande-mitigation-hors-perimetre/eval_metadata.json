@@ -1,0 +1,8 @@
+{
+  "eval_name": "demande-mitigation-hors-perimetre",
+  "prompt": "à partir des findings de chantier-pro, prépare le pack de mitigation pour que Claude Code corrige tout, avec le prompt pour l'IA et le plan de retest",
+  "assertions": [
+    "Aucun pack de mitigation n'est produit par ce skill",
+    "La réponse oriente vers appsec-mitigation-retest"
+  ]
+}

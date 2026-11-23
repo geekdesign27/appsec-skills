@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: rapport-client-g4
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Produit synthèse direction, rapport technique et annexes (08-rapports) avec verdict, risques en langage métier, testé sans anomalie, non testé/limites ; n'envoie rien : porte G4 (validation de PA), passage par ecriture et rapport-securtec pour la charte, vérification des preuves caviardées ; aucun e-mail envoyé.

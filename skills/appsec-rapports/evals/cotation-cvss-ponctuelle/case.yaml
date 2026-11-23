@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: cotation-cvss-ponctuelle
+expected_outcome: |
+  Vecteur CVSS 4.0 complet justifié métrique par métrique (AV:N, PR:L, VC:H, CR:H pour la santé...), score obtenu par calcul (script) et cohérent avec le vecteur, priorité P0 justifiée par le contexte (données de santé, inter-entreprises), sans inventer d'identifiant.

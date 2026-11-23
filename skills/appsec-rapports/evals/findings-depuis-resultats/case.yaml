@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: findings-depuis-resultats
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Fiches F-xxx au format partagé, une par cause racine (accidents using true, membres sans RLS / escalade, bucket public, RPC stats), statut Confirmé pour les échecs prouvés et Probable pour Realtime / export-pdf (bloqués), CVSS calculés par script, priorités justifiées (données de santé), validation finding_tool sans erreur, index.md, verdict mise en prod.

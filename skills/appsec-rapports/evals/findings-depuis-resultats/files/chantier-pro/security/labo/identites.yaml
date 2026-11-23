@@ -1,0 +1,37 @@
+# Identités du laboratoire AppSec : chantier-pro
+# A ADAPTER au schéma réel (voir security/01-inventaire.md). Valeurs de test uniquement.
+# Placeholders disponibles dans les modèles SQL :
+#   {tenant_id} {tenant_code} {tenant_nom} {user_id} {email} {role} {marqueur} {n}
+
+app: chantier-pro
+domaine_email: labo.test          # domaine réservé, jamais routé
+tenants:
+  - {code: A, nom: "Tenant A (fictif)"}
+  - {code: B, nom: "Tenant B (fictif)"}
+roles: [admin, membre, lecteur]
+anonyme: true                     # identité « anon » : pas de compte, seulement la clé publishable
+
+# Où l'app stocke le rôle et le tenant. Garder les modèles utiles, supprimer les autres.
+modeles_sql:
+  # Une ligne par tenant (table des organisations)
+  tenant: >-
+    insert into public.entreprises (id, nom) values ('{tenant_id}', '{tenant_nom}');
+  # Une ligne par identité (table d'appartenance)
+  membre: >-
+    insert into public.membres (user_id, entreprise_id, role) values ('{user_id}', '{tenant_id}', '{role}');
+  # Si le rôle ou le tenant vit dans le JWT (app_metadata), sinon laisser vide
+app_metadata: {}                # ex. {tenant_id: "{tenant_id}", role: "{role}"}
+
+# Données marquées : une série par tenant, pour prouver une fuite sans ambiguïté
+donnees:
+  - table: public.accidents
+    par_tenant: 2
+    modele: >-
+      insert into public.accidents (entreprise_id, victime, description, gravite)
+      values ('{tenant_id}', 'Personne fictive {n}', '{marqueur}', 2);
+
+# Fichiers marqués dans le Storage local (déposés par labo_fichiers.py après chaque reset). Supprimer si inutile.
+fichiers:
+  - bucket: photos-accidents
+    par_tenant: 1
+    chemin: "{tenant_id}/{marqueur}.txt"
