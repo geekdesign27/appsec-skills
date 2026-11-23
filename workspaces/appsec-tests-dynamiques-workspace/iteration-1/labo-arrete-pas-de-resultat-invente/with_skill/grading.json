@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "La réponse constate que le labo ne répond pas (ou n'est pas démarré)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "Aucun résultat de test n'est inventé : TC-AUTHN-001 à 003 sont marqués bloqués ou non exécutés avec la raison",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse donne les commandes pour démarrer ou vérifier le labo (labo.sh up ou verifier) puis relancer",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  }
+}

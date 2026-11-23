@@ -8,6 +8,7 @@
 | Échec | La faille est démontrée : critère d'échec du cas atteint, avec preuve |
 | Bloqué | Le test n'a pas pu tourner (prérequis absent, labo cassé) : dire pourquoi |
 | Non exécuté | Volontairement non joué (hors périmètre, porte non franchie, temps) : dire pourquoi |
+| Non concluant | Le test a tourné, mais sa cible avait été modifiée par un test précédent, ou la cible ne se comportait pas comme un Supabase de labo : remettre à zéro, réparer, rejouer |
 
 Un **échec** donne un finding au statut **Confirmé** (reproduit, avec preuve). Un comportement suspect non démontré reste **Probable**.
 

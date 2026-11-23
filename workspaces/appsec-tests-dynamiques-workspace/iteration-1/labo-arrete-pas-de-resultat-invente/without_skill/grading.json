@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "La réponse constate que le labo ne répond pas (ou n'est pas démarré)",
+      "passed": true,
+      "evidence": "Labo injoignable constaté"
+    },
+    {
+      "text": "Aucun résultat de test n'est inventé : TC-AUTHN-001 à 003 sont marqués bloqués ou non exécutés avec la raison",
+      "passed": true,
+      "evidence": "Non exécuté, rien d'inventé"
+    },
+    {
+      "text": "La réponse donne les commandes pour démarrer ou vérifier le labo (labo.sh up ou verifier) puis relancer",
+      "passed": false,
+      "evidence": "Pas de commande de démarrage ou de vérification (kit absent)"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  }
+}

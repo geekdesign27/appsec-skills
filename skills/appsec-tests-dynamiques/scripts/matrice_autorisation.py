@@ -52,6 +52,13 @@ ressources:
       membre: [lire, creer]
       lecteur: [lire]
       anon: []
+  - id: membres                          # escalade : s'ajouter admin dans une entreprise
+    type: table
+    nom: membres
+    colonne_tenant: entreprise_id        # pas de colonne marquée : la fuite se prouve par l'id de l'autre tenant
+    ligne_exemple: {user_id: "{user_id}", role: "admin"}
+    actions: [lire, creer]
+    attendu: {admin: [lire], membre: [lire], lecteur: [lire], anon: []}
   - id: stats
     type: rpc
     nom: stats_entreprise
@@ -73,6 +80,8 @@ def lab_uuid(*p):
 def cav(s):
     s = str(s)
     s = re.sub(r"eyJ[A-Za-z0-9_\-]{8,}\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+", "eyJ…[jeton caviardé]", s)
+    s = re.sub(r"(Bearer\s+)[^\s\"']+", r"\1[jeton caviardé]", s)
+    s = re.sub(r'("access_token"\s*:\s*")[^"]+', r"\1[jeton caviardé]", s)
     return re.sub(r"sb_(secret|publishable)_[A-Za-z0-9_\-]{6,}", r"sb_\1_…[caviardé]", s)
 
 
@@ -98,9 +107,9 @@ def lire_env(p):
 def identites(p):
     ids, marq = [], {}
     for l in open(p, encoding="utf-8"):
-        m = re.match(r"\|\s*([a-z0-9]+-[a-z0-9_]+)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(\S+@\S+)\s*\|", l)
+        m = re.match(r"\|\s*([a-z0-9]+-[a-z0-9_]+)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(\S+@\S+)\s*\|\s*`?([0-9a-f-]{36})?`?", l)
         if m:
-            ids.append({"id": m.group(1), "tenant": m.group(2), "role": m.group(3), "email": m.group(4)})
+            ids.append({"id": m.group(1), "tenant": m.group(2), "role": m.group(3), "email": m.group(4), "uuid": m.group(5)})
         m = re.match(r"\|\s*([\w.:\-]+)\s*\|\s*([A-Za-z0-9]+)\s*\|\s*`(SECRET-TENANT-[^`]+)`\s*\|", l)
         if m:
             marq.setdefault(m.group(1).split(".")[-1].replace("storage:", "storage:"), []).append((m.group(2), m.group(3)))
@@ -122,6 +131,7 @@ def main():
     e.add_argument("--g3")
     e.add_argument("--hote")
     e.add_argument("--sortie", default="security/06-dynamique")
+    e.add_argument("--forcer", action="store_true", help="exécuter malgré des contrôles de cohérence rouges (résultats non probants)")
     a = ap.parse_args()
 
     if a.cmd == "gabarit":
@@ -164,7 +174,7 @@ def main():
         sys.exit("Il faut au moins deux tenants dans identites.md pour tester l'isolation.")
     tid = {t: lab_uuid(app, "tenant", t) for t in tenants}
 
-    sessions = [{"id": "anon", "tenant": None, "role": "anon", "jwt": None}]
+    sessions = [{"id": "anon", "tenant": None, "role": "anon", "jwt": None, "uuid": None}]
     for i in ids:
         c, b = req("POST", f"{url}/auth/v1/token?grant_type=password", cle, corps={"email": i["email"], "password": mdp})
         jwt = json.loads(b).get("access_token") if c == 200 else None
@@ -173,8 +183,42 @@ def main():
             continue
         sessions.append({**i, "jwt": jwt})
 
+    # Contrôles de cohérence : la cible se comporte-t-elle comme un vrai Supabase ? Sinon une « fuite » ne prouve rien.
+    coherence = []
+    c, _ = req("GET", f"{url}/auth/v1/health", cle)
+    coherence.append(("API d'authentification (/auth/v1/health → 200)", c == 200, c))
+    try:
+        with urllib.request.urlopen(urllib.request.Request(f"{url}/rest/v1/"), timeout=15) as x:
+            c0 = x.status
+    except urllib.error.HTTPError as e2:
+        c0 = e2.code
+    except Exception:
+        c0 = 0
+    coherence.append(("requête sans clé d'API refusée (401)", c0 == 401, c0))
+    c, _ = req("GET", f"{url}/rest/v1/", cle, "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYXV0aGVudGljYXRlZCJ9.signaturefausse")
+    coherence.append(("jeton forgé refusé (401)", c == 401, c))
+    premiere = next((x for x in cfg.get("ressources", []) if x.get("type") == "table"), None)
+    if premiere and len(sessions) > 1:
+        s1 = sessions[1]
+        mien = next((m for (tt, m) in marqueurs.get(premiere["nom"], []) if tt == s1["tenant"]), None)
+        if mien:
+            colm = premiere["colonne_marqueur"]
+            c, b = req("GET", f"{url}/rest/v1/{premiere['nom']}?select={colm}&{colm}=eq.{urllib.parse.quote(mien)}", cle, s1["jwt"])
+            try:
+                nb = len(json.loads(b))
+            except Exception:
+                nb = -1
+            coherence.append((f"filtre PostgREST respecté ({colm}=eq.{mien} → 1 ligne)", nb == 1, c))
+    rouges = [x for x in coherence if not x[1]]
+    for lib, ok, code in coherence:
+        print(("OK    " if ok else "ROUGE ") + f"cohérence : {lib} [{code}]")
+    if rouges and not a.forcer:
+        sys.exit("ARRÊT : la cible ne se comporte pas comme un Supabase de labo, les résultats ne seraient pas probants. "
+                 "Vérifier le labo (labo.sh verifier), ou relancer avec --forcer et le signaler dans les résultats.")
+
     resultats = []
     n = 0
+    supprimes, deplaces = set(), set()
 
     def noter(s_, r_, action, portee, statut, constat, requete, code, corps):
         nonlocal n
@@ -185,6 +229,10 @@ def main():
 
     def autre(t):
         return next(x for x in tenants if x != t) if t else tenants[0]
+
+    def a_cree(s_, r_):
+        return any(x["identite"] == s_["id"] and x["ressource"] == r_["id"] and x["action"] == "creer"
+                   and x["portee"] == "propre" and "acceptée" in x["constat"] for x in resultats)
 
     ORDRE = {"lire": 0, "lister": 0, "appeler": 0, "creer": 1, "modifier": 2, "deplacer": 3, "supprimer": 4}
     res = cfg.get("ressources", [])
@@ -201,18 +249,19 @@ def main():
             continue
         if r["type"] == "table":
             t = urllib.parse.quote(r["nom"])
-            col, ten = r["colonne_marqueur"], r["colonne_tenant"]
+            col, ten = r.get("colonne_marqueur"), r["colonne_tenant"]
             m_autre = [m for (tt, m) in marqueurs.get(r["nom"], []) if tt == cible_t]
             m_propre = [m for (tt, m) in marqueurs.get(r["nom"], []) if tt == propre]
             if action == "lire":
-                q = f"{url}/rest/v1/{t}?select={col},{ten}"
+                sel = f"{col},{ten}" if col else "*"
+                q = f"{url}/rest/v1/{t}?select={sel}"
                 c, b = req("GET", q, cle, s_["jwt"])
-                fuite = [m for m in m_autre if m in b]
+                fuite = [m for m in m_autre if m in b] if col else ([f"lignes du tenant {cible_t}"] if tid[cible_t] in b else [])
                 noter(s_, r, action, "autre", "ÉCHEC" if fuite else "OK",
                       f"marqueurs de {cible_t} visibles : {', '.join(fuite)}" if fuite else f"aucun marqueur de {cible_t}",
-                      f"GET /rest/v1/{r['nom']}?select={col},{ten}", c, b)
+                      f"GET /rest/v1/{r['nom']}?select={sel}", c, b)
                 if propre:
-                    vu = any(m in b for m in m_propre)
+                    vu = any(m in b for m in m_propre) if col else (tid[propre] in b)
                     ok = vu == ("lire" in permis)
                     noter(s_, r, action, "propre", "OK" if ok else ("ÉCHEC" if vu else "écart"),
                           ("lecture permise" if vu else "lecture refusée") + (" (attendu)" if ok else " (non conforme à attendu)"),
@@ -221,35 +270,57 @@ def main():
                 for portee, tt in (("autre", cible_t), ("propre", propre)):
                     if tt is None:
                         continue
-                    ligne = {**(r.get("ligne_exemple") or {}), ten: tid[tt], col: f"TEST-ECRITURE-{s_['id']}-{portee}"}
+                    ligne = {k: (str(v).replace("{user_id}", s_.get("uuid") or "") if isinstance(v, str) else v)
+                             for k, v in (r.get("ligne_exemple") or {}).items()}
+                    ligne[ten] = tid[tt]
+                    if col:
+                        ligne[col] = f"TEST-ECRITURE-{s_['id']}-{portee}"
                     c, b = req("POST", f"{url}/rest/v1/{t}", cle, s_["jwt"], [ligne], "return=representation")
-                    cree = c in (200, 201) and "TEST-ECRITURE" in b
+                    cree = c in (200, 201) and tid[tt] in b
                     attendu_ok = (portee == "propre" and "creer" in permis)
                     statut = "OK" if cree == attendu_ok else ("ÉCHEC" if cree else "écart")
                     noter(s_, r, action, portee, statut, ("insertion acceptée" if cree else "insertion refusée") + f" ({c})",
                           f"POST /rest/v1/{r['nom']} {ten}={tt}", c, b)
-            elif action in ("modifier", "supprimer"):
-                for portee, ms in (("autre", m_autre), ("propre", m_propre)):
-                    if not ms or (portee == "propre" and propre is None):
+            elif action in ("modifier", "supprimer") and col:
+                # Côté propre, la suppression vise la ligne de test créée par l'identité (si sa création a réussi),
+                # pour ne pas détruire les marqueurs dont les autres identités ont besoin.
+                test = f"TEST-ECRITURE-{s_['id']}-propre"
+                m_test = [test] if a_cree(s_, r) else []
+                cibles = (("autre", m_autre), ("propre", m_test if action == "supprimer" else m_propre))
+                for portee, ms in cibles:
+                    if portee == "propre" and propre is None:
                         continue
-                    m = ms[-1]
+                    vivants = [x for x in ms if x not in supprimes and x not in deplaces]
+                    if not vivants:
+                        if portee == "autre" or action == "modifier":
+                            noter(s_, r, action, portee, "non concluant",
+                                  "aucune cible intacte (déjà supprimée ou déplacée par un test précédent) : remettre à zéro et rejouer", "", 0, "")
+                        continue
+                    m = vivants[-1]
                     q = f"{url}/rest/v1/{t}?{col}=eq.{urllib.parse.quote(m)}"
                     if action == "modifier":
                         c, b = req("PATCH", q, cle, s_["jwt"], {col: m}, "return=representation")
                     else:
-                        if portee == "propre" and "supprimer" not in permis:
-                            pass
                         c, b = req("DELETE", q, cle, s_["jwt"], None, "return=representation")
                     fait = c in (200, 204) and m in b
+                    if fait and action == "supprimer":
+                        supprimes.add(m)
                     attendu_ok = portee == "propre" and action in permis
                     statut = "OK" if fait == attendu_ok else ("ÉCHEC" if fait else "écart")
                     noter(s_, r, action, portee, statut, ("action acceptée" if fait else "action refusée") + f" sur {m} ({c})",
                           f"{'PATCH' if action == 'modifier' else 'DELETE'} /rest/v1/{r['nom']}?{col}=eq.{m}", c, b)
-            elif action == "deplacer" and propre and m_propre:
-                m = m_propre[0]
+            elif action == "deplacer" and propre and col:
+                test = f"TEST-ECRITURE-{s_['id']}-propre"
+                vivants = [x for x in m_propre if x not in supprimes and x not in deplaces]
+                m = test if a_cree(s_, r) else (vivants[0] if vivants else None)
+                if m is None:
+                    noter(s_, r, action, "propre→autre", "non concluant", "aucune ligne propre intacte à déplacer", "", 0, "")
+                    continue
                 q = f"{url}/rest/v1/{t}?{col}=eq.{urllib.parse.quote(m)}"
                 c, b = req("PATCH", q, cle, s_["jwt"], {ten: tid[cible_t]}, "return=representation")
                 fait = c == 200 and tid[cible_t] in b
+                if fait:
+                    deplaces.add(m)
                 noter(s_, r, action, "propre→autre", "ÉCHEC" if fait else "OK",
                       (f"ligne {m} déplacée vers {cible_t} (V-DB-04)" if fait else "déplacement refusé") + f" ({c})",
                       f"PATCH /rest/v1/{r['nom']} set {ten}={cible_t}", c, b)
@@ -292,16 +363,20 @@ def main():
                           f"GET /storage/v1/object/(authenticated|public)/{bk}/{chemin}", c if c == 200 else c2, b if c == 200 else b2)
 
     os.makedirs(a.sortie, exist_ok=True)
-    json.dump({"date": dt.datetime.now().isoformat(timespec="seconds"), "cible": a.cible, "resultats": resultats},
+    json.dump({"date": dt.datetime.now().isoformat(timespec="seconds"), "cible": a.cible,
+               "coherence": [{"controle": l, "ok": o, "code": c} for l, o, c in coherence], "resultats": resultats},
               open(os.path.join(a.sortie, "matrice-resultats.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     ech = [x for x in resultats if x["statut"] == "ÉCHEC"]
     ecarts = [x for x in resultats if x["statut"] == "écart"]
     L = [f"# Matrice d'autorisation : résultats ({a.cible}, {dt.date.today().isoformat()})", "",
          f"**{len(ech)} échecs de sécurité**, {len(ecarts)} écarts fonctionnels, {sum(1 for x in resultats if x['statut'] == 'OK')} contrôles conformes, "
-         f"{sum(1 for x in resultats if x['statut'] == 'non exécuté')} non exécutés.", "",
-         "Légende : ÉCHEC = accès qui aurait dû être refusé (faille). écart = refus d'une action attendue (fonctionnel, à vérifier). OK = conforme.", "",
+         f"{sum(1 for x in resultats if x['statut'] == 'non exécuté')} non exécutés, {sum(1 for x in resultats if x['statut'] == 'non concluant')} non concluants.", "",
+         "Légende : ÉCHEC = accès qui aurait dû être refusé (faille). écart = refus d'une action attendue (fonctionnel, à vérifier). "
+         "non concluant = cible déjà modifiée par un test précédent (remettre à zéro et rejouer). OK = conforme.", "",
+         "Cohérence de la cible : " + "; ".join(f"{lib} {'OK' if ok else 'ROUGE'}" for lib, ok, _ in coherence)
+         + (" **(exécution forcée : résultats non probants)**" if rouges else ""), "",
          "| Preuve | Identité | Ressource | Action | Portée | Statut | Constat |", "|---|---|---|---|---|---|---|"]
-    ordre = {"ÉCHEC": 0, "écart": 1, "non exécuté": 2, "OK": 3}
+    ordre = {"ÉCHEC": 0, "écart": 1, "non concluant": 2, "non exécuté": 3, "OK": 4}
     for x in sorted(resultats, key=lambda x: (ordre[x["statut"]], x["ressource"], x["identite"])):
         L.append(f"| {x['preuve']} | {x['identite']} | {x['ressource']} | {x['action']} | {x['portee']} | {x['statut']} | {x['constat']} |")
     L += ["", "Requêtes et extraits de réponses (jetons caviardés) : `matrice-resultats.json`. "

@@ -1,0 +1,22 @@
+[
+  {"query": "/dynamique lance le lot 1 sur le labo de prevens, la matrice d'autorisation avec tous les comptes de test", "should_trigger": true},
+  {"query": "est-ce qu'un client de auditapp peut voir les audits d'une autre commune ? teste-le pour de vrai sur le labo qui tourne", "should_trigger": true},
+  {"query": "teste l'isolation entre tenants de flameup dans le supabase local, REST, storage et realtime", "should_trigger": true},
+  {"query": "/pentest du labo de cap5km, g2 est validée", "should_trigger": true},
+  {"query": "un membre peut-il se promouvoir admin dans moncor-dashboard ? essaie avec les comptes du labo", "should_trigger": true},
+  {"query": "teste l'auth de suivi-sante sur le labo : rejeu de jwt après logout, énumération de comptes, inscription ouverte", "should_trigger": true},
+  {"query": "j'ai un chatbot avec rag dans psstmanager, teste l'injection de prompt et le cloisonnement entre clients dans le labo", "should_trigger": true},
+  {"query": "lance zap et nuclei sur l'app vite du labo de travail-isole et fais le tri des résultats", "should_trigger": true},
+  {"query": "lance la matrice d'autorisation sur la preview vercel de chantier-pro, G3 est validée et on est en plan pro", "should_trigger": true},
+  {"query": "relis mes migrations de flameup et dis-moi si mes policies RLS tiennent, sans lancer l'app", "should_trigger": false},
+  {"query": "monte le labo supabase local de prevens avec 2 cabinets et des comptes de test", "should_trigger": false},
+  {"query": "calcule le CVSS 4.0 de la fuite inter-tenant trouvée dans la matrice et rédige le finding", "should_trigger": false},
+  {"query": "écris les cas de test du lot 1 pour auditapp au format habituel, je les validerai avant", "should_trigger": false},
+  {"query": "c'est quoi un IDOR ? explique simplement avec un exemple", "should_trigger": false},
+  {"query": "écris les tests playwright e2e du parcours d'inscription de cap5km pour la CI", "should_trigger": false},
+  {"query": "/appsec on démarre une mission complète sur psstmanager", "should_trigger": false},
+  {"query": "prépare le pack de mitigation pour l'IA de dev à partir des échecs de la matrice", "should_trigger": false},
+  {"query": "scanne le bundle dist de flameup pour voir si la clé service_role traîne", "should_trigger": false},
+  {"query": "fais un test de charge k6 sur l'api de moncor-dashboard en prod pour voir combien elle tient", "should_trigger": false},
+  {"query": "corrige la policy RLS qui laisse un cabinet lire les mesures d'un autre", "should_trigger": false}
+]
