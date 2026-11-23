@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "chantier-pro/security/labo/identites.yaml référence les vraies tables du dépôt (entreprises, membres, accidents) et les rôles admin, membre, lecteur",
+      "passed": false,
+      "evidence": "Pas de security/labo/identites.yaml (kit maison dans labo/)"
+    },
+    {
+      "text": "chantier-pro/supabase/seeds/90_labo_identites.sql existe avec 6 comptes (2 entreprises x 3 rôles) et des marqueurs SECRET-TENANT-A et SECRET-TENANT-B",
+      "passed": false,
+      "evidence": "Seed maison labo/seed.sql (6 comptes, marqueurs) hors du chemin des seeds Supabase"
+    },
+    {
+      "text": "chantier-pro/supabase/config.toml active les seeds du dossier seeds/ (section [db.seed])",
+      "passed": false,
+      "evidence": "Pas de [db.seed] : reset --no-seed puis seed manuel"
+    },
+    {
+      "text": "chantier-pro/security/labo/.env.lab ne contient qu'une URL locale (127.0.0.1 ou localhost) et aucune clé secrète ni URL supabase.co",
+      "passed": true,
+      "evidence": "labo.env sans URL ni secret de prod"
+    },
+    {
+      "text": "chantier-pro/security/04-labo.md est rempli (sans ligne de gabarit) et contient une section de limites par rapport à la production",
+      "passed": true,
+      "evidence": "04-labo.md rempli avec limites"
+    },
+    {
+      "text": "La réponse indique clairement ce qui a été exécuté et vérifié et ce qui ne l'a pas été",
+      "passed": true,
+      "evidence": "Statut honnête (non démarré, testé contre doublures)"
+    },
+    {
+      "text": "Aucun test de sécurité n'est lancé (pas de scan, pas de tentative d'accès inter-tenant)",
+      "passed": true,
+      "evidence": "Pas de test de sécurité"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 3,
+    "total": 8,
+    "pass_rate": 0.625
+  }
+}

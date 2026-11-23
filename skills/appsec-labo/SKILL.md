@@ -24,8 +24,8 @@ Prérequis idéal : plan validé à la porte G2 (`security/03-plan.md`), qui dit
 1. **Vérifier les prérequis** : Docker, Supabase CLI ≥ 3, PyYAML, accès aux images (`references/stack-supabase.md`, section 1). Si un prérequis manque, dis-le et donne la commande d'installation, sans contourner un filtrage réseau.
 2. **Générer le gabarit d'identités** :
    `python3 scripts/labo_init.py gabarit <racine-app> --roles <rôles réels>`
-3. **L'adapter au schéma réel** : lis les migrations et `01-inventaire.md`, puis remplis dans `security/labo/identites.yaml` la table des tenants, l'appartenance (table ou `app_metadata`) et les tables sensibles à marquer. C'est le cœur du travail : un mauvais mapping donne un labo où rien ne prouve rien.
-4. **Générer le kit** : `python3 scripts/labo_init.py generer <racine-app>`. Il écrit le seed (`supabase/seeds/90_labo_identites.sql`), `.env.lab`, `labo.sh`, `labo_verifier.py` et `identites.md`. Ajoute les lignes `[db.seed]` qu'il affiche dans `supabase/config.toml`.
+3. **L'adapter au schéma réel** : lis les migrations et `01-inventaire.md`, puis remplis dans `security/labo/identites.yaml` la table des tenants, l'appartenance (table ou `app_metadata`), les tables sensibles à marquer et, si l'app stocke des documents, la section `fichiers` (buckets à garnir de fichiers marqués). C'est le cœur du travail : un mauvais mapping donne un labo où rien ne prouve rien.
+4. **Générer le kit** : `python3 scripts/labo_init.py generer <racine-app>`. Il écrit le seed (`supabase/seeds/90_labo_identites.sql`), `.env.lab`, `labo.sh`, `labo_verifier.py`, `labo_fichiers.py` (dépôt des fichiers marqués après chaque reset) et `identites.md`. N'écris pas de script maison pour ce que le kit fait déjà. Ajoute les lignes `[db.seed]` qu'il affiche dans `supabase/config.toml`.
 5. **Monter et vérifier**, si Docker est disponible :
    `security/labo/labo.sh up`, puis `security/labo/labo.sh reset`, puis `security/labo/labo.sh verifier --sonde public.<table>:<colonne>`
    Tout doit être vert avant de passer aux tests. Si tu ne peux pas exécuter (pas de Docker, registre inaccessible), livre le kit, dis clairement ce qui n'a pas été vérifié, et donne à PA les commandes à lancer.
@@ -52,4 +52,4 @@ Ensuite, passe le relais à `appsec-tests-statiques` (phase 5) ou `appsec-tests-
 | Versions des outils | `references/partage/referentiels.md`, section 4 |
 | Arborescence `security/`, identifiants | `references/partage/conventions.md` |
 
-Scripts : `scripts/labo_init.py` (gabarit, génération), `scripts/labo_verifier.py` (copié dans le kit). Assets : `assets/labo.sh`, `assets/docker-compose.outils.yml`, `assets/epingler_images.sh`. `references/partage/` et `scripts/partage/` sont communs à la famille (source : dossier `partage/` du dépôt).
+Scripts : `scripts/labo_init.py` (gabarit, génération), `scripts/labo_verifier.py` et `scripts/labo_fichiers.py` (copiés dans le kit). Assets : `assets/labo.sh`, `assets/docker-compose.outils.yml`, `assets/epingler_images.sh`. `references/partage/` et `scripts/partage/` sont communs à la famille (source : dossier `partage/` du dépôt).

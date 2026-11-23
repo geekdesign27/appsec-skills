@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "cap5km/supabase/config.toml ne contient plus de section [inbucket] et utilise [local_smtp] (ou l'équivalent Mailpit de la CLI v3)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne présente pas Postgres 15 comme refusé par la CLI v3 (seul Postgres 13 l'est) et cherche la cause de l'erreur de version ailleurs (volume local, alignement sur la prod)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse explique que ces erreurs viennent du passage à la CLI Supabase v3",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne propose ni --remote, ni --linked, ni SUPABASE_YES",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse donne les commandes pour relancer le labo (supabase start ou labo.sh)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "Vérifié dans les fichiers produits"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

@@ -20,12 +20,14 @@ case "${1:-}" in
   up)
     garde
     supabase start
+    python3 security/labo/labo_fichiers.py
     python3 security/labo/labo_verifier.py "${@:2}"
     ;;
   reset)
     garde
     # Rejoue toutes les migrations puis les seeds (dont seeds/90_labo_identites.sql). Local par défaut en CLI v3.
     supabase db reset
+    python3 security/labo/labo_fichiers.py
     python3 security/labo/labo_verifier.py "${@:2}"
     ;;
   verifier)

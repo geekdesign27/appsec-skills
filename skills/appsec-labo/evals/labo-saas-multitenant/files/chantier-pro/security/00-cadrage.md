@@ -1,15 +1,14 @@
-<!-- gabarit appsec : non rempli -->
 # Cadrage et autorisation : chantier-pro
 
 - Date : 2026-11-23
 - Niveau ASVS cible : L2
-- Porte G1 : en attente
+- Porte G1 : franchie le 2026-11-18
 
 ## 1. App, environnements, propriétaires, fournisseurs
 | Élément | Valeur |
 |---|---|
 | App | chantier-pro |
-| Propriétaire (autorise les tests) | <à compléter> |
+| Propriétaire (autorise les tests) | PA (app personnelle) |
 | Environnements | labo : <url locale> ; staging : <url ou aucun> ; prod : <url> |
 | Fournisseurs | <Supabase, Vercel (plan : Hobby/Pro/Enterprise), ...> |
 
@@ -27,4 +26,4 @@
 - Autorisation écrite : <référence du document ou message de PA, date>
 
 ## 4. Décision G1
-<décision de PA, date>
+2026-11-18 : « OK, c'est mon app, labo local uniquement » (PA)

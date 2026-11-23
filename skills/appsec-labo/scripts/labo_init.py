@@ -63,6 +63,12 @@ donnees:
     modele: >-
       insert into public.accidents (entreprise_id, victime, description, gravite)
       values ('{{tenant_id}}', 'Personne fictive {{n}}', '{{marqueur}}', 2);
+
+# Fichiers marqués dans le Storage local (déposés par labo_fichiers.py après chaque reset). Supprimer si inutile.
+fichiers:
+  - bucket: photos-accidents
+    par_tenant: 1
+    chemin: "{{tenant_id}}/{{marqueur}}.txt"
 """
 
 
@@ -204,7 +210,8 @@ def cmd_generer(a):
         fh.write("\n".join(env) + "\n")
     shutil.copy(os.path.join(ASSETS, "labo.sh"), os.path.join(lab, "labo.sh"))
     os.chmod(os.path.join(lab, "labo.sh"), 0o755)
-    shutil.copy(os.path.join(ICI, "labo_verifier.py"), os.path.join(lab, "labo_verifier.py"))
+    for f in ("labo_verifier.py", "labo_fichiers.py"):
+        shutil.copy(os.path.join(ICI, f), os.path.join(lab, f))
 
     md = [f"# Identités du laboratoire : {app}", "", "Mot de passe commun : `LABO_MOT_DE_PASSE` dans `.env.lab`.", "",
           "| Identité | Tenant | Rôle | E-mail | UUID |", "|---|---|---|---|---|"]
@@ -213,11 +220,15 @@ def cmd_generer(a):
     md += [f"| {i} | {c} | {r} | {e} | `{u}` |" for (i, c, r, e, u) in ident]
     md += ["", "## Marqueurs de données", "", "| Table | Tenant | Marqueur |", "|---|---|---|"]
     md += [f"| {t} | {c} | `{m}` |" for (t, c, m) in marqueurs]
+    for spec in cfg.get("fichiers") or []:
+        for t in tenants:
+            for n in range(1, int(spec.get("par_tenant", 1)) + 1):
+                md.append(f"| storage:{spec['bucket']} | {t['code']} | `SECRET-TENANT-{t['code']}-{100 + n:03d}` |")
     with open(os.path.join(lab, "identites.md"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(md) + "\n")
 
     print(f"{len(ident)} comptes, {len(tenants)} tenants, {len(marqueurs)} lignes marquées.")
-    print("Écrits : supabase/seeds/90_labo_identites.sql, security/labo/{.env.lab, labo.sh, labo_verifier.py, identites.md}")
+    print("Écrits : supabase/seeds/90_labo_identites.sql, security/labo/{.env.lab, labo.sh, labo_verifier.py, labo_fichiers.py, identites.md}")
     cfgtoml = os.path.join(racine, "supabase", "config.toml")
     if os.path.exists(cfgtoml) and "seeds/" not in open(cfgtoml, encoding="utf-8").read():
         print("À FAIRE dans supabase/config.toml, section [db.seed] :")

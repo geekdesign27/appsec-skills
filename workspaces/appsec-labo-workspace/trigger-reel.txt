@@ -1,0 +1,21 @@
+OK  attendu=oui taux=1.00 autres=[] | /labo monte le labo de prevens avec 2 cabinets et les comptes de test 
+OK  attendu=oui taux=1.00 autres=[] | j'ai besoin d'un environnement local isolé pour tester la sécu de audi
+OK  attendu=oui taux=1.00 autres=[] | remets le labo de flameup à zéro, j'ai tout cassé en testant les injec
+OK  attendu=oui taux=1.00 autres=[] | le labo sécu de cap5km ne démarre plus depuis la mise à jour de la CLI
+OK  attendu=oui taux=1.00 autres=[] | crée-moi les comptes de test owner/admin/member/viewer pour 2 tenants 
+OK  attendu=oui taux=1.00 autres=[] | prépare le conteneur avec zap, nuclei, trufflehog et osv-scanner pour 
+OK  attendu=oui taux=1.00 autres=[] | pour le pentest de mon portail odoo client, il me faut une copie de te
+OK  attendu=oui taux=1.00 autres=[] | rédige le 04-labo.md de suivi-sante avec les limites du labo par rappo
+OK  attendu=oui taux=1.00 autres=[] | /labo seed des tenants pour chantier-pro, je veux un SECRET-TENANT par
+OK  attendu=non taux=0.00 autres=[] | comment je configure mon environnement de dev Vite + Supabase local po
+OK  attendu=non taux=0.00 autres=['appsec-cadrage-menaces'] | fais le modèle de menaces de chantier-pro avec le DFD
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | lance la matrice d'autorisation sur le labo de prevens avec a-member e
+OK  attendu=non taux=0.00 autres=[] | scanne les secrets dans l'historique git de flameup avec trufflehog et
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | /appsec on démarre une mission complète sur travail-isole
+OK  attendu=non taux=0.00 autres=[] | mets en place un staging sur vercel pour cap5km avec une base supabase
+OK  attendu=non taux=0.00 autres=[] | écris les tests pgTAP de non-régression pour la policy accidents_selec
+OK  attendu=non taux=0.00 autres=[] | mon docker desktop prend 40 Go sur mon mac, comment je fais le ménage 
+OK  attendu=non taux=0.00 autres=[] | calcule le CVSS 4.0 de la fuite inter-tenant trouvée hier dans le labo
+OK  attendu=non taux=0.00 autres=[] | installe-moi le serveur MCP supabase dans claude code pour mon projet
+OK  attendu=non taux=0.00 autres=[] | fais-moi une checklist de mise en prod pour l'app evacecole
+Score : 20/20

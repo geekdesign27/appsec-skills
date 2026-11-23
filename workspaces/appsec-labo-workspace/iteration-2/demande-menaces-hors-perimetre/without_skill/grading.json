@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "Aucun labo n'est monté ni aucun fichier de labo généré",
+      "passed": true,
+      "evidence": "Pas de labo"
+    },
+    {
+      "text": "La réponse oriente vers appsec-cadrage-menaces pour le modèle de menaces",
+      "passed": false,
+      "evidence": "Modèle STRIDE hypothétique produit, aucun renvoi"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  }
+}
