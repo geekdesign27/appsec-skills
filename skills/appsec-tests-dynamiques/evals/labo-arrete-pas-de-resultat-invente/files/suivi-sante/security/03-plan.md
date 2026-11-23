@@ -1,0 +1,12 @@
+<!-- gabarit appsec : non rempli -->
+# Plan de test : suivi-sante
+
+- Porte G2 : en attente
+
+## Exigences ASVS L2 retenues
+
+## Lots et ordre d'exécution
+
+## Charge estimée
+
+## Couverture attendue

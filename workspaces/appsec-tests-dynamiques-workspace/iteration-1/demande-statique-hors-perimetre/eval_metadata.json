@@ -1,0 +1,8 @@
+{
+  "eval_name": "demande-statique-hors-perimetre",
+  "prompt": "relis mes migrations supabase de chantier-pro côté sécu et dis-moi si mes policies RLS tiennent, sans lancer l'app",
+  "assertions": [
+    "Aucun test dynamique n'est lancé",
+    "La réponse oriente vers appsec-tests-statiques"
+  ]
+}

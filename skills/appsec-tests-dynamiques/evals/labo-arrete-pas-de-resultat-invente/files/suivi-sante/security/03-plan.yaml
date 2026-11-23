@@ -1,0 +1,9 @@
+- id: TC-AUTHN-001
+  titre: L'inscription publique est fermée
+  lot: 2
+- id: TC-AUTHN-002
+  titre: Un JWT rejoué après déconnexion est refusé
+  lot: 2
+- id: TC-AUTHN-003
+  titre: Les messages de connexion ne révèlent pas l'existence d'un compte
+  lot: 2

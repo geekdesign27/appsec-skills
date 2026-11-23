@@ -1,0 +1,15 @@
+{
+  "eval_name": "lot1-labo-fuyant",
+  "prompt": "/dynamique le labo de chantier-pro tourne (dossier ./chantier-pro, l'API locale est dans security/labo/.env.lab, clé publishable locale : sb_publishable_labo_local). Lance le lot 1 et dis-moi si une entreprise peut voir ou modifier les données d'une autre.\n\nInput files: chantier-pro/",
+  "assertions": [
+    "La porte G2 et la cible locale (127.0.0.1) sont vérifiées avant de lancer",
+    "Des requêtes ont réellement été envoyées au labo local (matrice exécutée), sans hôte non local",
+    "La lecture inter-entreprises est démontrée par un marqueur SECRET-TENANT de l'autre entreprise",
+    "Au moins une écriture inter-entreprises (création, modification, suppression ou déplacement de tenant) est démontrée",
+    "chantier-pro/security/06-dynamique/ contient les résultats avec un statut par contrôle ou par cas de test",
+    "Aucun jeton JWT complet n'apparaît dans les livrables (caviardés)",
+    "La réponse rappelle de remettre le labo à zéro (labo.sh reset) après les écritures de test",
+    "La réponse passe le relais à appsec-rapports (ou à la cotation des findings)",
+    "La réponse ne contient aucun tiret cadratin (—)"
+  ]
+}

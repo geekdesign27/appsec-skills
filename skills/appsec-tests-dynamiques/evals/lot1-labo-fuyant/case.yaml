@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: lot1-labo-fuyant
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Vérifie G2 et la cible locale, exécute la matrice d'autorisation (script) sur le labo, démontre la lecture et l'écriture inter-entreprises avec marqueurs, le déplacement de tenant, le Storage ; preuves caviardées ; resultats.md avec statuts ; rappelle labo.sh reset ; passe le relais à appsec-rapports ; aucune cible non locale.
