@@ -1,1 +1,250 @@
-<html><body><h1>Starting optimization loop...</h1><meta http-equiv='refresh' content='5'></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>appsec-chef-de-mission — Skill Description Optimization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', Georgia, serif;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #faf9f5;
+            color: #141413;
+        }
+        h1 { font-family: 'Poppins', sans-serif; color: #141413; }
+        .explainer {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+            color: #b0aea5;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .summary {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+        }
+        .summary p { margin: 5px 0; }
+        .best { color: #788c5d; font-weight: bold; }
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e8e6dc;
+            border-radius: 6px;
+            font-size: 12px;
+            min-width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #e8e6dc;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        th {
+            font-family: 'Poppins', sans-serif;
+            background: #141413;
+            color: #faf9f5;
+            font-weight: 500;
+        }
+        th.test-col {
+            background: #6a9bcc;
+        }
+        th.query-col { min-width: 200px; }
+        td.description {
+            font-family: monospace;
+            font-size: 11px;
+            word-wrap: break-word;
+            max-width: 400px;
+        }
+        td.result {
+            text-align: center;
+            font-size: 16px;
+            min-width: 40px;
+        }
+        td.test-result {
+            background: #f0f6fc;
+        }
+        .pass { color: #788c5d; }
+        .fail { color: #c44; }
+        .rate {
+            font-size: 9px;
+            color: #b0aea5;
+            display: block;
+        }
+        tr:hover { background: #faf9f5; }
+        .score {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .score-good { background: #eef2e8; color: #788c5d; }
+        .score-ok { background: #fef3c7; color: #d97706; }
+        .score-bad { background: #fceaea; color: #c44; }
+        .train-label { color: #b0aea5; font-size: 10px; }
+        .test-label { color: #6a9bcc; font-size: 10px; font-weight: bold; }
+        .best-row { background: #f5f8f2; }
+        th.positive-col { border-bottom: 3px solid #788c5d; }
+        th.negative-col { border-bottom: 3px solid #c44; }
+        th.test-col.positive-col { border-bottom: 3px solid #788c5d; }
+        th.test-col.negative-col { border-bottom: 3px solid #c44; }
+        .legend { font-family: 'Poppins', sans-serif; display: flex; gap: 20px; margin-bottom: 10px; font-size: 13px; align-items: center; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+        .swatch-positive { background: #141413; border-bottom: 3px solid #788c5d; }
+        .swatch-negative { background: #141413; border-bottom: 3px solid #c44; }
+        .swatch-test { background: #6a9bcc; }
+        .swatch-train { background: #141413; }
+    </style>
+</head>
+<body>
+    <h1>appsec-chef-de-mission — Skill Description Optimization</h1>
+    <div class="explainer">
+        <strong>Optimizing your skill's description.</strong> This page updates automatically as Claude tests different versions of your skill's description. Each row is an iteration — a new description attempt. The columns show test queries: green checkmarks mean the skill triggered correctly (or correctly didn't trigger), red crosses mean it got it wrong. The "Train" score shows performance on queries used to improve the description; the "Test" score shows performance on held-out queries the optimizer hasn't seen. When it's done, Claude will apply the best-performing description to your skill.
+    </div>
+
+    <div class="summary">
+        <p><strong>Original:</strong> Point d&#x27;entrée de la famille AppSec de PA (persona Loïc Chappuis, ingénieur sécurité applicative senior) : lance, cadre et pilote une mission de sécurité sur une app web vibecodée (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 à G5, puis passe le relais au bon skill appsec-*. Active sur « /appsec », « Loïc », « lance une mission sécu », « audite la sécurité de mon app », « est-ce que mon app est prête pour la prod côté sécurité », « on en est où de l&#x27;audit », « quelle est la prochaine étape sécu », « reprends la mission AppSec », ou dès que PA veut une démarche complète de sécurité (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d&#x27;un client. INDISPENSABLE avant tout test de sécurité, car c&#x27;est lui qui vérifie l&#x27;autorisation écrite et l&#x27;environnement. NE PAS activer pour une question défensive ponctuelle sans mission (→ web-security-audit), pour seulement modéliser les menaces ou écrire un plan de test (→ appsec-cadrage-menaces), monter le labo (→ appsec-labo), coter un finding ou rédiger un rapport (→ appsec-rapports), ni pour corriger du code (→ dev-senior).</p>
+        <p class="best"><strong>Best:</strong> Point d&#x27;entrée de la famille AppSec de PA (persona Loïc Chappuis, ingénieur sécurité applicative senior) : lance, cadre et pilote une mission de sécurité sur une app web vibecodée (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 à G5, puis passe le relais au bon skill appsec-*. Active sur « /appsec », « Loïc », « lance une mission sécu », « audite la sécurité de mon app », « est-ce que mon app est prête pour la prod côté sécurité », « on en est où de l&#x27;audit », « quelle est la prochaine étape sécu », « reprends la mission AppSec », ou dès que PA veut une démarche complète de sécurité (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d&#x27;un client. INDISPENSABLE avant tout test de sécurité, car c&#x27;est lui qui vérifie l&#x27;autorisation écrite et l&#x27;environnement. NE PAS activer pour une question défensive ponctuelle sans mission (→ web-security-audit), pour seulement modéliser les menaces ou écrire un plan de test (→ appsec-cadrage-menaces), monter le labo (→ appsec-labo), coter un finding ou rédiger un rapport (→ appsec-rapports), ni pour corriger du code (→ dev-senior).</p>
+        <p><strong>Best Score:</strong> 5/8 (test)</p>
+        <p><strong>Iterations:</strong> 3 | <strong>Train:</strong> 12 | <strong>Test:</strong> 8</p>
+    </div>
+
+    <div class="legend">
+        <span style="font-weight:600">Query columns:</span>
+        <span class="legend-item"><span class="legend-swatch swatch-positive"></span> Should trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-negative"></span> Should NOT trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-train"></span> Train</span>
+        <span class="legend-item"><span class="legend-swatch swatch-test"></span> Test</span>
+    </div>
+
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Iter</th>
+                <th>Train</th>
+                <th>Test</th>
+                <th class="query-col">Description</th>
+                <th class="positive-col">est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, ça ira plus vite que de monter un labo</th>
+                <th class="positive-col">lance une mission AppSec complète sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c&#x27;est mon app, labo local ok</th>
+                <th class="positive-col">j&#x27;ai reçu une demande d&#x27;un RSSI client qui veut savoir si on a fait un audit de sécu de psstmanager. faut lancer quelque chose de sérieux, tu me guides ?</th>
+                <th class="positive-col">on en est où sur l&#x27;audit sécu de prevens ? quelle est la prochaine étape et qu&#x27;est-ce que je dois valider</th>
+                <th class="positive-col">/appsec on démarre l&#x27;audit de sécu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, dépôt dans ~/dev/auditapp</th>
+                <th class="positive-col">Loïc, tu peux reprendre la mission sécurité sur cap5km ? on s&#x27;était arrêtés après les tests statiques je crois</th>
+                <th class="negative-col">fais-moi le modèle de menaces STRIDE de mon flux d&#x27;upload de photos d&#x27;accidents vers Supabase Storage, avec le DFD en mermaid</th>
+                <th class="negative-col">détermination des dangers Suva pour un poste de travail isolé en station d&#x27;épuration, tu peux me faire le tableau ?</th>
+                <th class="negative-col">ajoute dans mon CLAUDE.md des règles pour que l&#x27;agent ne désactive jamais la RLS et ne mette jamais de clé secrète côté client</th>
+                <th class="negative-col">rédige-moi un rapport SecurTec d&#x27;avis sécurité sur l&#x27;échafaudage de la façade nord du chantier de Givisiez, voici mes notes</th>
+                <th class="negative-col">scanne juste mon dépôt pour voir s&#x27;il y a des secrets ou des dépendances vulnérables, pas besoin de tout le tralala</th>
+                <th class="negative-col">c&#x27;est quoi la différence entre la clé sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?</th>
+                <th class="test-col positive-col">je veux une démarche sécu structurée pour mon SaaS multi-tenant avant la démo au client Suva la semaine pro, avec les portes de validation et un journal</th>
+                <th class="test-col positive-col">un client (fiduciaire à Fribourg) veut que je fasse un audit de sécurité complet de son portail WeWeb + Supabase, comment on s&#x27;organise, par quoi on commence ?</th>
+                <th class="test-col positive-col">j&#x27;ai fini de vibecoder mon app de suivi santé (supabase + vercel), j&#x27;aimerais savoir si elle est prête côté sécurité avant que mes potes l&#x27;utilisent, tu peux faire tout le process proprement ?</th>
+                <th class="test-col positive-col">audite la sécurité de mon app flameup stp, React Vite Supabase, j&#x27;ai 40 utilisateurs dessus</th>
+                <th class="test-col negative-col">mon app est-elle RGPD et nLPD compatible ? j&#x27;ai un formulaire de contact et Google Analytics</th>
+                <th class="test-col negative-col">calcule le score CVSS 4.0 de ce finding : un membre peut lire les audits d&#x27;un autre tenant via PostgREST, sans interaction, données perso</th>
+                <th class="test-col negative-col">corrige ma policy RLS sur la table audits, elle laisse passer tout le monde avec using(true), voilà le fichier de migration</th>
+                <th class="test-col negative-col">monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro, je veux pouvoir le remettre à zéro en une commande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="best-row">
+                <td>1</td>
+                <td><span class="score score-ok">21/36</span></td>
+                <td><span class="score score-ok">14/24</span></td>
+                <td class="description">Point d&#x27;entrée de la famille AppSec de PA (persona Loïc Chappuis, ingénieur sécurité applicative senior) : lance, cadre et pilote une mission de sécurité sur une app web vibecodée (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 à G5, puis passe le relais au bon skill appsec-*. Active sur « /appsec », « Loïc », « lance une mission sécu », « audite la sécurité de mon app », « est-ce que mon app est prête pour la prod côté sécurité », « on en est où de l&#x27;audit », « quelle est la prochaine étape sécu », « reprends la mission AppSec », ou dès que PA veut une démarche complète de sécurité (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d&#x27;un client. INDISPENSABLE avant tout test de sécurité, car c&#x27;est lui qui vérifie l&#x27;autorisation écrite et l&#x27;environnement. NE PAS activer pour une question défensive ponctuelle sans mission (→ web-security-audit), pour seulement modéliser les menaces ou écrire un plan de test (→ appsec-cadrage-menaces), monter le labo (→ appsec-labo), coter un finding ou rédiger un rapport (→ appsec-rapports), ni pour corriger du code (→ dev-senior).</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">2/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>2</td>
+                <td><span class="score score-ok">20/36</span></td>
+                <td><span class="score score-ok">14/24</span></td>
+                <td class="description">Utilise ce skill (Loïc, chef de mission AppSec de PA) dès que PA veut faire auditer ou pentester une de ses apps web, ou celle d&#x27;un client, à n&#x27;importe quel stade : démarrer un audit sécu sur une app nommée (« /appsec », mise en prod prévue, client ou RSSI qui exige un audit sérieux), reprendre une mission interrompue, savoir où en est l&#x27;audit, la prochaine étape ou ce qu&#x27;il doit valider. Aussi pour toute demande de tester une app en marche, surtout en prod (sqlmap, scan, attaque) : il vérifie l&#x27;autorisation écrite, l&#x27;environnement et le plan Vercel, refuse ce qui est risqué et propose le labo. Il pilote toute la démarche (cadrage, labo, tests, rapport, corrections, retest), tient security/journal.md et les portes G1 à G5, puis délègue aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu&#x27;il y a une mission ou un audit d&#x27;app. Pas pour une question sécu ponctuelle, un modèle de menaces seul, un scan de dépôt seul, un rapport seul ou du code à corriger.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">1/3</span></td>
+            </tr>
+            <tr class="">
+                <td>3</td>
+                <td><span class="score score-ok">20/36</span></td>
+                <td><span class="score score-ok">13/24</span></td>
+                <td class="description">Loïc, chef de mission AppSec de PA. Charge-le AVANT de répondre dès qu&#x27;un message parle d&#x27;audit de sécurité, de pentest, de mission sécu ou de « Loïc » pour une app web précise (de PA ou d&#x27;un client), même si ça paraît simple. Trois cas. Démarrer : « /appsec », mise en prod prochaine, client, RSSI ou commune qui veut un audit sérieux, mission complète (cadrage, tests, rapport, corrections, retest). Suivre : reprendre une mission en pause, où en est l&#x27;audit, prochaine étape, ce que PA doit valider (security/journal.md, portes G1 à G5). Freiner : envie de tester vite une app en ligne ou en prod (sqlmap, scan, attaque) ; il vérifie l&#x27;autorisation et le plan Vercel, refuse le risqué, propose le labo. Il délègue ensuite aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu&#x27;une app nommée doit être auditée. Pas pour une question ponctuelle, un STRIDE ou un scan de dépôt seuls, une règle CLAUDE.md, ni la sécurité au travail (SST, Suva, chantier).</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">1/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">1/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+</body>
+</html>

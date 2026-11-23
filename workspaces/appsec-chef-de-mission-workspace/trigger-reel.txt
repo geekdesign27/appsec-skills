@@ -1,0 +1,21 @@
+OK  attendu=oui taux=1.00 autres=[] | /appsec on démarre l'audit de sécu de auditapp, je veux le mettre en p
+OK  attendu=oui taux=1.00 autres=[] | Loïc, tu peux reprendre la mission sécurité sur cap5km ? on s'était ar
+OK  attendu=oui taux=1.00 autres=[] | j'ai fini de vibecoder mon app de suivi santé (supabase + vercel), j'a
+OK  attendu=oui taux=1.00 autres=[] | un client (fiduciaire à Fribourg) veut que je fasse un audit de sécuri
+OK  attendu=oui taux=1.00 autres=[] | on en est où sur l'audit sécu de prevens ? quelle est la prochaine éta
+OK  attendu=oui taux=1.00 autres=[] | lance une mission AppSec complète sur moncor-dashboard : cadrage, test
+KO  attendu=oui taux=0.00 autres=[] | est-ce que tu peux pentester direct la prod de travail-isole ce soir ?
+OK  attendu=oui taux=1.00 autres=[] | je veux une démarche sécu structurée pour mon SaaS multi-tenant avant 
+OK  attendu=oui taux=1.00 autres=[] | audite la sécurité de mon app flameup stp, React Vite Supabase, j'ai 4
+OK  attendu=oui taux=1.00 autres=[] | j'ai reçu une demande d'un RSSI client qui veut savoir si on a fait un
+OK  attendu=non taux=0.00 autres=[] | c'est quoi la différence entre la clé sb_publishable et la sb_secret s
+OK  attendu=non taux=0.00 autres=['anthropic-skills:web-security-audit'] | fais-moi le modèle de menaces STRIDE de mon flux d'upload de photos d'
+OK  attendu=non taux=0.00 autres=[] | monte-moi le labo supabase local avec 2 tenants et des comptes de test
+OK  attendu=non taux=0.00 autres=[] | calcule le score CVSS 4.0 de ce finding : un membre peut lire les audi
+OK  attendu=non taux=0.00 autres=[] | corrige ma policy RLS sur la table audits, elle laisse passer tout le 
+OK  attendu=non taux=0.00 autres=['anthropic-skills:web-security-audit'] | mon app est-elle RGPD et nLPD compatible ? j'ai un formulaire de conta
+OK  attendu=non taux=0.00 autres=['anthropic-skills:rapport-securtec'] | rédige-moi un rapport SecurTec d'avis sécurité sur l'échafaudage de la
+OK  attendu=non taux=0.00 autres=[] | ajoute dans mon CLAUDE.md des règles pour que l'agent ne désactive jam
+OK  attendu=non taux=0.00 autres=['anthropic-skills:determination-dangers-suva'] | détermination des dangers Suva pour un poste de travail isolé en stati
+OK  attendu=non taux=0.00 autres=[] | scanne juste mon dépôt pour voir s'il y a des secrets ou des dépendanc
+Score : 19/20

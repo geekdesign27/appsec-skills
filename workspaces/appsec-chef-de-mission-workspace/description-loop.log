@@ -4,3 +4,933 @@ Split: 12 train, 8 test (holdout=0.4)
 Iteration 1/3
 Description: Point d'entrée de la famille AppSec de PA (persona Loïc Chappuis, ingénieur sécurité applicative senior) : lance, cadre et pilote une mission de sécurité sur une app web vibecodée (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 à G5, puis passe le relais au bon skill appsec-*. Active sur « /appsec », « Loïc », « lance une mission sécu », « audite la sécurité de mon app », « est-ce que mon app est prête pour la prod côté sécurité », « on en est où de l'audit », « quelle est la prochaine étape sécu », « reprends la mission AppSec », ou dès que PA veut une démarche complète de sécurité (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d'un client. INDISPENSABLE avant tout test de sécurité, car c'est lui qui vérifie l'autorisation écrite et l'environnement. NE PAS activer pour une question défensive ponctuelle sans mission (→ web-security-audit), pour seulement modéliser les menaces ou écrire un plan de test (→ appsec-cadrage-menaces), monter le labo (→ appsec-labo), coter un finding ou rédiger un rapport (→ appsec-rapports), ni pour corriger du code (→ dev-senior).
 ============================================================
+Train: 21/36 correct, precision=100% recall=17% accuracy=58% (74.8s)
+  [FAIL] rate=0/3 expected=True: est-ce que tu peux pentester direct la prod de travail-isole
+  [FAIL] rate=1/3 expected=True: lance une mission AppSec complète sur moncor-dashboard : cad
+  [FAIL] rate=0/3 expected=True: j'ai reçu une demande d'un RSSI client qui veut savoir si on
+  [FAIL] rate=1/3 expected=True: on en est où sur l'audit sécu de prevens ? quelle est la pro
+  [FAIL] rate=0/3 expected=True: /appsec on démarre l'audit de sécu de auditapp, je veux le m
+  [FAIL] rate=1/3 expected=True: Loïc, tu peux reprendre la mission sécurité sur cap5km ? on 
+  [PASS] rate=0/3 expected=False: fais-moi le modèle de menaces STRIDE de mon flux d'upload de
+  [PASS] rate=0/3 expected=False: détermination des dangers Suva pour un poste de travail isol
+  [PASS] rate=0/3 expected=False: ajoute dans mon CLAUDE.md des règles pour que l'agent ne dés
+  [PASS] rate=0/3 expected=False: rédige-moi un rapport SecurTec d'avis sécurité sur l'échafau
+  [PASS] rate=0/3 expected=False: scanne juste mon dépôt pour voir s'il y a des secrets ou des
+  [PASS] rate=0/3 expected=False: c'est quoi la différence entre la clé sb_publishable et la s
+Test : 14/24 correct, precision=100% recall=17% accuracy=58% (0.0s)
+  [FAIL] rate=0/3 expected=True: je veux une démarche sécu structurée pour mon SaaS multi-ten
+  [PASS] rate=2/3 expected=True: un client (fiduciaire à Fribourg) veut que je fasse un audit
+  [FAIL] rate=0/3 expected=True: j'ai fini de vibecoder mon app de suivi santé (supabase + ve
+  [FAIL] rate=0/3 expected=True: audite la sécurité de mon app flameup stp, React Vite Supaba
+  [PASS] rate=0/3 expected=False: mon app est-elle RGPD et nLPD compatible ? j'ai un formulair
+  [PASS] rate=0/3 expected=False: calcule le score CVSS 4.0 de ce finding : un membre peut lir
+  [PASS] rate=0/3 expected=False: corrige ma policy RLS sur la table audits, elle laisse passe
+  [PASS] rate=0/3 expected=False: monte-moi le labo supabase local avec 2 tenants et des compt
+
+Improving description...
+Proposed (20.0s): Utilise ce skill (Loïc, chef de mission AppSec de PA) dès que PA veut faire auditer ou pentester une de ses apps web, ou celle d'un client, à n'importe quel stade : démarrer un audit sécu sur une app nommée (« /appsec », mise en prod prévue, client ou RSSI qui exige un audit sérieux), reprendre une mission interrompue, savoir où en est l'audit, la prochaine étape ou ce qu'il doit valider. Aussi pour toute demande de tester une app en marche, surtout en prod (sqlmap, scan, attaque) : il vérifie l'autorisation écrite, l'environnement et le plan Vercel, refuse ce qui est risqué et propose le labo. Il pilote toute la démarche (cadrage, labo, tests, rapport, corrections, retest), tient security/journal.md et les portes G1 à G5, puis délègue aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu'il y a une mission ou un audit d'app. Pas pour une question sécu ponctuelle, un modèle de menaces seul, un scan de dépôt seul, un rapport seul ou du code à corriger.
+
+============================================================
+Iteration 2/3
+Description: Utilise ce skill (Loïc, chef de mission AppSec de PA) dès que PA veut faire auditer ou pentester une de ses apps web, ou celle d'un client, à n'importe quel stade : démarrer un audit sécu sur une app nommée (« /appsec », mise en prod prévue, client ou RSSI qui exige un audit sérieux), reprendre une mission interrompue, savoir où en est l'audit, la prochaine étape ou ce qu'il doit valider. Aussi pour toute demande de tester une app en marche, surtout en prod (sqlmap, scan, attaque) : il vérifie l'autorisation écrite, l'environnement et le plan Vercel, refuse ce qui est risqué et propose le labo. Il pilote toute la démarche (cadrage, labo, tests, rapport, corrections, retest), tient security/journal.md et les portes G1 à G5, puis délègue aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu'il y a une mission ou un audit d'app. Pas pour une question sécu ponctuelle, un modèle de menaces seul, un scan de dépôt seul, un rapport seul ou du code à corriger.
+============================================================
+Train: 20/36 correct, precision=100% recall=11% accuracy=56% (64.3s)
+  [FAIL] rate=0/3 expected=True: est-ce que tu peux pentester direct la prod de travail-isole
+  [FAIL] rate=1/3 expected=True: lance une mission AppSec complète sur moncor-dashboard : cad
+  [FAIL] rate=0/3 expected=True: j'ai reçu une demande d'un RSSI client qui veut savoir si on
+  [FAIL] rate=0/3 expected=True: on en est où sur l'audit sécu de prevens ? quelle est la pro
+  [FAIL] rate=0/3 expected=True: /appsec on démarre l'audit de sécu de auditapp, je veux le m
+  [FAIL] rate=1/3 expected=True: Loïc, tu peux reprendre la mission sécurité sur cap5km ? on 
+  [PASS] rate=0/3 expected=False: fais-moi le modèle de menaces STRIDE de mon flux d'upload de
+  [PASS] rate=0/3 expected=False: ajoute dans mon CLAUDE.md des règles pour que l'agent ne dés
+  [PASS] rate=0/3 expected=False: détermination des dangers Suva pour un poste de travail isol
+  [PASS] rate=0/3 expected=False: rédige-moi un rapport SecurTec d'avis sécurité sur l'échafau
+  [PASS] rate=0/3 expected=False: scanne juste mon dépôt pour voir s'il y a des secrets ou des
+  [PASS] rate=0/3 expected=False: c'est quoi la différence entre la clé sb_publishable et la s
+Test : 14/24 correct, precision=75% recall=25% accuracy=58% (0.0s)
+  [FAIL] rate=1/3 expected=True: je veux une démarche sécu structurée pour mon SaaS multi-ten
+  [FAIL] rate=0/3 expected=True: un client (fiduciaire à Fribourg) veut que je fasse un audit
+  [FAIL] rate=1/3 expected=True: audite la sécurité de mon app flameup stp, React Vite Supaba
+  [FAIL] rate=1/3 expected=True: j'ai fini de vibecoder mon app de suivi santé (supabase + ve
+  [PASS] rate=0/3 expected=False: mon app est-elle RGPD et nLPD compatible ? j'ai un formulair
+  [PASS] rate=1/3 expected=False: monte-moi le labo supabase local avec 2 tenants et des compt
+  [PASS] rate=0/3 expected=False: calcule le score CVSS 4.0 de ce finding : un membre peut lir
+  [PASS] rate=0/3 expected=False: corrige ma policy RLS sur la table audits, elle laisse passe
+
+Improving description...
+Proposed (27.3s): Loïc, chef de mission AppSec de PA. Charge-le AVANT de répondre dès qu'un message parle d'audit de sécurité, de pentest, de mission sécu ou de « Loïc » pour une app web précise (de PA ou d'un client), même si ça paraît simple. Trois cas. Démarrer : « /appsec », mise en prod prochaine, client, RSSI ou commune qui veut un audit sérieux, mission complète (cadrage, tests, rapport, corrections, retest). Suivre : reprendre une mission en pause, où en est l'audit, prochaine étape, ce que PA doit valider (security/journal.md, portes G1 à G5). Freiner : envie de tester vite une app en ligne ou en prod (sqlmap, scan, attaque) ; il vérifie l'autorisation et le plan Vercel, refuse le risqué, propose le labo. Il délègue ensuite aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu'une app nommée doit être auditée. Pas pour une question ponctuelle, un STRIDE ou un scan de dépôt seuls, une règle CLAUDE.md, ni la sécurité au travail (SST, Suva, chantier).
+
+============================================================
+Iteration 3/3
+Description: Loïc, chef de mission AppSec de PA. Charge-le AVANT de répondre dès qu'un message parle d'audit de sécurité, de pentest, de mission sécu ou de « Loïc » pour une app web précise (de PA ou d'un client), même si ça paraît simple. Trois cas. Démarrer : « /appsec », mise en prod prochaine, client, RSSI ou commune qui veut un audit sérieux, mission complète (cadrage, tests, rapport, corrections, retest). Suivre : reprendre une mission en pause, où en est l'audit, prochaine étape, ce que PA doit valider (security/journal.md, portes G1 à G5). Freiner : envie de tester vite une app en ligne ou en prod (sqlmap, scan, attaque) ; il vérifie l'autorisation et le plan Vercel, refuse le risqué, propose le labo. Il délègue ensuite aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit dès qu'une app nommée doit être auditée. Pas pour une question ponctuelle, un STRIDE ou un scan de dépôt seuls, une règle CLAUDE.md, ni la sécurité au travail (SST, Suva, chantier).
+============================================================
+Train: 20/36 correct, precision=100% recall=11% accuracy=56% (66.8s)
+  [FAIL] rate=0/3 expected=True: est-ce que tu peux pentester direct la prod de travail-isole
+  [FAIL] rate=0/3 expected=True: lance une mission AppSec complète sur moncor-dashboard : cad
+  [FAIL] rate=1/3 expected=True: j'ai reçu une demande d'un RSSI client qui veut savoir si on
+  [FAIL] rate=0/3 expected=True: on en est où sur l'audit sécu de prevens ? quelle est la pro
+  [FAIL] rate=1/3 expected=True: /appsec on démarre l'audit de sécu de auditapp, je veux le m
+  [FAIL] rate=0/3 expected=True: Loïc, tu peux reprendre la mission sécurité sur cap5km ? on 
+  [PASS] rate=0/3 expected=False: fais-moi le modèle de menaces STRIDE de mon flux d'upload de
+  [PASS] rate=0/3 expected=False: détermination des dangers Suva pour un poste de travail isol
+  [PASS] rate=0/3 expected=False: ajoute dans mon CLAUDE.md des règles pour que l'agent ne dés
+  [PASS] rate=0/3 expected=False: rédige-moi un rapport SecurTec d'avis sécurité sur l'échafau
+  [PASS] rate=0/3 expected=False: scanne juste mon dépôt pour voir s'il y a des secrets ou des
+  [PASS] rate=0/3 expected=False: c'est quoi la différence entre la clé sb_publishable et la s
+Test : 13/24 correct, precision=100% recall=8% accuracy=54% (0.0s)
+  [FAIL] rate=0/3 expected=True: je veux une démarche sécu structurée pour mon SaaS multi-ten
+  [FAIL] rate=1/3 expected=True: un client (fiduciaire à Fribourg) veut que je fasse un audit
+  [FAIL] rate=0/3 expected=True: j'ai fini de vibecoder mon app de suivi santé (supabase + ve
+  [FAIL] rate=0/3 expected=True: audite la sécurité de mon app flameup stp, React Vite Supaba
+  [PASS] rate=0/3 expected=False: mon app est-elle RGPD et nLPD compatible ? j'ai un formulair
+  [PASS] rate=0/3 expected=False: calcule le score CVSS 4.0 de ce finding : un membre peut lir
+  [PASS] rate=0/3 expected=False: monte-moi le labo supabase local avec 2 tenants et des compt
+  [PASS] rate=0/3 expected=False: corrige ma policy RLS sur la table audits, elle laisse passe
+
+Max iterations reached (3).
+
+Exit reason: max_iterations (3)
+Best score: 5/8 (iteration 1)
+{
+  "exit_reason": "max_iterations (3)",
+  "original_description": "Point d'entr\u00e9e de la famille AppSec de PA (persona Lo\u00efc Chappuis, ing\u00e9nieur s\u00e9curit\u00e9 applicative senior) : lance, cadre et pilote une mission de s\u00e9curit\u00e9 sur une app web vibecod\u00e9e (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 \u00e0 G5, puis passe le relais au bon skill appsec-*. Active sur \u00ab /appsec \u00bb, \u00ab Lo\u00efc \u00bb, \u00ab lance une mission s\u00e9cu \u00bb, \u00ab audite la s\u00e9curit\u00e9 de mon app \u00bb, \u00ab est-ce que mon app est pr\u00eate pour la prod c\u00f4t\u00e9 s\u00e9curit\u00e9 \u00bb, \u00ab on en est o\u00f9 de l'audit \u00bb, \u00ab quelle est la prochaine \u00e9tape s\u00e9cu \u00bb, \u00ab reprends la mission AppSec \u00bb, ou d\u00e8s que PA veut une d\u00e9marche compl\u00e8te de s\u00e9curit\u00e9 (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d'un client. INDISPENSABLE avant tout test de s\u00e9curit\u00e9, car c'est lui qui v\u00e9rifie l'autorisation \u00e9crite et l'environnement. NE PAS activer pour une question d\u00e9fensive ponctuelle sans mission (\u2192 web-security-audit), pour seulement mod\u00e9liser les menaces ou \u00e9crire un plan de test (\u2192 appsec-cadrage-menaces), monter le labo (\u2192 appsec-labo), coter un finding ou r\u00e9diger un rapport (\u2192 appsec-rapports), ni pour corriger du code (\u2192 dev-senior).",
+  "best_description": "Point d'entr\u00e9e de la famille AppSec de PA (persona Lo\u00efc Chappuis, ing\u00e9nieur s\u00e9curit\u00e9 applicative senior) : lance, cadre et pilote une mission de s\u00e9curit\u00e9 sur une app web vibecod\u00e9e (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 \u00e0 G5, puis passe le relais au bon skill appsec-*. Active sur \u00ab /appsec \u00bb, \u00ab Lo\u00efc \u00bb, \u00ab lance une mission s\u00e9cu \u00bb, \u00ab audite la s\u00e9curit\u00e9 de mon app \u00bb, \u00ab est-ce que mon app est pr\u00eate pour la prod c\u00f4t\u00e9 s\u00e9curit\u00e9 \u00bb, \u00ab on en est o\u00f9 de l'audit \u00bb, \u00ab quelle est la prochaine \u00e9tape s\u00e9cu \u00bb, \u00ab reprends la mission AppSec \u00bb, ou d\u00e8s que PA veut une d\u00e9marche compl\u00e8te de s\u00e9curit\u00e9 (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d'un client. INDISPENSABLE avant tout test de s\u00e9curit\u00e9, car c'est lui qui v\u00e9rifie l'autorisation \u00e9crite et l'environnement. NE PAS activer pour une question d\u00e9fensive ponctuelle sans mission (\u2192 web-security-audit), pour seulement mod\u00e9liser les menaces ou \u00e9crire un plan de test (\u2192 appsec-cadrage-menaces), monter le labo (\u2192 appsec-labo), coter un finding ou r\u00e9diger un rapport (\u2192 appsec-rapports), ni pour corriger du code (\u2192 dev-senior).",
+  "best_score": "5/8",
+  "best_train_score": "6/12",
+  "best_test_score": "5/8",
+  "final_description": "Lo\u00efc, chef de mission AppSec de PA. Charge-le AVANT de r\u00e9pondre d\u00e8s qu'un message parle d'audit de s\u00e9curit\u00e9, de pentest, de mission s\u00e9cu ou de \u00ab Lo\u00efc \u00bb pour une app web pr\u00e9cise (de PA ou d'un client), m\u00eame si \u00e7a para\u00eet simple. Trois cas. D\u00e9marrer : \u00ab /appsec \u00bb, mise en prod prochaine, client, RSSI ou commune qui veut un audit s\u00e9rieux, mission compl\u00e8te (cadrage, tests, rapport, corrections, retest). Suivre : reprendre une mission en pause, o\u00f9 en est l'audit, prochaine \u00e9tape, ce que PA doit valider (security/journal.md, portes G1 \u00e0 G5). Freiner : envie de tester vite une app en ligne ou en prod (sqlmap, scan, attaque) ; il v\u00e9rifie l'autorisation et le plan Vercel, refuse le risqu\u00e9, propose le labo. Il d\u00e9l\u00e8gue ensuite aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit d\u00e8s qu'une app nomm\u00e9e doit \u00eatre audit\u00e9e. Pas pour une question ponctuelle, un STRIDE ou un scan de d\u00e9p\u00f4t seuls, une r\u00e8gle CLAUDE.md, ni la s\u00e9curit\u00e9 au travail (SST, Suva, chantier).",
+  "iterations_run": 3,
+  "holdout": 0.4,
+  "train_size": 12,
+  "test_size": 8,
+  "history": [
+    {
+      "iteration": 1,
+      "description": "Point d'entr\u00e9e de la famille AppSec de PA (persona Lo\u00efc Chappuis, ing\u00e9nieur s\u00e9curit\u00e9 applicative senior) : lance, cadre et pilote une mission de s\u00e9curit\u00e9 sur une app web vibecod\u00e9e (React/Vite + Supabase + Vercel, aussi Odoo, WeWeb, WordPress, Convex), tient le journal security/journal.md et les portes de validation G1 \u00e0 G5, puis passe le relais au bon skill appsec-*. Active sur \u00ab /appsec \u00bb, \u00ab Lo\u00efc \u00bb, \u00ab lance une mission s\u00e9cu \u00bb, \u00ab audite la s\u00e9curit\u00e9 de mon app \u00bb, \u00ab est-ce que mon app est pr\u00eate pour la prod c\u00f4t\u00e9 s\u00e9curit\u00e9 \u00bb, \u00ab on en est o\u00f9 de l'audit \u00bb, \u00ab quelle est la prochaine \u00e9tape s\u00e9cu \u00bb, \u00ab reprends la mission AppSec \u00bb, ou d\u00e8s que PA veut une d\u00e9marche compl\u00e8te de s\u00e9curit\u00e9 (cadrage, tests, rapport, correction, retest) sur une de ses apps ou celle d'un client. INDISPENSABLE avant tout test de s\u00e9curit\u00e9, car c'est lui qui v\u00e9rifie l'autorisation \u00e9crite et l'environnement. NE PAS activer pour une question d\u00e9fensive ponctuelle sans mission (\u2192 web-security-audit), pour seulement mod\u00e9liser les menaces ou \u00e9crire un plan de test (\u2192 appsec-cadrage-menaces), monter le labo (\u2192 appsec-labo), coter un finding ou r\u00e9diger un rapport (\u2192 appsec-rapports), ni pour corriger du code (\u2192 dev-senior).",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 5,
+      "test_failed": 3,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "je veux une d\u00e9marche s\u00e9cu structur\u00e9e pour mon SaaS multi-tenant avant la d\u00e9mo au client Suva la semaine pro, avec les portes de validation et un journal",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "un client (fiduciaire \u00e0 Fribourg) veut que je fasse un audit de s\u00e9curit\u00e9 complet de son portail WeWeb + Supabase, comment on s'organise, par quoi on commence ?",
+          "should_trigger": true,
+          "trigger_rate": 0.6666666666666666,
+          "triggers": 2,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "j'ai fini de vibecoder mon app de suivi sant\u00e9 (supabase + vercel), j'aimerais savoir si elle est pr\u00eate c\u00f4t\u00e9 s\u00e9curit\u00e9 avant que mes potes l'utilisent, tu peux faire tout le process proprement ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "audite la s\u00e9curit\u00e9 de mon app flameup stp, React Vite Supabase, j'ai 40 utilisateurs dessus",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "mon app est-elle RGPD et nLPD compatible ? j'ai un formulaire de contact et Google Analytics",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "calcule le score CVSS 4.0 de ce finding : un membre peut lire les audits d'un autre tenant via PostgREST, sans interaction, donn\u00e9es perso",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "corrige ma policy RLS sur la table audits, elle laisse passer tout le monde avec using(true), voil\u00e0 le fichier de migration",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro, je veux pouvoir le remettre \u00e0 z\u00e9ro en une commande",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "description": "Utilise ce skill (Lo\u00efc, chef de mission AppSec de PA) d\u00e8s que PA veut faire auditer ou pentester une de ses apps web, ou celle d'un client, \u00e0 n'importe quel stade : d\u00e9marrer un audit s\u00e9cu sur une app nomm\u00e9e (\u00ab /appsec \u00bb, mise en prod pr\u00e9vue, client ou RSSI qui exige un audit s\u00e9rieux), reprendre une mission interrompue, savoir o\u00f9 en est l'audit, la prochaine \u00e9tape ou ce qu'il doit valider. Aussi pour toute demande de tester une app en marche, surtout en prod (sqlmap, scan, attaque) : il v\u00e9rifie l'autorisation \u00e9crite, l'environnement et le plan Vercel, refuse ce qui est risqu\u00e9 et propose le labo. Il pilote toute la d\u00e9marche (cadrage, labo, tests, rapport, corrections, retest), tient security/journal.md et les portes G1 \u00e0 G5, puis d\u00e9l\u00e8gue aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit d\u00e8s qu'il y a une mission ou un audit d'app. Pas pour une question s\u00e9cu ponctuelle, un mod\u00e8le de menaces seul, un scan de d\u00e9p\u00f4t seul, un rapport seul ou du code \u00e0 corriger.",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "je veux une d\u00e9marche s\u00e9cu structur\u00e9e pour mon SaaS multi-tenant avant la d\u00e9mo au client Suva la semaine pro, avec les portes de validation et un journal",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "un client (fiduciaire \u00e0 Fribourg) veut que je fasse un audit de s\u00e9curit\u00e9 complet de son portail WeWeb + Supabase, comment on s'organise, par quoi on commence ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "audite la s\u00e9curit\u00e9 de mon app flameup stp, React Vite Supabase, j'ai 40 utilisateurs dessus",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai fini de vibecoder mon app de suivi sant\u00e9 (supabase + vercel), j'aimerais savoir si elle est pr\u00eate c\u00f4t\u00e9 s\u00e9curit\u00e9 avant que mes potes l'utilisent, tu peux faire tout le process proprement ?",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "mon app est-elle RGPD et nLPD compatible ? j'ai un formulaire de contact et Google Analytics",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro, je veux pouvoir le remettre \u00e0 z\u00e9ro en une commande",
+          "should_trigger": false,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "calcule le score CVSS 4.0 de ce finding : un membre peut lire les audits d'un autre tenant via PostgREST, sans interaction, donn\u00e9es perso",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "corrige ma policy RLS sur la table audits, elle laisse passer tout le monde avec using(true), voil\u00e0 le fichier de migration",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "description": "Lo\u00efc, chef de mission AppSec de PA. Charge-le AVANT de r\u00e9pondre d\u00e8s qu'un message parle d'audit de s\u00e9curit\u00e9, de pentest, de mission s\u00e9cu ou de \u00ab Lo\u00efc \u00bb pour une app web pr\u00e9cise (de PA ou d'un client), m\u00eame si \u00e7a para\u00eet simple. Trois cas. D\u00e9marrer : \u00ab /appsec \u00bb, mise en prod prochaine, client, RSSI ou commune qui veut un audit s\u00e9rieux, mission compl\u00e8te (cadrage, tests, rapport, corrections, retest). Suivre : reprendre une mission en pause, o\u00f9 en est l'audit, prochaine \u00e9tape, ce que PA doit valider (security/journal.md, portes G1 \u00e0 G5). Freiner : envie de tester vite une app en ligne ou en prod (sqlmap, scan, attaque) ; il v\u00e9rifie l'autorisation et le plan Vercel, refuse le risqu\u00e9, propose le labo. Il d\u00e9l\u00e8gue ensuite aux skills appsec-*. Prioritaire sur pentest-saas-vibecoding et web-security-audit d\u00e8s qu'une app nomm\u00e9e doit \u00eatre audit\u00e9e. Pas pour une question ponctuelle, un STRIDE ou un scan de d\u00e9p\u00f4t seuls, une r\u00e8gle CLAUDE.md, ni la s\u00e9curit\u00e9 au travail (SST, Suva, chantier).",
+      "train_passed": 6,
+      "train_failed": 6,
+      "train_total": 12,
+      "train_results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "test_passed": 4,
+      "test_failed": 4,
+      "test_total": 8,
+      "test_results": [
+        {
+          "query": "je veux une d\u00e9marche s\u00e9cu structur\u00e9e pour mon SaaS multi-tenant avant la d\u00e9mo au client Suva la semaine pro, avec les portes de validation et un journal",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "un client (fiduciaire \u00e0 Fribourg) veut que je fasse un audit de s\u00e9curit\u00e9 complet de son portail WeWeb + Supabase, comment on s'organise, par quoi on commence ?",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai fini de vibecoder mon app de suivi sant\u00e9 (supabase + vercel), j'aimerais savoir si elle est pr\u00eate c\u00f4t\u00e9 s\u00e9curit\u00e9 avant que mes potes l'utilisent, tu peux faire tout le process proprement ?",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "audite la s\u00e9curit\u00e9 de mon app flameup stp, React Vite Supabase, j'ai 40 utilisateurs dessus",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "mon app est-elle RGPD et nLPD compatible ? j'ai un formulaire de contact et Google Analytics",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "calcule le score CVSS 4.0 de ce finding : un membre peut lire les audits d'un autre tenant via PostgREST, sans interaction, donn\u00e9es perso",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "monte-moi le labo supabase local avec 2 tenants et des comptes de test pour chantier-pro, je veux pouvoir le remettre \u00e0 z\u00e9ro en une commande",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "corrige ma policy RLS sur la table audits, elle laisse passer tout le monde avec using(true), voil\u00e0 le fichier de migration",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ],
+      "passed": 6,
+      "failed": 6,
+      "total": 12,
+      "results": [
+        {
+          "query": "est-ce que tu peux pentester direct la prod de travail-isole ce soir ? genre sqlmap et tout, \u00e7a ira plus vite que de monter un labo",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "lance une mission AppSec compl\u00e8te sur moncor-dashboard : cadrage, tests, rapport, corrections et retest. c'est mon app, labo local ok",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "j'ai re\u00e7u une demande d'un RSSI client qui veut savoir si on a fait un audit de s\u00e9cu de psstmanager. faut lancer quelque chose de s\u00e9rieux, tu me guides ?",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "on en est o\u00f9 sur l'audit s\u00e9cu de prevens ? quelle est la prochaine \u00e9tape et qu'est-ce que je dois valider",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "/appsec on d\u00e9marre l'audit de s\u00e9cu de auditapp, je veux le mettre en prod pour la commune de Marly en janvier, d\u00e9p\u00f4t dans ~/dev/auditapp",
+          "should_trigger": true,
+          "trigger_rate": 0.3333333333333333,
+          "triggers": 1,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "Lo\u00efc, tu peux reprendre la mission s\u00e9curit\u00e9 sur cap5km ? on s'\u00e9tait arr\u00eat\u00e9s apr\u00e8s les tests statiques je crois",
+          "should_trigger": true,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": false
+        },
+        {
+          "query": "fais-moi le mod\u00e8le de menaces STRIDE de mon flux d'upload de photos d'accidents vers Supabase Storage, avec le DFD en mermaid",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "d\u00e9termination des dangers Suva pour un poste de travail isol\u00e9 en station d'\u00e9puration, tu peux me faire le tableau ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "ajoute dans mon CLAUDE.md des r\u00e8gles pour que l'agent ne d\u00e9sactive jamais la RLS et ne mette jamais de cl\u00e9 secr\u00e8te c\u00f4t\u00e9 client",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "r\u00e9dige-moi un rapport SecurTec d'avis s\u00e9curit\u00e9 sur l'\u00e9chafaudage de la fa\u00e7ade nord du chantier de Givisiez, voici mes notes",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "scanne juste mon d\u00e9p\u00f4t pour voir s'il y a des secrets ou des d\u00e9pendances vuln\u00e9rables, pas besoin de tout le tralala",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        },
+        {
+          "query": "c'est quoi la diff\u00e9rence entre la cl\u00e9 sb_publishable et la sb_secret sur supabase, je peux mettre laquelle dans VITE_ ?",
+          "should_trigger": false,
+          "trigger_rate": 0.0,
+          "triggers": 0,
+          "runs": 3,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}
+
+Report: /home/user/appsec-skills/workspaces/appsec-chef-de-mission-workspace/description-report.html
+Results saved to: /home/user/appsec-skills/workspaces/appsec-chef-de-mission-workspace/description-results/2026-11-23_061530
