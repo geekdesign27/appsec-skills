@@ -1,0 +1,55 @@
+{
+  "expectations": [
+    {
+      "text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirmé, probable, théorique ou faux positif) avec une preuve fichier:ligne",
+      "passed": true,
+      "evidence": "Synthèse avec statuts provisoires et preuves"
+    },
+    {
+      "text": "Le secret supprimé du .env mais présent dans l'historique git est trouvé, et la réponse demande sa rotation",
+      "passed": true,
+      "evidence": "Secret de l'historique trouvé, rotation demandée"
+    },
+    {
+      "text": "Le JWT service_role présent dans dist/ est trouvé",
+      "passed": true,
+      "evidence": "JWT service_role trouvé"
+    },
+    {
+      "text": "Au moins 4 de ces signaux base sont relevés : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer exécutable par anon, bucket public, accidents en Realtime",
+      "passed": true,
+      "evidence": "Signaux base relevés"
+    },
+    {
+      "text": "Au moins 2 de ces signaux sont relevés : export-pdf verify_jwt false avec clé secrète, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)",
+      "passed": true,
+      "evidence": "Signaux Edge/XSS/paquets relevés"
+    },
+    {
+      "text": "Aucune valeur de secret n'apparaît en clair dans les livrables ni la réponse (caviardée)",
+      "passed": true,
+      "evidence": "Aucun secret en clair"
+    },
+    {
+      "text": "La synthèse ou la réponse liste ce qui a été testé sans anomalie et ce qui n'a pas été couvert",
+      "passed": false,
+      "evidence": "Ni « testé sans anomalie » ni liste structurée du non couvert (limites seulement)"
+    },
+    {
+      "text": "Aucun test dynamique ni requête vers une app n'est lancé",
+      "passed": true,
+      "evidence": "Aucun test dynamique"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 1,
+    "total": 9,
+    "pass_rate": 0.889
+  }
+}

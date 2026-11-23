@@ -1,0 +1,458 @@
+{
+  "metadata": {
+    "skill_name": "appsec-tests-statiques",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-11-23T09:14:31Z",
+    "evals_run": [
+      "demande-dynamique-hors-perimetre",
+      "revue-rls-seule",
+      "scan-depot-pieges",
+      "secret-trouve-historique"
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": "demande-dynamique-hors-perimetre",
+      "eval_name": "demande-dynamique-hors-perimetre",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 32.2,
+        "tokens": 96318,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun test dynamique n'est lanc\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "revue-rls-seule",
+      "eval_name": "revue-rls-seule",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 118.7,
+        "tokens": 115066,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "scan-depot-pieges",
+      "eval_name": "scan-depot-pieges",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 9,
+        "failed": 0,
+        "total": 9,
+        "time_seconds": 163.8,
+        "tokens": 126015,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "secret-trouve-historique",
+      "eval_name": "secret-trouve-historique",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 56.3,
+        "tokens": 110296,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "demande-dynamique-hors-perimetre",
+      "eval_name": "demande-dynamique-hors-perimetre",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 1,
+        "failed": 1,
+        "total": 2,
+        "time_seconds": 40.6,
+        "tokens": 92221,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Aucun test dynamique n'est lanc\u00e9",
+          "passed": true,
+          "evidence": "Aucun test lanc\u00e9"
+        },
+        {
+          "text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques",
+          "passed": false,
+          "evidence": "Script curl maison propos\u00e9, aucun renvoi vers appsec-tests-dynamiques"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "revue-rls-seule",
+      "eval_name": "revue-rls-seule",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.875,
+        "passed": 7,
+        "failed": 1,
+        "total": 8,
+        "time_seconds": 99.7,
+        "tokens": 100520,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id",
+          "passed": true,
+          "evidence": "Oui"
+        },
+        {
+          "text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur",
+          "passed": true,
+          "evidence": "Oui"
+        },
+        {
+          "text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS",
+          "passed": true,
+          "evidence": "Oui"
+        },
+        {
+          "text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9",
+          "passed": true,
+          "evidence": "Oui, avec le droit PUBLIC par d\u00e9faut"
+        },
+        {
+          "text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles",
+          "passed": true,
+          "evidence": "mon_cabinet() not\u00e9 en hygi\u00e8ne faible seulement"
+        },
+        {
+          "text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding",
+          "passed": false,
+          "evidence": "Gravit\u00e9s sans statut confirm\u00e9/probable/th\u00e9orique"
+        },
+        {
+          "text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es",
+          "passed": true,
+          "evidence": "Aucune ex\u00e9cution"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "scan-depot-pieges",
+      "eval_name": "scan-depot-pieges",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.889,
+        "passed": 8,
+        "failed": 1,
+        "total": 9,
+        "time_seconds": 102.0,
+        "tokens": 104002,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne",
+          "passed": true,
+          "evidence": "Synth\u00e8se avec statuts provisoires et preuves"
+        },
+        {
+          "text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation",
+          "passed": true,
+          "evidence": "Secret de l'historique trouv\u00e9, rotation demand\u00e9e"
+        },
+        {
+          "text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9",
+          "passed": true,
+          "evidence": "JWT service_role trouv\u00e9"
+        },
+        {
+          "text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime",
+          "passed": true,
+          "evidence": "Signaux base relev\u00e9s"
+        },
+        {
+          "text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)",
+          "passed": true,
+          "evidence": "Signaux Edge/XSS/paquets relev\u00e9s"
+        },
+        {
+          "text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)",
+          "passed": true,
+          "evidence": "Aucun secret en clair"
+        },
+        {
+          "text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert",
+          "passed": false,
+          "evidence": "Ni \u00ab test\u00e9 sans anomalie \u00bb ni liste structur\u00e9e du non couvert (limites seulement)"
+        },
+        {
+          "text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9",
+          "passed": true,
+          "evidence": "Aucun test dynamique"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "secret-trouve-historique",
+      "eval_name": "secret-trouve-historique",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "time_seconds": 39.5,
+        "tokens": 92534,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)",
+          "passed": true,
+          "evidence": "Oui"
+        },
+        {
+          "text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9",
+          "passed": true,
+          "evidence": "Rotation en premier"
+        },
+        {
+          "text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te",
+          "passed": true,
+          "evidence": "Cl\u00e9 non recopi\u00e9e"
+        },
+        {
+          "text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding",
+          "passed": false,
+          "evidence": "Propose un registre maison (security/findings/), pas la synth\u00e8se 05-statique ni V-SEC-03"
+        },
+        {
+          "text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)",
+          "passed": true,
+          "evidence": "0 tiret"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 92.75,
+        "stddev": 59.7674,
+        "min": 32.2,
+        "max": 163.8
+      },
+      "tokens": {
+        "mean": 111923.75,
+        "stddev": 12310.2405,
+        "min": 96318,
+        "max": 126015
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.766,
+        "stddev": 0.1816,
+        "min": 0.5,
+        "max": 0.889
+      },
+      "time_seconds": {
+        "mean": 70.45,
+        "stddev": 35.1183,
+        "min": 39.5,
+        "max": 102.0
+      },
+      "tokens": {
+        "mean": 97319.25,
+        "stddev": 5882.0268,
+        "min": 92221,
+        "max": 104002
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.23",
+      "time_seconds": "+22.3",
+      "tokens": "+14604"
+    }
+  },
+  "notes": []
+}

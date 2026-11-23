@@ -146,6 +146,9 @@ def analyser(dossier):
     return fichiers, tables, policies, vues, fonctions, grants, buckets, realtime
 
 
+DOSSIER = "."
+
+
 def signaux(tables, policies, vues, fonctions, grants, buckets, realtime):
     S = []
     def add(cid, objet, constat, gravite):
@@ -179,10 +182,16 @@ def signaux(tables, policies, vues, fonctions, grants, buckets, realtime):
             add("V-DB-02", f'{p["table"]} / {p["nom"]}', f'policy d\'écriture ouverte au rôle {p["roles"]}', "élevée")
         elif p["roles"] == "public" and u not in ("true", "(true)"):
             add("V-DB-02", f'{p["table"]} / {p["nom"]}', "policy sans clause TO : s'applique aussi au rôle anon", "moyenne")
-        if p["commande"] in ("update", "all", "insert") and not p["with_check"] and p["commande"] != "insert":
-            add("V-DB-04", f'{p["table"]} / {p["nom"]}', "UPDATE sans WITH CHECK : la ligne modifiée n'est pas recontrôlée (réécriture du tenant possible)", "élevée")
+        if p["commande"] in ("update", "all") and not p["with_check"]:
+            # Sans WITH CHECK, Postgres réapplique USING à la nouvelle ligne : le risque dépend de ce que USING contraint.
+            contraint_tenant = re.search(r"tenant|entreprise|cabinet|org", u) is not None
+            add("V-DB-04", f'{p["table"]} / {p["nom"]}',
+                "UPDATE sans WITH CHECK explicite : Postgres réapplique USING à la nouvelle ligne ; "
+                + ("USING contraint le tenant, vérifier les colonnes sensibles restées modifiables"
+                   if contraint_tenant else "USING ne contraint pas le tenant : la ligne peut être déplacée vers un autre tenant si la colonne est modifiable"),
+                "moyenne" if contraint_tenant else "élevée")
         if p["commande"] == "insert" and not p["with_check"]:
-            add("V-DB-04", f'{p["table"]} / {p["nom"]}', "INSERT sans WITH CHECK", "élevée")
+            add("V-DB-04", f'{p["table"]} / {p["nom"]}', "INSERT sans WITH CHECK : aucune condition sur la ligne insérée (à vérifier)", "élevée")
         if "user_metadata" in u + w:
             add("V-DB-06", f'{p["table"]} / {p["nom"]}', "policy basée sur user_metadata (modifiable par l'utilisateur)", "élevée")
         fonctions_sures = {f.split(".")[-1] for f, d in fonctions.items() if d["auth_uid"]}
@@ -193,6 +202,11 @@ def signaux(tables, policies, vues, fonctions, grants, buckets, realtime):
         if v.startswith("public.") and not d.get("security_invoker"):
             add("V-DB-07", v, "vue exposée sans security_invoker : elle s'exécute avec les droits de son créateur", "élevée")
     exec_anon = {g["objet"] for g in grants if "execute" in g["droits"] and re.search(r"\b(anon|public)\b", g["a"])}
+    revoque_public = set()
+    for f in glob.glob(os.path.join(DOSSIER, "*.sql")):
+        for m in re.finditer(r"revoke\s+(?:all|execute)[^;]*?on\s+(?:function\s+)?([\w.\"]+)[^;]*?from\s+([^;]+)", strip_comments(open(f, encoding="utf-8").read()), FLAGS):
+            if re.search(r"\b(public|anon)\b", m.group(2), re.I):
+                revoque_public.add(nom(m.group(1)))
     exec_auth = {g["objet"] for g in grants if "execute" in g["droits"] and "authenticated" in g["a"]}
     for f, d in fonctions.items():
         if not f.startswith("public."):
@@ -201,8 +215,14 @@ def signaux(tables, policies, vues, fonctions, grants, buckets, realtime):
             if not d["search_path"]:
                 add("V-DB-08", f, "SECURITY DEFINER sans search_path fixé", "moyenne")
             if not d["auth_uid"]:
-                qui = "anon" if f in exec_anon else ("authenticated" if f in exec_auth else "PUBLIC par défaut (révoquer explicitement)")
-                add("V-DB-08", f, f"SECURITY DEFINER sans contrôle auth.uid()/auth.jwt(), exécutable par {qui}", "élevée")
+                if f in exec_anon:
+                    qui = "anon (droit accordé explicitement)"
+                elif f in revoque_public:
+                    qui = "authenticated seulement (droit PUBLIC révoqué)" if f in exec_auth else "personne côté API (droit PUBLIC révoqué)"
+                else:
+                    qui = "PUBLIC par défaut, donc aussi anon : un GRANT à authenticated ne retire pas ce droit, il faut REVOKE ... FROM public, anon"
+                add("V-DB-08", f, f"SECURITY DEFINER sans contrôle auth.uid()/auth.jwt(), exécutable par {qui}",
+                    "info" if qui.startswith("personne") else "élevée")
     for g in grants:
         if g["objet"].startswith("public.") and re.search(r"\banon\b", g["a"]) and re.search(r"insert|update|delete|all", g["droits"]):
             add("V-DB-02", g["objet"], f'droits d\'écriture accordés à anon ({g["droits"]})', "élevée")
@@ -224,6 +244,8 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--sortie")
     a = ap.parse_args()
+    global DOSSIER
+    DOSSIER = a.dossier
     fichiers, tables, policies, vues, fonctions, grants, buckets, realtime = analyser(a.dossier)
     S = signaux(tables, policies, vues, fonctions, grants, buckets, realtime)
     if a.json:

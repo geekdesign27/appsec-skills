@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Relève que profils_update_soi (UPDATE sans WITH CHECK) permet à un patient de modifier sa propre ligne, dont role ou cabinet_id",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "Relève que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "Relève que v_mesures_recentes n'a pas security_invoker et contourne la RLS",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "Relève que get_mesures est security definer sans contrôle de l'appelant ni search_path fixé",
+      "passed": true,
+      "evidence": "Oui, avec le droit PUBLIC par défaut"
+    },
+    {
+      "text": "Reconnaît que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles",
+      "passed": true,
+      "evidence": "mon_cabinet() noté en hygiène faible seulement"
+    },
+    {
+      "text": "Les signaux ont un statut (confirmé, probable ou théorique) et la suite proposée est un test en labo ou un finding",
+      "passed": false,
+      "evidence": "Gravités sans statut confirmé/probable/théorique"
+    },
+    {
+      "text": "Aucune commande n'est exécutée contre une base de données",
+      "passed": true,
+      "evidence": "Aucune exécution"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.875
+  }
+}

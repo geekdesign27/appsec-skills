@@ -1,0 +1,21 @@
+OK  attendu=oui taux=1.00 autres=[] | /statique scanne le dépôt de moncor-dashboard avant les tests sur le l
+OK  attendu=oui taux=0.50 autres=[] | cherche s'il y a des secrets dans tout l'historique git de flameup, mê
+OK  attendu=oui taux=1.00 autres=[] | relis mes migrations supabase de prevens côté sécurité, je veux savoir
+OK  attendu=oui taux=1.00 autres=[] | est-ce que mes dépendances npm de cap5km sont sûres ? j'ai peur que cl
+OK  attendu=oui taux=1.00 autres=[] | vérifie que la clé service_role n'est pas dans le bundle vite de audit
+OK  attendu=oui taux=1.00 autres=[] | lance trufflehog, osv-scanner et semgrep sur psstmanager et fais-moi l
+OK  attendu=oui taux=1.00 autres=[] | mes edge functions et mon config.toml sont-ils bien configurés niveau 
+OK  attendu=oui taux=1.00 autres=[] | j'ai des fonctions security definer dans suivi-sante, est-ce qu'elles 
+OK  attendu=oui taux=1.00 autres=[] | audite le code de travail-isole pour les failles XSS et les secrets en
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | lance la matrice d'autorisation sur le labo de prevens avec a-member e
+OK  attendu=non taux=0.00 autres=[] | corrige la policy RLS de la table audits pour qu'elle filtre par tenan
+OK  attendu=non taux=0.00 autres=[] | c'est quoi la différence entre SAST et DAST, en deux phrases ?
+OK  attendu=non taux=0.00 autres=[] | calcule le CVSS 4.0 du secret trouvé hier dans l'historique de flameup
+OK  attendu=non taux=0.00 autres=['appsec-labo'] | monte le labo supabase local de chantier-pro avec les comptes de test
+OK  attendu=non taux=0.00 autres=['appsec-cadrage-menaces'] | fais le modèle de menaces STRIDE de cap5km
+OK  attendu=non taux=0.00 autres=[] | mets à jour toutes les dépendances npm de evacecole vers leur dernière
+OK  attendu=non taux=0.00 autres=[] | écris-moi un hook pre-commit qui bloque les secrets pour que l'IA ne l
+OK  attendu=non taux=0.00 autres=[] | explique-moi comment marche row level security dans supabase pour un d
+OK  attendu=non taux=0.00 autres=['appsec-chef-de-mission'] | /appsec on démarre la mission sur flameup
+OK  attendu=non taux=0.00 autres=[] | refactorise le composant Rapport.tsx, il est trop long
+Score : 20/20

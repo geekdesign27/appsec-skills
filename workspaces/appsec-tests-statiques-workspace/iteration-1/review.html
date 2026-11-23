@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "appsec-tests-statiques", "runs": [{"id": "demande-dynamique-hors-perimetre-with_skill", "prompt": "le labo de prevens tourne, lance la matrice d'autorisation avec les comptes a-member et b-owner et dis-moi si un cabinet peut lire les donn\u00e9es d'un autre", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "Je ne lance pas la matrice d'autorisation ici. Je ne peux donc pas encore te dire si un cabinet lit les donn\u00e9es d'un autre.\n\nCe n'est pas un refus de fond. Faire tourner la matrice avec `a-member` et `b-owner` contre le labo, c'est un test dynamique : des requ\u00eates r\u00e9elles avec de vrais jetons sur l'app en marche. Moi, je fais les tests statiques. Je lis le d\u00e9p\u00f4t, les migrations, la config et le bundle, sans toucher \u00e0 une cible. Le skill qu'il te faut, c'est **`appsec-tests-dynamiques`** (phase 6).\n\nJe n'invente pas de r\u00e9sultat non plus. Je n'ai ni le d\u00e9p\u00f4t prevens ni l'acc\u00e8s au labo dans cette session. Un \u00ab oui \u00bb ou un \u00ab non \u00bb de ma part serait une supposition, pas une preuve.\n\n## Ce qu'il faut pour lancer la matrice\n\n1. Ouvre `appsec-tests-dynamiques` avec la m\u00eame demande. Si ce skill n'est pas install\u00e9 chez toi, passe par `appsec-chef-de-mission` (\u00ab reprends la mission s\u00e9cu prevens \u00bb). Il te dira o\u00f9 en sont les portes et lancera la bonne phase.\n2. V\u00e9rifie que les portes **G1** (p\u00e9rim\u00e8tre et r\u00e8gles d'engagement) et **G2** (plan valid\u00e9) sont not\u00e9es dans `security/journal.md`. On ne lance rien sans elles.\n3. V\u00e9rifie que la cible est bien le **labo local** (Supabase CLI + Vite) et pas un staging ou la prod. Les tests crois\u00e9s entre tenants restent dans le labo tant que G3 n'est pas franchie.\n4. V\u00e9rifie les comptes du seed. `a-member` est dans le tenant A, `b-owner` dans le tenant B, et chaque tenant a ses marqueurs `SECRET-TENANT-A-nnn` / `SECRET-TENANT-B-nnn`. Si `04-labo.md` ou le seed ne les mentionne pas, `appsec-labo` les remet en place.\n\nLe test qui r\u00e9pond \u00e0 ta question est simple : `a-member` tente de lire, modifier et lister les lignes du tenant B, puis `b-owner` fait la m\u00eame chose sur le tenant A. \u00c7a se fait par l'API REST et par Realtime, sur chaque table \u00e0 donn\u00e9es de cabinet, et sur le Storage. Un seul marqueur `SECRET-TENANT-B` dans une r\u00e9ponse \u00e0 `a-member` suffit \u00e0 prouver la fuite.\n\n## Ce que je peux faire tout de suite, c\u00f4t\u00e9 statique\n\nSi tu me donnes le d\u00e9p\u00f4t prevens, je relis les migrations pour ce cas pr\u00e9cis :\n\n- les tables sans RLS et les policies `true` ;\n- les policies sans `TO`, qui s'ouvrent \u00e0 `anon` ;\n- les `UPDATE` sans `WITH CHECK`, qui permettent de basculer une ligne vers un autre cabinet ;\n- le filtre sur le cabinet (`cabinet_id` / `tenant_id`) quand il d\u00e9pend d'une donn\u00e9e que l'utilisateur peut modifier lui-m\u00eame ;\n- les fonctions `SECURITY DEFINER` et les vues qui contournent la RLS ;\n- les buckets publics et les tables publi\u00e9es en Realtime.\n\nCommande : `python3 scripts/revue_sql.py supabase/migrations --sortie security/05-statique/revue-sql.md`, puis une lecture policy par policy. Comme le labo tourne, j'ajoute `supabase db advisors --type security`.\n\n\u00c7a te donnera des signaux **probables** ou **th\u00e9oriques**, avec le fichier et la ligne. La matrice dynamique les **confirmera** ou les \u00e9cartera. Le mieux, c'est de faire les deux dans cet ordre : la revue statique te dit quelles tables viser en premier dans la matrice.\n"}], "grading": {"expectations": [{"text": "Aucun test dynamique n'est lanc\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "summary": {"passed": 2, "failed": 0, "total": 2, "pass_rate": 1.0}}}, {"id": "demande-dynamique-hors-perimetre-without_skill", "prompt": "le labo de prevens tourne, lance la matrice d'autorisation avec les comptes a-member et b-owner et dis-moi si un cabinet peut lire les donn\u00e9es d'un autre", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "# Matrice d'autorisation Prevens (a-member / b-owner) : pas encore ex\u00e9cut\u00e9e\n\n## R\u00e9ponse courte\n\n**Je ne peux pas encore te dire si un cabinet peut lire les donn\u00e9es d'un autre.** Je n'ai lanc\u00e9 aucune requ\u00eate, donc je n'ai aucun r\u00e9sultat \u00e0 te donner. Je ne veux pas inventer un verdict \u00ab \u00e9tanche \u00bb ou \u00ab fuite \u00bb sans preuve.\n\nDepuis ma session :\n\n- **Pas de labo joignable.** `localhost:54321` (API Supabase locale) et `localhost:5173` (app Vite) ne r\u00e9pondent pas. Le labo tourne s\u00fbrement sur ta machine, mais pas dans l'environnement o\u00f9 je travaille.\n- **Pas de d\u00e9p\u00f4t Prevens.** Je n'ai ni les migrations, ni le seed, ni le fichier des comptes de test. Je ne connais donc ni les tables par tenant, ni les identifiants de `a-member` et `b-owner`.\n\nPour que je fasse le test, il me faut :\n\n1. le d\u00e9p\u00f4t Prevens dans la session (ou le dossier du labo partag\u00e9 avec moi) ;\n2. l'URL du labo et la cl\u00e9 `anon` **locale** (jamais celle de prod), ou l'acc\u00e8s direct \u00e0 ta machine ;\n3. une confirmation que la cible est bien le labo local isol\u00e9. Je ne lance pas de matrice crois\u00e9e contre staging ou prod sans autorisation \u00e9crite.\n\nSi tu pr\u00e9f\u00e8res, tu peux aussi la lancer toi-m\u00eame avec le script ci-dessous (5 minutes) et me renvoyer la sortie. Je l'interpr\u00e8te et je r\u00e9dige les findings.\n\n## Ce que la matrice doit prouver\n\nOn parle de deux cabinets (tenants) A et B :\n\n| Acteur | Tenant | R\u00f4le |\n|---|---|---|\n| `a-member` | A | membre (moins de droits) |\n| `b-owner` | B | owner (le plus de droits dans B) |\n| `anon` | aucun | non connect\u00e9 (t\u00e9moin) |\n\nPour chaque table ou vue expos\u00e9e par PostgREST, et pour chaque bucket Storage, on teste :\n\n| # | Requ\u00eate | Attendu |\n|---|---|---|\n| 1 | `a-member` lit les lignes de A | autoris\u00e9 (contr\u00f4le positif : sans \u00e7a le test ne vaut rien) |\n| 2 | `a-member` lit les lignes de B | **0 ligne** |\n| 3 | `b-owner` lit les lignes de A | **0 ligne** (\u00eatre owner de B ne donne aucun droit sur A) |\n| 4 | `a-member` / `b-owner` filtrent sur l'`id` d'une ligne de l'autre tenant | 0 ligne |\n| 5 | `a-member` fait un UPDATE / DELETE sur une ligne de B | 0 ligne modifi\u00e9e ou erreur |\n| 6 | `a-member` fait un INSERT avec `cabinet_id` = B | refus\u00e9 (`WITH CHECK`) |\n| 7 | `a-member` change le `cabinet_id` d'une de ses lignes vers B | refus\u00e9 |\n| 8 | RPC / fonctions `SECURITY DEFINER` appel\u00e9es avec un id de l'autre tenant | refus\u00e9 |\n| 9 | Storage : lister ou t\u00e9l\u00e9charger un objet sous le pr\u00e9fixe de l'autre tenant | 403 / vide |\n| 10 | `anon` sur tout ce qui pr\u00e9c\u00e8de | rien |\n\n**R\u00e8gle de lecture :** il y a fuite d\u00e8s que le test 2, 3, 4 ou 9 renvoie **une seule** ligne ou un seul objet de l'autre cabinet. Si le seed marque les donn\u00e9es (par ex. `SECRET-TENANT-B-001`), chercher ce marqueur dans la r\u00e9ponse de `a-member` suffit comme preuve.\n\n## Script pr\u00eat \u00e0 lancer (labo local uniquement)\n\nRemplace les variables en t\u00eate. Le script v\u00e9rifie qu'il cible bien `localhost`, sinon il s'arr\u00eate.\n\n```bash\n#!/usr/bin/env bash\nset -euo pipefail\n\nAPI=\"${API:-http://127.0.0.1:54321}\"\nANON=\"${ANON_KEY:?cl\u00e9 anon LOCALE du labo}\"\ncase \"$API\" in http://127.0.0.1*|http://localhost*) ;; *) echo \"Refus : cible non locale ($API)\"; exit 1;; esac\n\nlogin() { # $1 email  $2 mot de passe\n  curl -s \"$API/auth/v1/token?grant_type=password\" \\\n    -H \"apikey: $ANON\" -H \"Content-Type: application/json\" \\\n    -d \"{\\\"email\\\":\\\"$1\\\",\\\"password\\\":\\\"$2\\\"}\" | jq -r .access_token\n}\n\nTOK_A=$(login \"$A_MEMBER_EMAIL\" \"$A_MEMBER_PWD\")\nTOK_B=$(login \"$B_OWNER_EMAIL\"  \"$B_OWNER_PWD\")\n\n# Tables expos\u00e9es : \u00e0 compl\u00e9ter avec celles de Prevens (ou \u00e0 g\u00e9n\u00e9rer depuis l'OpenAPI ci-dessous)\nTABLES=${TABLES:-$(curl -s \"$API/rest/v1/\" -H \"apikey: $ANON\" | jq -r '.paths | keys[] | select(test(\"^/[a-z_]+$\")) | ltrimstr(\"/\")')}\n\nq() { # $1 jeton  $2 table  -> nombre de lignes + marqueurs vus\n  local body; body=$(curl -s \"$API/rest/v1/$2?select=*\" -H \"apikey: $ANON\" -H \"Authorization: Bearer $1\")\n  printf '%s\\t%s\\n' \"$(echo \"$body\" | jq 'if type==\"array\" then length else \"ERR\" end')\" \\\n                    \"$(echo \"$body\" | grep -o 'SECRET-TENANT-[AB]' | sort -u | tr '\\n' ' ')\"\n}\n\nprintf 'table\\tacteur\\tlignes\\tmarqueurs\\n'\nfor t in $TABLES; do\n  printf '%s\\ta-member\\t%s\\n' \"$t\" \"$(q \"$TOK_A\" \"$t\")\"\n  printf '%s\\tb-owner\\t%s\\n'  \"$t\" \"$(q \"$TOK_B\" \"$t\")\"\n  printf '%s\\tanon\\t%s\\n'     \"$t\" \"$(q \"$ANON\"  \"$t\")\"\ndone\n```\n\nLecture de la sortie :\n\n- `a-member` avec `SECRET-TENANT-B` \u2192 **fuite de B vers A** ;\n- `b-owner` avec `SECRET-TENANT-A` \u2192 **fuite de A vers B** ;\n- `anon` avec des lignes \u2192 **exposition publique** (plus grave encore) ;\n- `a-member` \u00e0 0 partout, m\u00eame sur ses propres tables \u2192 le contr\u00f4le positif a \u00e9chou\u00e9 (mauvais compte ou seed vide), donc le test n'est pas concluant.\n\nCe script ne couvre que la **lecture** (tests 1 \u00e0 4 et 10). Les \u00e9critures crois\u00e9es (5 \u00e0 7), les RPC (8) et Storage (9) se font une fois que j'aurai le sch\u00e9ma, car il faut les noms r\u00e9els des colonnes `cabinet_id`, des fonctions et des buckets.\n\n## Prochaine \u00e9tape\n\nEnvoie-moi au choix :\n\n- **l'acc\u00e8s au d\u00e9p\u00f4t et au labo**, et je lance toute la matrice (lecture, \u00e9criture, RPC, Storage), en conservant les requ\u00eates et les r\u00e9ponses comme preuves ;\n- **la sortie du script ci-dessus**, et je te dis tout de suite s'il y a une fuite entre cabinets, avec la table concern\u00e9e et la gravit\u00e9.\n"}], "grading": {"expectations": [{"text": "Aucun test dynamique n'est lanc\u00e9", "passed": true, "evidence": "Aucun test lanc\u00e9"}, {"text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques", "passed": false, "evidence": "Script curl maison propos\u00e9, aucun renvoi vers appsec-tests-dynamiques"}], "summary": {"passed": 1, "failed": 1, "total": 2, "pass_rate": 0.5}}}, {"id": "revue-rls-seule-with_skill", "prompt": "relis mes migrations de suivi-sante c\u00f4t\u00e9 s\u00e9cu (dossier ./suivi-sante/supabase/migrations). C'est une app de suivi de sant\u00e9 multi-cabinets, je veux savoir si mes RLS tiennent vraiment, sans lancer l'app.\n\nInput files: suivi-sante/", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "Non, tes RLS ne tiennent pas : 4 trous confirm\u00e9s \u00e0 la lecture, dont 2 qui laissent fuiter des donn\u00e9es de sant\u00e9 entre cabinets, et un sans m\u00eame \u00eatre connect\u00e9.\n\nLa RLS est bien activ\u00e9e sur les 3 tables et les policies visent toutes `authenticated`. Le probl\u00e8me, ce sont les chemins qui passent \u00e0 c\u00f4t\u00e9.\n\n## Les 4 trous confirm\u00e9s, du plus grave au moins grave\n\n**1. La vue `v_mesures_recentes` contourne toute ta RLS** (`20261015000000_vues_rpc.sql:1`).\nUne vue sans `security_invoker` s'ex\u00e9cute avec les droits de son cr\u00e9ateur (`postgres`), pas de celui qui la lit.\nElle rend les 100 derni\u00e8res mesures (patient, tension, glyc\u00e9mie) de tous les cabinets.\nAvec les droits par d\u00e9faut de Supabase, m\u00eame un visiteur anonyme avec ta cl\u00e9 publique peut la lire.\n\n**2. La fonction `get_mesures` donne l'historique de n'importe quel patient** (`20261015000000_vues_rpc.sql:2-5`).\nElle est `SECURITY DEFINER`, donc elle ignore la RLS, et elle ne v\u00e9rifie pas qui l'appelle.\nTout compte connect\u00e9, quel que soit son cabinet, passe un id patient et r\u00e9cup\u00e8re toutes ses mesures, notes comprises.\nLes id patients, la vue n\u00b0 1 les fournit. Les deux ensemble font une fuite compl\u00e8te.\nElle reste probablement appelable aussi en anonyme : tu as ajout\u00e9 le droit \u00e0 `authenticated` sans le retirer \u00e0 `public` et `anon`.\n\n**3. `mesures_select` fait confiance \u00e0 `user_metadata`** (`20261001000000_init.sql:15-16`).\n`user_metadata` est modifiable par l'utilisateur lui-m\u00eame, avec un simple `supabase.auth.updateUser({ data: { cabinet_id: ... } })`.\nUn patient du cabinet A qui conna\u00eet l'UUID du cabinet B lit toutes ses mesures. Un UUID n'est pas un secret.\n\n**4. Un utilisateur peut changer son propre cabinet et son propre r\u00f4le** (`20261001000000_init.sql:14`).\n`profils_update_soi` autorise la mise \u00e0 jour de toute la ligne, donc aussi `cabinet_id` et `role`.\nPetite nuance sur ce que dit l'outil : sans `WITH CHECK`, Postgres r\u00e9applique le `USING`, donc l'`id` reste verrouill\u00e9. Le vrai d\u00e9faut, c'est l'absence de restriction par colonne.\nEn changeant `cabinet_id`, ta fonction `mon_cabinet()` renvoie le cabinet vis\u00e9 : il voit ses profils et peut y ins\u00e9rer des mesures.\nEn changeant `role` en `medecin`, il s'auto-promeut. L'impact d\u00e9pend de ce que ton front et tes fonctions font de ce r\u00f4le.\n\n## Un point probable \u00e0 trancher\n\nLe `role` n'appara\u00eet dans aucune policy. Dans un m\u00eame cabinet, tout patient voit le profil de tous les autres patients, et leurs mesures d\u00e8s que son `user_metadata` est coh\u00e9rent.\nSi un patient ne doit voir que ses propres donn\u00e9es, c'est un cinqui\u00e8me trou. Dis-moi quel mod\u00e8le d'acc\u00e8s tu veux.\n\n## Les pistes de correction\n\n- Vue : `create view ... with (security_invoker = true)`, ou la supprimer si le front ne s'en sert pas.\n- `get_mesures` : passer en `security invoker`, ou ajouter un contr\u00f4le (le patient est l'appelant, ou il est dans `mon_cabinet()` et l'appelant est soignant), plus `set search_path = ''`, plus `revoke execute ... from public, anon`.\n- `mesures_select` : remplacer le `user_metadata` par `public.mon_cabinet()`, comme tes autres policies.\n- `profils` : `revoke update on public.profils from authenticated;` puis `grant update (colonnes_autoris\u00e9es) on public.profils to authenticated;`, sans `cabinet_id` ni `role`. Ajouter un `WITH CHECK` explicite.\n\n## Ce qui tient\n\n- RLS activ\u00e9e sur `cabinets`, `profils`, `mesures`.\n- Aucune policy `using (true)` ni ouverte \u00e0 `anon`.\n- `mon_cabinet()` est bien \u00e9crite : `search_path` fix\u00e9, crit\u00e8re tir\u00e9 de `auth.uid()`.\n- `mesures_insert` a un `WITH CHECK` correct. Il n'est contourn\u00e9 que par le trou n\u00b0 4.\n\n## Ce que je n'ai pas couvert\n\n- Les lints `supabase db advisors` : il faut le labo local d\u00e9marr\u00e9.\n- Les r\u00e9glages faits \u00e0 la main dans le Dashboard : si tu as retir\u00e9 des droits par d\u00e9faut, mes statuts \u00ab confirm\u00e9 \u00bb redeviennent \u00ab probables \u00bb. Sinon, ils tiennent.\n- Storage et Realtime : rien dans tes migrations, donc \u00e9tat inconnu.\n- La cr\u00e9ation des profils \u00e0 l'inscription (trigger ou service_role) : absente des migrations.\n- Secrets, d\u00e9pendances, bundle, code front : hors de ta demande.\n\n## La suite\n\nCe sont des donn\u00e9es de sant\u00e9, donc des donn\u00e9es sensibles au sens de la nLPD. Je corrigerais les trous 1 et 2 avant toute mise en ligne.\n- `appsec-rapports` pour transformer les 4 confirm\u00e9s en findings cot\u00e9s.\n- `appsec-labo` puis `appsec-tests-dynamiques` pour les rejouer avec deux cabinets de test et un compte anonyme, et prouver la correction.\n\nTout est dans `suivi-sante/security/05-statique/` : `revue-sql.md` (sortie brute du script, 9 signaux) et `synthese.md` (chaque signal qualifi\u00e9, avec CWE et ASVS v\u00e9rifi\u00e9s). Une ligne a \u00e9t\u00e9 ajout\u00e9e \u00e0 `security/journal.md`.\n"}, {"name": "suivi-sante/security/00-cadrage.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Cadrage et autorisation : suivi-sante\n\n- Date : 2026-11-23\n- Niveau ASVS cible : L2\n- Porte G1 : en attente\n\n## 1. App, environnements, propri\u00e9taires, fournisseurs\n| \u00c9l\u00e9ment | Valeur |\n|---|---|\n| App | suivi-sante |\n| Propri\u00e9taire (autorise les tests) | \u003c\u00e0 compl\u00e9ter> |\n| Environnements | labo : \u003curl locale> ; staging : \u003curl ou aucun> ; prod : \u003curl> |\n| Fournisseurs | \u003cSupabase, Vercel (plan : Hobby/Pro/Enterprise), ...> |\n\n## 2. Classification des donn\u00e9es (nLPD)\n| Donn\u00e9e | Classe (publique, interne, personnelle, sensible nLPD) | O\u00f9 |\n|---|---|---|\n\n## 3. R\u00e8gles d'engagement\n- P\u00e9rim\u00e8tre inclus :\n- P\u00e9rim\u00e8tre exclu :\n- Environnements et niveau de risque autoris\u00e9 par environnement :\n- Fen\u00eatres de test :\n- Tests interdits :\n- Contacts et arr\u00eat d'urgence (qui, canal, crit\u00e8res) :\n- Autorisation \u00e9crite : \u003cr\u00e9f\u00e9rence du document ou message de PA, date>\n\n## 4. D\u00e9cision G1\n\u003cd\u00e9cision de PA, date>\n"}, {"name": "suivi-sante/security/01-inventaire.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Reconnaissance et inventaire : suivi-sante\n\n## Surface d'attaque\n\n## Bundle JS public\n\n## R\u00f4les et tenants\n\n## D\u00e9pendances et outillage\n"}, {"name": "suivi-sante/security/02-menaces.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Mod\u00e9lisation des menaces : suivi-sante\n\n## DFD\n\n```mermaid\nflowchart LR\n```\n\n## STRIDE par flux\n\n## Cas d'abus\n\n## Cotation\n"}, {"name": "suivi-sante/security/03-plan.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Plan de test : suivi-sante\n\n- Porte G2 : en attente\n\n## Exigences ASVS L2 retenues\n\n## Lots et ordre d'ex\u00e9cution\n\n## Charge estim\u00e9e\n\n## Couverture attendue\n"}, {"name": "suivi-sante/security/03-plan.yaml", "type": "text", "content": "# Liste de cas de test au format partag\u00e9 (references/partage/formats.md, section 1)\n[]\n"}, {"name": "suivi-sante/security/04-labo.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Laboratoire : suivi-sante\n\n## Lancer\n\n## V\u00e9rifier\n\n## Remettre \u00e0 z\u00e9ro\n\n## Arr\u00eater\n\n## Limites par rapport \u00e0 la production\n"}, {"name": "suivi-sante/security/05-statique/revue-sql.md", "type": "text", "content": "# Revue statique des migrations (2 fichiers)\n\nAnalyse par motifs : chaque ligne est un signal **constat\u00e9 dans le code**, \u00e0 confirmer par un test en phase 6.\n\n## Tables du sch\u00e9ma public\n\n| Table | RLS | Policies (commande : r\u00f4les) |\n|---|---|---|\n| public.cabinets | oui | select : authenticated |\n| public.mesures | oui | select : authenticated; insert : authenticated |\n| public.profils | oui | select : authenticated; update : authenticated |\n\n## Signaux (9)\n\n| Catalogue | Objet | Constat | Indication |\n|---|---|---|---|\n| V-DB-04 | public.profils / profils_update_soi | UPDATE sans WITH CHECK : la ligne modifi\u00e9e n'est pas recontr\u00f4l\u00e9e (r\u00e9\u00e9criture du tenant possible) | \u00e9lev\u00e9e |\n| V-DB-06 | public.mesures / mesures_select | policy bas\u00e9e sur user_metadata (modifiable par l'utilisateur) | \u00e9lev\u00e9e |\n| V-DB-07 | public.v_mesures_recentes | vue expos\u00e9e sans security_invoker : elle s'ex\u00e9cute avec les droits de son cr\u00e9ateur | \u00e9lev\u00e9e |\n| V-DB-08 | public.get_mesures | SECURITY DEFINER sans contr\u00f4le auth.uid()/auth.jwt(), ex\u00e9cutable par authenticated | \u00e9lev\u00e9e |\n| V-DB-08 | public.get_mesures | SECURITY DEFINER sans search_path fix\u00e9 | moyenne |\n| V-DB-09 | public.profils | colonne sensible (r\u00f4le, plan ou tenant) modifiable par une policy UPDATE/ALL : v\u00e9rifier les privil\u00e8ges de colonne | moyenne |\n| V-DB-03 | public.cabinets | pas de policy pour : delete, insert, update (refus\u00e9 par d\u00e9faut, \u00e0 confirmer comme voulu) | info |\n| V-DB-03 | public.profils | pas de policy pour : delete, insert (refus\u00e9 par d\u00e9faut, \u00e0 confirmer comme voulu) | info |\n| V-DB-03 | public.mesures | pas de policy pour : delete, update (refus\u00e9 par d\u00e9faut, \u00e0 confirmer comme voulu) | info |\n\nLimites : SQL dynamique, r\u00e9glages faits dans le Dashboard et logique plpgsql non interpr\u00e9t\u00e9s. Compl\u00e9ter par `supabase db advisors --type security` et une lecture humaine des policies.\n"}, {"name": "suivi-sante/security/05-statique/synthese.md", "type": "text", "content": "# Tests statiques : synth\u00e8se (2026-11-23, migrations seules)\n\nP\u00e9rim\u00e8tre : `supabase/migrations/` uniquement (2 fichiers), \u00e0 la demande de PA. Le dossier n'est pas un d\u00e9p\u00f4t git \u00e0 part : pas de commit de r\u00e9f\u00e9rence. Empreintes SHA-256 (12 premiers caract\u00e8res) : `20261001000000_init.sql` 5156c496e9c8, `20261015000000_vues_rpc.sql` 5b6c615a6d92.\nPas de `03-plan.yaml` rempli : contr\u00f4le 1 seul fait (revue SQL + lecture humaine), les contr\u00f4les 2 \u00e0 5 sont list\u00e9s en \u00ab non couvert \u00bb.\n\nHypoth\u00e8se commune aux statuts \u00ab Confirm\u00e9 \u00bb ci-dessous : les droits par d\u00e9faut de Supabase sur le sch\u00e9ma `public` (SELECT/INSERT/UPDATE/DELETE et EXECUTE accord\u00e9s \u00e0 `anon` et `authenticated`). Aucune migration ne les retire (`revoke` absent). Si des droits ont \u00e9t\u00e9 retir\u00e9s \u00e0 la main dans le Dashboard, le statut redescend \u00e0 \u00ab Probable \u00bb et l'\u00e9cart de parit\u00e9 devient lui-m\u00eame un signal.\n\n| # | Signal | Catalogue | Statut | Preuve (fichier:ligne) | R\u00e9f. | Suite |\n|---|---|---|---|---|---|---|\n| S1 | La vue `v_mesures_recentes` n'a pas `security_invoker` : elle tourne avec les droits de son cr\u00e9ateur (`postgres`), contourne la RLS de `mesures` et rend les 100 derni\u00e8res mesures (patient_id, tension, glyc\u00e9mie) de **tous les cabinets**, \u00e0 `authenticated` et \u00e0 `anon` (cl\u00e9 publique seule). | V-DB-07 | Confirm\u00e9 | 20261015000000_vues_rpc.sql:1 | CWE-863 ; ASVS V8.4.1, V8.2.2 | Finding critique (appsec-rapports) ; TC-RLS en phase 6 : `GET /rest/v1/v_mesures_recentes` avec la cl\u00e9 anon |\n| S2 | `get_mesures(p_patient)` est SECURITY DEFINER, ne v\u00e9rifie pas l'appelant et renvoie `select *` (dont `note`) pour n'importe quel patient. EXECUTE est accord\u00e9 \u00e0 `authenticated` et n'est pas retir\u00e9 \u00e0 `PUBLIC`/`anon`. Cha\u00eene avec S1 : la vue fournit les `patient_id`, la RPC rend tout l'historique. | V-DB-08 | Confirm\u00e9 (authenticated) ; Probable (anon, selon les privil\u00e8ges EXECUTE par d\u00e9faut) | 20261015000000_vues_rpc.sql:2-5 | CWE-639 ; ASVS V8.2.2, V8.4.1 | Finding critique ; TC en phase 6 : `rpc/get_mesures` avec l'id d'un patient du tenant B, en compte A puis en anon |\n| S3 | `mesures_select` prend le cabinet dans `auth.jwt() -> 'user_metadata'`. `user_metadata` est modifiable par l'utilisateur lui-m\u00eame (`supabase.auth.updateUser({ data: { cabinet_id } })`). Un compte du cabinet A lit les mesures du cabinet B d\u00e8s qu'il conna\u00eet son UUID (un UUID n'est pas un secret). | V-DB-06, V-DB-05 | Confirm\u00e9 | 20261001000000_init.sql:15-16 | CWE-639 ; ASVS V8.3.1, V8.4.1 | Finding \u00e9lev\u00e9 ; TC en phase 6 : updateUser puis select sur `mesures` |\n| S4 | `profils_update_soi` laisse l'utilisateur modifier **toutes** les colonnes de sa ligne, dont `cabinet_id` et `role`. Nuance sur le signal du script : sans `WITH CHECK`, Postgres r\u00e9applique le `USING` (`id = auth.uid()`), donc `id` reste verrouill\u00e9 ; le d\u00e9faut est l'absence de privil\u00e8ges de colonne. En changeant `cabinet_id`, `mon_cabinet()` renvoie le cabinet cible : lecture de ses `profils` et `cabinets`, insertion de mesures chez lui (`mesures_insert`). En changeant `role`, auto-promotion (impact selon l'usage de `role` hors migrations). | V-DB-09, V-DB-04 | Confirm\u00e9 (cabinet_id) ; Probable (impact de `role`) | 20261001000000_init.sql:2, 14 | CWE-915, CWE-269 ; ASVS V8.2.3, V8.4.1 | Finding \u00e9lev\u00e9 ; TC en phase 6 : PATCH `profils` sur `cabinet_id` et `role` |\n| S5 | Aucun cloisonnement patient / soignant \u00e0 l'int\u00e9rieur d'un cabinet : `role` n'appara\u00eet dans aucune policy. Tout patient lit les profils de tous les autres patients de son cabinet (`profils_select`) et, avec un `user_metadata` correct, toutes leurs mesures (`mesures_select`). | V-DB-02 | Probable (d\u00e9pend du mod\u00e8le d'acc\u00e8s voulu, non document\u00e9) | 20261001000000_init.sql:13, 15-16 | CWE-285 ; ASVS V8.1.1, V8.2.2 | Faire trancher le mod\u00e8le d'acc\u00e8s par PA ; finding si non voulu |\n| S6 | `get_mesures` sans `set search_path`. Les objets du corps sont qualifi\u00e9s (`public.mesures`), le risque r\u00e9siduel est faible. | V-DB-08 | Th\u00e9orique | 20261015000000_vues_rpc.sql:2 | CWE-426 | Corriger avec S2 (`set search_path = ''`) |\n| S7 | Commandes sans policy (cabinets : insert/update/delete ; profils : insert/delete ; mesures : update/delete). | V-DB-03 | Faux positif c\u00f4t\u00e9 s\u00e9curit\u00e9 : RLS active, donc refus par d\u00e9faut. Point fonctionnel : la cr\u00e9ation des `profils` se fait forc\u00e9ment hors migrations (trigger ou service_role), non vu. | 20261001000000_init.sql:4-18 | | V\u00e9rifier le m\u00e9canisme de cr\u00e9ation des profils |\n\n## Test\u00e9 sans anomalie\n\n- RLS activ\u00e9e sur les 3 tables (`cabinets`, `profils`, `mesures`) : init.sql:4-6.\n- Toutes les policies visent `to authenticated` : aucune ouverture \u00e0 `anon` par une policy, aucun `using (true)`.\n- `mon_cabinet()` : SECURITY DEFINER avec `set search_path = ''`, noms qualifi\u00e9s, crit\u00e8re tir\u00e9 de `auth.uid()` (init.sql:8-10). Correct en soi ; c'est la colonne `profils.cabinet_id` qu'il lit qui est modifiable (S4).\n- `cabinets_select` : crit\u00e8re serveur fiable (init.sql:12).\n- `mesures_insert` : `WITH CHECK` pr\u00e9sent, `patient_id = auth.uid()` et cabinet tir\u00e9 de `mon_cabinet()` (init.sql:17-18). Sain en soi, mais contourn\u00e9 par S4 tant que `cabinet_id` reste modifiable.\n\n## Non couvert (et pourquoi)\n\n- `supabase db advisors --type security` : pas de labo d\u00e9marr\u00e9, Supabase CLI absent ici.\n- Parit\u00e9 avec le Dashboard de prod (policies, droits, r\u00e9glages ajout\u00e9s \u00e0 la main) : non fourni.\n- Storage (buckets) et Realtime (publication `supabase_realtime`) : rien dans les migrations, donc \u00e9tat inconnu, pas \u00ab s\u00fbr \u00bb.\n- Trigger ou fonction de cr\u00e9ation des `profils` \u00e0 l'inscription : absent des migrations fournies.\n- Config Auth, Edge Functions, `vercel.json`, bundle, secrets dans l'historique git, d\u00e9pendances, SAST, CI : hors demande (migrations seules) et outils (trufflehog, semgrep, osv-scanner, zizmor) non install\u00e9s.\n\n## Versions des outils\n\nVoir `versions.txt` : python3 3.13.18, PyYAML 6.0.3, `revue_sql.py` du skill (9 signaux bruts, tous qualifi\u00e9s ci-dessus).\n"}, {"name": "suivi-sante/security/05-statique/versions.txt", "type": "text", "content": "Tests statiques suivi-sante, 2026-11-23\npython3 3.13.18 / PyYAML 6.0.3\nscripts/revue_sql.py (skill appsec-tests-statiques) : ex\u00e9cut\u00e9\nscripts/partage/ref_lookup.py : CWE (cwe.mitre.org) et ASVS 5.0.0 (d\u00e9p\u00f4t OWASP) r\u00e9cup\u00e9r\u00e9s en ligne\nNon install\u00e9s dans cet environnement : supabase CLI, trufflehog, semgrep/opengrep, osv-scanner, zizmor\n"}, {"name": "suivi-sante/security/09-mitigation/PROMPT-IA.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Prompt pour l'IA de d\u00e9veloppement\n\n\u003cg\u00e9n\u00e9r\u00e9 par appsec-mitigation-retest>\n"}, {"name": "suivi-sante/security/09-mitigation/mitigation-pack.yaml", "type": "text", "content": "# Format : references/partage/formats.md, section 3\n"}, {"name": "suivi-sante/security/10-retest/retest-plan.yaml", "type": "text", "content": "# Format : references/partage/formats.md, section 5\n[]\n"}, {"name": "suivi-sante/security/journal.md", "type": "text", "content": "# Journal de mission : suivi-sante\n\n| Date | Phase | \u00c9v\u00e9nement ou d\u00e9cision | Par |\n|---|---|---|---|\n| 2026-11-23 | 0 | Arborescence security/ initialis\u00e9e (10 fichiers cr\u00e9\u00e9s), ASVS L2 | appsec-chef-de-mission |\n| 2026-11-23 | 5 | Tests statiques, migrations seules (2 fichiers, sans commit de r\u00e9f\u00e9rence) : 4 confirm\u00e9s (S1 vue, S2 RPC, S3 user_metadata, S4 colonnes profils), 1 probable, 1 th\u00e9orique, 1 faux positif. Synth\u00e8se : security/05-statique/synthese.md | appsec-tests-statiques |\n"}, {"name": "suivi-sante/supabase/migrations/20261001000000_init.sql", "type": "text", "content": "create table public.cabinets (id uuid primary key default gen_random_uuid(), nom text not null);\ncreate table public.profils (id uuid primary key references auth.users, cabinet_id uuid references public.cabinets, role text not null default 'patient');\ncreate table public.mesures (id uuid primary key default gen_random_uuid(), patient_id uuid references public.profils, cabinet_id uuid references public.cabinets, tension text, glycemie numeric, note text);\nalter table public.cabinets enable row level security;\nalter table public.profils enable row level security;\nalter table public.mesures enable row level security;\n\ncreate function public.mon_cabinet() returns uuid language sql stable security definer set search_path = '' as $$\n  select cabinet_id from public.profils where id = auth.uid()\n$$;\n\ncreate policy cabinets_select on public.cabinets for select to authenticated using (id = public.mon_cabinet());\ncreate policy profils_select on public.profils for select to authenticated using (cabinet_id = public.mon_cabinet());\ncreate policy profils_update_soi on public.profils for update to authenticated using (id = auth.uid());\ncreate policy mesures_select on public.mesures for select to authenticated\n  using (cabinet_id = (auth.jwt() -> 'user_metadata' ->> 'cabinet_id')::uuid);\ncreate policy mesures_insert on public.mesures for insert to authenticated\n  with check (cabinet_id = public.mon_cabinet() and patient_id = auth.uid());\n"}, {"name": "suivi-sante/supabase/migrations/20261015000000_vues_rpc.sql", "type": "text", "content": "create view public.v_mesures_recentes as select patient_id, tension, glycemie from public.mesures order by id desc limit 100;\ncreate or replace function public.get_mesures(p_patient uuid) returns setof public.mesures language sql security definer as $$\n  select * from public.mesures where patient_id = p_patient\n$$;\ngrant execute on function public.get_mesures(uuid) to authenticated;\n"}], "grading": {"expectations": [{"text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "summary": {"passed": 8, "failed": 0, "total": 8, "pass_rate": 1.0}}}, {"id": "revue-rls-seule-without_skill", "prompt": "relis mes migrations de suivi-sante c\u00f4t\u00e9 s\u00e9cu (dossier ./suivi-sante/supabase/migrations). C'est une app de suivi de sant\u00e9 multi-cabinets, je veux savoir si mes RLS tiennent vraiment, sans lancer l'app.\n\nInput files: suivi-sante/", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "# Revue s\u00e9cu des migrations `suivi-sante` (RLS, vues, fonctions)\n\n**P\u00e9rim\u00e8tre relu** : `suivi-sante/supabase/migrations/20261001000000_init.sql` (18 lignes) et `20261015000000_vues_rpc.sql` (5 lignes). Je n'ai rien lanc\u00e9 ni connect\u00e9 \u00e0 une base : c'est une lecture du SQL, avec les comportements standard de Postgres et de Supabase.\n\n## Verdict\n\n**Non, les RLS ne tiennent pas.** Activer RLS sur les 3 tables \u00e9tait la bonne id\u00e9e, mais il y a **4 failles critiques**, chacune suffisante \u00e0 elle seule pour lire des donn\u00e9es de sant\u00e9 d'un autre cabinet. Deux d'entre elles marchent **sans compte**, juste avec la cl\u00e9 `anon` publique de l'app. Pour des donn\u00e9es de sant\u00e9 (donn\u00e9es sensibles au sens de la LPD et du RGPD), il ne faut pas mettre \u00e7a en production en l'\u00e9tat.\n\n| # | Gravit\u00e9 | O\u00f9 | Probl\u00e8me en une ligne |\n|---|---|---|---|\n| 1 | Critique | `v_mesures_recentes` (vues_rpc l.1) | La vue contourne la RLS : n'importe qui avec la cl\u00e9 anon lit les 100 derni\u00e8res mesures de tous les cabinets |\n| 2 | Critique | `get_mesures()` (vues_rpc l.2-5) | RPC `SECURITY DEFINER` sans contr\u00f4le : n'importe qui (anon compris) lit toutes les mesures de n'importe quel patient |\n| 3 | Critique | `mesures_select` (init l.15-16) | Le cabinet est lu dans `user_metadata`, que l'utilisateur peut modifier lui-m\u00eame |\n| 4 | Critique | `profils_update_soi` (init l.14) | Un utilisateur peut changer son propre `cabinet_id` et son `role` |\n| 5 | \u00c9lev\u00e9 | `mesures_select`, `profils_select` | Aucune s\u00e9paration patient / soignant : chaque patient voit les mesures et profils de tous les patients de son cabinet |\n| 6 | Moyen | `mesures_insert` + #4 | Injection de fausses mesures dans un autre cabinet |\n| 7 | Faible | `mon_cabinet()`, `get_mesures()` | Fonctions expos\u00e9es en RPC, `search_path` manquant, `auth.uid()` non mis en cache |\n\n---\n\n## D\u00e9tail des failles\n\n### 1. Critique : la vue `v_mesures_recentes` contourne toute la RLS\n\n```sql\ncreate view public.v_mesures_recentes as select patient_id, tension, glycemie from public.mesures ...\n```\n\n- Par d\u00e9faut, une vue Postgres s'ex\u00e9cute avec les droits de **son propri\u00e9taire** (`postgres` pour une migration Supabase), pas de celui qui l'interroge. Or `postgres` contourne la RLS. La policy de `mesures` ne s'applique donc **pas** \u00e0 la vue.\n- Dans le sch\u00e9ma `public`, Supabase donne par d\u00e9faut `SELECT` aux r\u00f4les `anon` et `authenticated` sur toute nouvelle table ou vue. La vue est donc expos\u00e9e par l'API REST.\n- **Exploitation** : `GET /rest/v1/v_mesures_recentes` avec la seule cl\u00e9 anon (pr\u00e9sente dans le bundle front) renvoie `patient_id`, `tension` et `glycemie` de 100 mesures, tous cabinets confondus.\n- D\u00e9tail annexe : `order by id desc` sur un UUID al\u00e9atoire ne donne pas les mesures \u00ab r\u00e9centes \u00bb, juste 100 mesures arbitraires. Il faut une colonne `created_at`.\n\n**Correctif** : `with (security_invoker = true)` (Postgres 15 ou plus, le cas des projets Supabase actuels) et retrait des droits \u00e0 `anon`.\n\n### 2. Critique : la RPC `get_mesures(p_patient)` lit n'importe quel dossier\n\n```sql\ncreate or replace function public.get_mesures(p_patient uuid) returns setof public.mesures\nlanguage sql security definer as $$ select * from public.mesures where patient_id = p_patient $$;\ngrant execute on function public.get_mesures(uuid) to authenticated;\n```\n\n- `SECURITY DEFINER` : la fonction s'ex\u00e9cute en tant que `postgres` et contourne donc la RLS. Rien ne v\u00e9rifie que `p_patient` appartient \u00e0 l'appelant ou \u00e0 son cabinet. C'est une IDOR classique.\n- Le `grant ... to authenticated` **n'emp\u00eache pas** l'acc\u00e8s anonyme. Postgres accorde `EXECUTE` \u00e0 `PUBLIC` sur toute nouvelle fonction, et Supabase l'accorde aussi \u00e0 `anon` par ses privil\u00e8ges par d\u00e9faut. Sans `revoke`, `anon` peut appeler `POST /rest/v1/rpc/get_mesures`.\n- Les `patient_id` \u00e0 cibler sont faciles \u00e0 obtenir : la vue n\u00b01 les fournit.\n- La fonction renvoie `select *`, donc aussi `note` (texte libre m\u00e9dical) et `cabinet_id`. Ce `cabinet_id` alimente directement la faille n\u00b04.\n- `search_path` n'est pas fix\u00e9. Le risque reste limit\u00e9 ici parce que la table est qualifi\u00e9e (`public.mesures`), mais c'est une mauvaise pratique pour une fonction `SECURITY DEFINER`.\n\n**Correctif** : passer en `security invoker` pour que la RLS s'applique, fixer `search_path`, et faire `revoke execute ... from public, anon`.\n\n### 3. Critique : `mesures_select` fait confiance \u00e0 `user_metadata`\n\n```sql\nusing (cabinet_id = (auth.jwt() -> 'user_metadata' ->> 'cabinet_id')::uuid)\n```\n\n- Dans Supabase Auth, l'utilisateur peut modifier lui-m\u00eame `user_metadata` : `supabase.auth.updateUser({ data: { cabinet_id: '\u003cuuid d'un autre cabinet>' } })`. Apr\u00e8s le rafra\u00eechissement de la session, le JWT contient la valeur choisie par l'attaquant.\n- **Exploitation** : un patient de n'importe quel cabinet change sa m\u00e9tadonn\u00e9e, puis lit **toutes** les mesures du cabinet vis\u00e9 avec un simple `select * from mesures`.\n- Si les connexions anonymes (*anonymous sign-ins*) sont activ\u00e9es sur le projet, un utilisateur anonyme re\u00e7oit lui aussi le r\u00f4le `authenticated`. Il peut faire la m\u00eame manipulation **sans m\u00eame cr\u00e9er de compte**.\n- C'est aussi incoh\u00e9rent avec le reste du sch\u00e9ma : les autres policies utilisent `mon_cabinet()`, c'est-\u00e0-dire la table `profils`. Deux sources de v\u00e9rit\u00e9 pour le cabinet, dont une contr\u00f4l\u00e9e par le client.\n\n**R\u00e8gle** : n'utilisez jamais `user_metadata` dans une policy. Utilisez une table que vous contr\u00f4lez (`profils`) ou `app_metadata`, qui n'est modifiable que c\u00f4t\u00e9 serveur.\n\n### 4. Critique : `profils_update_soi` permet de changer de cabinet et de r\u00f4le\n\n```sql\ncreate policy profils_update_soi on public.profils for update to authenticated using (id = auth.uid());\n```\n\n- Sans `WITH CHECK`, Postgres r\u00e9utilise le `USING` comme contr\u00f4le de la nouvelle ligne. Le seul contr\u00f4le est donc \u00ab la ligne m'appartient \u00bb. Rien n'emp\u00eache de modifier les **autres colonnes**.\n- Le droit `UPDATE` par d\u00e9faut de Supabase couvre toutes les colonnes. Un utilisateur peut donc faire :\n  - `update profils set cabinet_id = '\u003cautre cabinet>' where id = auth.uid()`. \u00c0 partir de l\u00e0, `mon_cabinet()` renvoie le cabinet vis\u00e9 : il voit ce cabinet, tous ses profils, et peut y ins\u00e9rer des mesures. C'est un changement de tenant complet ;\n  - `update profils set role = 'medecin'` (ou `admin`), une \u00e9l\u00e9vation de privil\u00e8ge d\u00e8s que le r\u00f4le sera utilis\u00e9, c\u00f4t\u00e9 front ou dans de futures policies.\n- La table `profils` ne contient aujourd'hui que `id`, `cabinet_id` et `role`, trois colonnes que l'utilisateur ne doit **jamais** modifier. Cette policy n'a donc pas de raison d'exister.\n\n**Cha\u00eene compl\u00e8te, de anonyme \u00e0 l'acc\u00e8s \u00e0 un autre cabinet** : la vue (n\u00b01) donne des `patient_id`. `get_mesures` (n\u00b02) donne leur `cabinet_id`. Je cr\u00e9e un compte, puis je modifie `profils.cabinet_id` (n\u00b04) ou `user_metadata` (n\u00b03). J'ai alors un acc\u00e8s complet au cabinet cible.\n\n### 5. \u00c9lev\u00e9 : pas de cloisonnement entre patients d'un m\u00eame cabinet\n\n- `mesures_select` filtre uniquement par cabinet. **Chaque patient voit la glyc\u00e9mie, la tension et les notes de tous les autres patients de son cabinet.** La colonne `role` existe mais n'est utilis\u00e9e par aucune policy.\n- `profils_select` : chaque patient voit la liste des patients de son cabinet, avec leurs r\u00f4les. Avoir un profil dans tel cabinet m\u00e9dical est d\u00e9j\u00e0 en soi une donn\u00e9e sensible.\n- Le mod\u00e8le attendu est probablement : un patient ne voit que ses propres mesures, les soignants voient celles de leur cabinet. \u00c0 vous de confirmer les valeurs de `role` (`patient`, `medecin`\u2026). J'ai suppos\u00e9 `medecin` et `soignant` dans le correctif ci-dessous.\n\n### 6. Moyen : injection de mesures dans un autre cabinet\n\n`mesures_insert` contr\u00f4le `cabinet_id = mon_cabinet() and patient_id = auth.uid()`. Ce contr\u00f4le est correct en soi, mais il h\u00e9rite de la faille n\u00b04. Apr\u00e8s avoir chang\u00e9 son `cabinet_id`, un attaquant peut **\u00e9crire** de fausses mesures dans le cabinet vis\u00e9, ce qui pollue le suivi m\u00e9dical. Ce point se r\u00e8gle en corrigeant le n\u00b04.\n\nRien ne garantit non plus en base que `mesures.cabinet_id` est \u00e9gal au cabinet du patient (pas de contrainte ni de trigger). Seule la policy d'insert le garantit aujourd'hui.\n\n### 7. Faible : hygi\u00e8ne\n\n- `public.mon_cabinet()` est dans `public`, donc appelable en RPC par tout le monde. \u00c7a ne fuit rien de grave : la fonction ne renvoie que le cabinet de l'appelant. Mieux vaut quand m\u00eame mettre les fonctions d'aide aux policies dans un sch\u00e9ma non expos\u00e9.\n- `auth.uid()` et `mon_cabinet()` appel\u00e9s directement dans `USING` sont r\u00e9\u00e9valu\u00e9s ligne par ligne. Les \u00e9crire `(select auth.uid())` permet \u00e0 Postgres de les calculer une seule fois (recommandation Supabase pour les performances).\n- Ce qui est correct : aucune policy `UPDATE` ou `DELETE` sur `mesures`, ni `INSERT`, `UPDATE` ou `DELETE` sur `cabinets`, donc ces op\u00e9rations sont refus\u00e9es. Si l'app en a besoin plus tard, ajoutez-les explicitement avec `USING` **et** `WITH CHECK`. `mon_cabinet()` fixe bien `search_path = ''`.\n\n---\n\n## Migration corrective propos\u00e9e\n\n\u00c0 ajouter comme nouvelle migration (par exemple `20261123000000_durcissement_rls.sql`). Ne modifiez pas les migrations d\u00e9j\u00e0 appliqu\u00e9es. **\u00c0 adapter** : les valeurs de `role` et les colonnes r\u00e9ellement modifiables par l'utilisateur.\n\n```sql\n-- 0. Sch\u00e9ma priv\u00e9 pour les fonctions d'aide (non expos\u00e9 par l'API)\ncreate schema if not exists prive;\nrevoke all on schema prive from public, anon;\ngrant usage on schema prive to authenticated;\n\ncreate or replace function prive.mon_cabinet() returns uuid\nlanguage sql stable security definer set search_path = '' as $$\n  select cabinet_id from public.profils where id = (select auth.uid())\n$$;\ncreate or replace function prive.mon_role() returns text\nlanguage sql stable security definer set search_path = '' as $$\n  select role from public.profils where id = (select auth.uid())\n$$;\nrevoke execute on function prive.mon_cabinet(), prive.mon_role() from public, anon;\ngrant  execute on function prive.mon_cabinet(), prive.mon_role() to authenticated;\n\n-- 1. Vue : respecter la RLS de l'appelant, fermer \u00e0 anon\ndrop view if exists public.v_mesures_recentes;\ncreate view public.v_mesures_recentes with (security_invoker = true) as\n  select patient_id, tension, glycemie from public.mesures\n  order by id desc limit 100;   -- \u00e0 remplacer par un order by created_at desc\nrevoke all on public.v_mesures_recentes from anon, public;\ngrant select on public.v_mesures_recentes to authenticated;\n\n-- 2. RPC : soumise \u00e0 la RLS, ferm\u00e9e \u00e0 anon\ncreate or replace function public.get_mesures(p_patient uuid) returns setof public.mesures\nlanguage sql stable security invoker set search_path = '' as $$\n  select * from public.mesures where patient_id = p_patient\n$$;\nrevoke execute on function public.get_mesures(uuid) from public, anon;\ngrant  execute on function public.get_mesures(uuid) to authenticated;\n\n-- 3 + 5. Mesures : plus de user_metadata, cloisonnement patient / soignant\ndrop policy if exists mesures_select on public.mesures;\ncreate policy mesures_select on public.mesures for select to authenticated using (\n  patient_id = (select auth.uid())\n  or (\n    cabinet_id = (select prive.mon_cabinet())\n    and (select prive.mon_role()) in ('medecin', 'soignant')   -- \u00e0 adapter\n  )\n);\ndrop policy if exists mesures_insert on public.mesures;\ncreate policy mesures_insert on public.mesures for insert to authenticated with check (\n  patient_id = (select auth.uid())\n  and cabinet_id = (select prive.mon_cabinet())\n);\n\n-- 4. Profils : plus de modification de cabinet_id / role par l'utilisateur\ndrop policy if exists profils_update_soi on public.profils;\nrevoke update on public.profils from authenticated, anon;\n-- Si vous ajoutez plus tard des colonnes \u00e9ditables (nom, t\u00e9l\u00e9phone...) :\n--   grant update (nom, telephone) on public.profils to authenticated;\n--   create policy profils_update_soi on public.profils for update to authenticated\n--     using (id = (select auth.uid())) with check (id = (select auth.uid()));\n\n-- 5. Profils : un patient ne voit que lui, les soignants voient leur cabinet\ndrop policy if exists profils_select on public.profils;\ncreate policy profils_select on public.profils for select to authenticated using (\n  id = (select auth.uid())\n  or (cabinet_id = (select prive.mon_cabinet())\n      and (select prive.mon_role()) in ('medecin', 'soignant'))\n);\n\ndrop policy if exists cabinets_select on public.cabinets;\ncreate policy cabinets_select on public.cabinets for select to authenticated\n  using (id = (select prive.mon_cabinet()));\n\n-- 7. Ancienne fonction expos\u00e9e en RPC, plus utilis\u00e9e par aucune policy\ndrop function if exists public.mon_cabinet();\n```\n\nPoints \u00e0 garder en t\u00eate :\n- Les fonctions d'aide `prive.*` sont `SECURITY DEFINER`. C'est volontaire : elles lisent `profils` sans d\u00e9clencher la RLS de `profils` (sinon on aurait une r\u00e9cursion). Elles ne renvoient que des informations sur l'appelant.\n- Le sch\u00e9ma `prive` ne doit **pas** \u00eatre ajout\u00e9 aux *Exposed schemas* de l'API (Dashboard > API settings).\n- Le changement de cabinet ou de r\u00f4le d'un utilisateur doit se faire c\u00f4t\u00e9 serveur uniquement (`service_role`, Edge Function d'admin).\n\n## Tests \u00e0 \u00e9crire pour prouver que \u00e7a tient (sans lancer l'app)\n\nLe plus fiable est d'ajouter des tests pgTAP dans `supabase/tests/`, lanc\u00e9s avec `supabase test db` sur la stack locale, jamais sur la prod. Il faut au minimum 2 cabinets (A et B), un patient et un m\u00e9decin par cabinet, puis v\u00e9rifier :\n\n1. `anon` : `select` sur `mesures`, `profils`, `cabinets` et `v_mesures_recentes` renvoie 0 ligne ou une erreur de droit ; `get_mesures(\u003cpatient A>)` donne `permission denied`.\n2. Patient A : ne voit que ses propres mesures, aucune de B ni d'un autre patient de A ; `get_mesures(\u003cpatient B>)` renvoie 0 ligne.\n3. Patient A avec `user_metadata.cabinet_id = B` dans ses claims (simul\u00e9 via `set local request.jwt.claims`) : toujours 0 ligne de B.\n4. Patient A : `update profils set cabinet_id = B` et `update profils set role = 'medecin'` \u00e9chouent.\n5. Patient A : `insert into mesures (cabinet_id = B, ...)` \u00e9choue, de m\u00eame que `insert` avec `patient_id` = un autre patient.\n6. M\u00e9decin A : voit toutes les mesures de A et aucune de B.\n\nExemple pour le test 3 :\n\n```sql\nbegin;\nselect plan(1);\nset local role authenticated;\nset local request.jwt.claims = '{\"sub\":\"\u003cuuid patient A>\",\"role\":\"authenticated\",\"user_metadata\":{\"cabinet_id\":\"\u003cuuid cabinet B>\"}}';\nselect is((select count(*) from public.mesures where cabinet_id = '\u003cuuid cabinet B>'), 0::bigint,\n          'user_metadata falsifi\u00e9 ne donne pas acc\u00e8s au cabinet B');\nselect * from finish();\nrollback;\n```\n\n## Limites de cette revue\n\n- J'ai relu seulement les deux fichiers de migration. Je n'ai pas vu le code front, les Edge Functions, la configuration Auth (connexions anonymes activ\u00e9es ou non, confirmation d'email), les buckets Storage ni Realtime. Une table publi\u00e9e dans Realtime suit la RLS, mais v\u00e9rifiez qu'aucune n'est publi\u00e9e sans raison.\n- Je n'ai pas pu v\u00e9rifier si des droits ou des policies ont \u00e9t\u00e9 modifi\u00e9s \u00e0 la main dans le Dashboard, en dehors des migrations. Les droits par d\u00e9faut de Supabase cit\u00e9s plus haut (anon et authenticated sur `public`, `EXECUTE` \u00e0 `PUBLIC`) sont ceux d'un projet standard. Vous pouvez le confirmer avec `\\dp public.*` et `\\df+ public.get_mesures` sur votre base locale.\n- Il manque une policy `INSERT` sur `profils` : la cr\u00e9ation de profil doit donc passer par un trigger sur `auth.users` ou par le serveur. Ce trigger n'appara\u00eet pas dans les migrations. S'il existe ailleurs, il faut le relire aussi, en particulier pour savoir comment `cabinet_id` est attribu\u00e9 \u00e0 l'inscription. S'il le prend dans `raw_user_meta_data`, on retrouve la faille n\u00b03.\n\n**Priorit\u00e9** : corrigez les n\u00b01 et n\u00b02 en premier (exploitables sans compte), puis les n\u00b03 et n\u00b04, puis le n\u00b05, avant toute mise en ligne avec de vraies donn\u00e9es patients.\n"}, {"name": "suivi-sante/supabase/migrations/20261001000000_init.sql", "type": "text", "content": "create table public.cabinets (id uuid primary key default gen_random_uuid(), nom text not null);\ncreate table public.profils (id uuid primary key references auth.users, cabinet_id uuid references public.cabinets, role text not null default 'patient');\ncreate table public.mesures (id uuid primary key default gen_random_uuid(), patient_id uuid references public.profils, cabinet_id uuid references public.cabinets, tension text, glycemie numeric, note text);\nalter table public.cabinets enable row level security;\nalter table public.profils enable row level security;\nalter table public.mesures enable row level security;\n\ncreate function public.mon_cabinet() returns uuid language sql stable security definer set search_path = '' as $$\n  select cabinet_id from public.profils where id = auth.uid()\n$$;\n\ncreate policy cabinets_select on public.cabinets for select to authenticated using (id = public.mon_cabinet());\ncreate policy profils_select on public.profils for select to authenticated using (cabinet_id = public.mon_cabinet());\ncreate policy profils_update_soi on public.profils for update to authenticated using (id = auth.uid());\ncreate policy mesures_select on public.mesures for select to authenticated\n  using (cabinet_id = (auth.jwt() -> 'user_metadata' ->> 'cabinet_id')::uuid);\ncreate policy mesures_insert on public.mesures for insert to authenticated\n  with check (cabinet_id = public.mon_cabinet() and patient_id = auth.uid());\n"}, {"name": "suivi-sante/supabase/migrations/20261015000000_vues_rpc.sql", "type": "text", "content": "create view public.v_mesures_recentes as select patient_id, tension, glycemie from public.mesures order by id desc limit 100;\ncreate or replace function public.get_mesures(p_patient uuid) returns setof public.mesures language sql security definer as $$\n  select * from public.mesures where patient_id = p_patient\n$$;\ngrant execute on function public.get_mesures(uuid) to authenticated;\n"}], "grading": {"expectations": [{"text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9", "passed": true, "evidence": "Oui, avec le droit PUBLIC par d\u00e9faut"}, {"text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles", "passed": true, "evidence": "mon_cabinet() not\u00e9 en hygi\u00e8ne faible seulement"}, {"text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding", "passed": false, "evidence": "Gravit\u00e9s sans statut confirm\u00e9/probable/th\u00e9orique"}, {"text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es", "passed": true, "evidence": "Aucune ex\u00e9cution"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "summary": {"passed": 7, "failed": 1, "total": 8, "pass_rate": 0.875}}}, {"id": "scan-depot-pieges-with_skill", "prompt": "/statique scanne le d\u00e9p\u00f4t de chantier-pro (dans ./chantier-pro, le build est d\u00e9j\u00e0 dans dist/). Je veux savoir ce qui craint avant de passer aux tests sur le labo.\n\nInput files: chantier-pro/", "eval_id": null, "outputs": [{"name": "chantier-pro/.gitignore", "type": "binary", "mime": "application/octet-stream", "data_uri": "data:application/octet-stream;base64,LmVudgo="}, {"name": "chantier-pro/README.md", "type": "text", "content": "# chantier-pro\\nSaaS SST multi-tenant : d\u00e9clarations d'accidents par entreprise.\n"}, {"name": "chantier-pro/dist/assets/index-abc123.js", "type": "text", "content": "(()=>{const u=\"http://127.0.0.1:54321\",k=\"eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogInNlcnZpY2Vfcm9sZSIsICJpc3MiOiAic3VwYWJhc2UiLCAicmVmIjogImxhYm9maWN0aWYwMDAwMDAwMDAwIn0.c2lnbmF0dXJlLWZpY3RpdmUtcG91ci1sZXMtdGVzdHM\";console.log(u,k)})();\n"}, {"name": "chantier-pro/dist/assets/index-abc123.js.map", "type": "binary", "mime": "application/octet-stream", "data_uri": "data:application/octet-stream;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9tYWluLnRzeCJdfQo="}, {"name": "chantier-pro/package.json", "type": "text", "content": "{\"name\":\"chantier-pro\",\"private\":true,\"dependencies\":{\"@supabase/supabase-js\":\"^2.45.0\",\"react\":\"^18.3.1\",\"react-dom\":\"^18.3.1\",\"supabase-helpers-pro\":\"^1.2.0\",\"reactt-router\":\"^6.0.0\"},\"devDependencies\":{\"vite\":\"^5.4.0\"}}\n"}, {"name": "chantier-pro/security/00-cadrage.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Cadrage et autorisation : chantier-pro\n\n- Date : 2026-11-23\n- Niveau ASVS cible : L2\n- Porte G1 : en attente\n\n## 1. App, environnements, propri\u00e9taires, fournisseurs\n| \u00c9l\u00e9ment | Valeur |\n|---|---|\n| App | chantier-pro |\n| Propri\u00e9taire (autorise les tests) | \u003c\u00e0 compl\u00e9ter> |\n| Environnements | labo : \u003curl locale> ; staging : \u003curl ou aucun> ; prod : \u003curl> |\n| Fournisseurs | \u003cSupabase, Vercel (plan : Hobby/Pro/Enterprise), ...> |\n\n## 2. Classification des donn\u00e9es (nLPD)\n| Donn\u00e9e | Classe (publique, interne, personnelle, sensible nLPD) | O\u00f9 |\n|---|---|---|\n\n## 3. R\u00e8gles d'engagement\n- P\u00e9rim\u00e8tre inclus :\n- P\u00e9rim\u00e8tre exclu :\n- Environnements et niveau de risque autoris\u00e9 par environnement :\n- Fen\u00eatres de test :\n- Tests interdits :\n- Contacts et arr\u00eat d'urgence (qui, canal, crit\u00e8res) :\n- Autorisation \u00e9crite : \u003cr\u00e9f\u00e9rence du document ou message de PA, date>\n\n## 4. D\u00e9cision G1\n\u003cd\u00e9cision de PA, date>\n"}, {"name": "chantier-pro/security/01-inventaire.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Reconnaissance et inventaire : chantier-pro\n\n## Surface d'attaque\n\n## Bundle JS public\n\n## R\u00f4les et tenants\n\n## D\u00e9pendances et outillage\n"}, {"name": "chantier-pro/security/02-menaces.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Mod\u00e9lisation des menaces : chantier-pro\n\n## DFD\n\n```mermaid\nflowchart LR\n```\n\n## STRIDE par flux\n\n## Cas d'abus\n\n## Cotation\n"}, {"name": "chantier-pro/security/03-plan.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Plan de test : chantier-pro\n\n- Porte G2 : en attente\n\n## Exigences ASVS L2 retenues\n\n## Lots et ordre d'ex\u00e9cution\n\n## Charge estim\u00e9e\n\n## Couverture attendue\n"}, {"name": "chantier-pro/security/03-plan.yaml", "type": "text", "content": "# Liste de cas de test au format partag\u00e9 (references/partage/formats.md, section 1)\n[]\n"}, {"name": "chantier-pro/security/04-labo.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Laboratoire : chantier-pro\n\n## Lancer\n\n## V\u00e9rifier\n\n## Remettre \u00e0 z\u00e9ro\n\n## Arr\u00eater\n\n## Limites par rapport \u00e0 la production\n"}, {"name": "chantier-pro/security/05-statique/config.md", "type": "text", "content": "# Contr\u00f4les statiques : configuration, secrets visibles, bundle\n\nSignaux **constat\u00e9s dans les fichiers** (valeurs caviard\u00e9es). Exploitabilit\u00e9 \u00e0 confirmer en phase 6.\n\n## Signaux (12)\n\n| Catalogue | Objet | Constat | Indication |\n|---|---|---|---|\n| V-AUTH-05 | Edge Function export-pdf | verify_jwt = false : appelable sans JWT | \u00e9lev\u00e9e |\n| V-AUTH-05 | supabase/functions/export-pdf/index.ts | utilise la cl\u00e9 secr\u00e8te (contourne RLS) sans lire l'identit\u00e9 de l'appelant | \u00e9lev\u00e9e |\n| V-FE-01 | src/components/Rapport.tsx:2 | dangerouslySetInnerHTML sans d\u00e9sinfection visible | \u00e9lev\u00e9e |\n| V-SEC-01 | dist/assets/index-abc123.js | JWT service_role dans le bundle (eyJh\u2026[caviard\u00e9]) | \u00e9lev\u00e9e |\n| V-SEC-03 | dist/assets/index-abc123.js:1 | JWT de r\u00f4le service_role visible dans un fichier suivi (eyJh\u2026[caviard\u00e9]) | \u00e9lev\u00e9e |\n| V-API-01 | supabase/functions/export-pdf/index.ts | CORS \u00ab * \u00bb | moyenne |\n| V-AUTH-02 | supabase/config.toml [auth] | inscription ouverte (enable_signup) : \u00e0 confirmer comme voulu | moyenne |\n| V-AUTH-03 | supabase/config.toml [auth.email] | confirmation d'e-mail d\u00e9sactiv\u00e9e | moyenne |\n| V-FE-02 | vercel.json | absent : aucun en-t\u00eate de s\u00e9curit\u00e9 versionn\u00e9 (v\u00e9rifier en observation passive) | moyenne |\n| V-SEC-05 | dist | 1 source maps pr\u00e9sentes dans le bundle construit | moyenne |\n| V-AUTH-03 | supabase/config.toml [auth.mfa] | MFA TOTP non activ\u00e9 (\u00e0 exiger pour les r\u00f4les admin) | info |\n| info | supabase/config.toml | r\u00e9glages locaux seulement : comparer avec le Dashboard de prod (non versionn\u00e9) | info |\n\nNon couvert ici : historique git complet (TruffleHog), d\u00e9pendances (deps_check.py, osv-scanner), SAST par r\u00e8gles (Semgrep/Opengrep), advisors Supabase, r\u00e9glages du Dashboard.\n"}, {"name": "chantier-pro/security/05-statique/dependances.md", "type": "text", "content": "# Cha\u00eene d'approvisionnement npm\n\nLockfile : aucun. D\u00e9pendances directes : 6. Registre npm interrog\u00e9.\n\n## Signaux (3)\n\n| Catalogue | Objet | Constat | Indication |\n|---|---|---|---|\n| V-SC-01 | reactt-router | introuvable sur le registre npm (HTTP Error 404: Not Found) : paquet hallucin\u00e9 ? | \u00e9lev\u00e9e |\n| V-SC-01 | supabase-helpers-pro | introuvable sur le registre npm (HTTP Error 404: Not Found) : paquet hallucin\u00e9 ? | \u00e9lev\u00e9e |\n| V-SC-03 | lockfile | aucun lockfile : versions install\u00e9es non reproductibles | moyenne |\n\nCompl\u00e9ter par : osv-scanner (CVE connues, puis EPSS/KEV pour les CVE trouv\u00e9es), Socket CLI (paquets malveillants).\n"}, {"name": "chantier-pro/security/05-statique/revue-sql.md", "type": "text", "content": "# Revue statique des migrations (2 fichiers)\n\nAnalyse par motifs : chaque ligne est un signal **constat\u00e9 dans le code**, \u00e0 confirmer par un test en phase 6.\n\n## Tables du sch\u00e9ma public\n\n| Table | RLS | Policies (commande : r\u00f4les) |\n|---|---|---|\n| public.accidents | oui | select : public |\n| public.entreprises | **non** | aucune |\n| public.membres | **non** | aucune |\n\n## Signaux (10)\n\n| Catalogue | Objet | Constat | Indication |\n|---|---|---|---|\n| V-DB-01 | public.entreprises | RLS non activ\u00e9e sur une table du sch\u00e9ma expos\u00e9 | \u00e9lev\u00e9e |\n| V-DB-01 | public.membres | RLS non activ\u00e9e sur une table du sch\u00e9ma expos\u00e9 | \u00e9lev\u00e9e |\n| V-DB-02 | public.accidents / accidents_select | policy SELECT en \u00ab true \u00bb pour public | \u00e9lev\u00e9e |\n| V-DB-08 | public.stats_entreprise | SECURITY DEFINER sans contr\u00f4le auth.uid()/auth.jwt(), ex\u00e9cutable par anon | \u00e9lev\u00e9e |\n| V-DB-10 | storage:photos-accidents | bucket public : tout objet est lisible par URL sans authentification | \u00e9lev\u00e9e |\n| V-DB-11 | public.accidents | table publi\u00e9e en Realtime avec une lecture ouverte : diffusion \u00e0 tous les abonn\u00e9s | \u00e9lev\u00e9e |\n| V-DB-02 | storage.objects / photos_read | policy sans clause TO : s'applique aussi au r\u00f4le anon | moyenne |\n| V-DB-05 | storage.objects / photos_read | policy sans auth.uid() ni auth.jwt() : v\u00e9rifier d'o\u00f9 vient le crit\u00e8re | moyenne |\n| V-DB-08 | public.stats_entreprise | SECURITY DEFINER sans search_path fix\u00e9 | moyenne |\n| V-DB-03 | public.accidents | pas de policy pour : delete, insert, update (refus\u00e9 par d\u00e9faut, \u00e0 confirmer comme voulu) | info |\n\nLimites : SQL dynamique, r\u00e9glages faits dans le Dashboard et logique plpgsql non interpr\u00e9t\u00e9s. Compl\u00e9ter par `supabase db advisors --type security` et une lecture humaine des policies.\n"}, {"name": "chantier-pro/security/05-statique/synthese.md", "type": "text", "content": "# Tests statiques : synth\u00e8se (2026-11-23, commit f9accd9)\n\nP\u00e9rim\u00e8tre : d\u00e9p\u00f4t `chantier-pro` (branche `master`, 2 commits, aucune autre branche ni stash), y compris `dist/` versionn\u00e9. Contr\u00f4les passifs uniquement : aucune requ\u00eate vers l'app ni vers Supabase. Seule requ\u00eate sortante : le registre npm (existence des paquets, `deps_check.py --registre`).\n\nPas de plan de test (`03-plan.yaml` vide) : contr\u00f4les 1 \u00e0 5 du skill par d\u00e9faut.\n\nContexte qui p\u00e8se sur la gravit\u00e9 : SaaS multi-tenant de d\u00e9clarations d'accidents (README). `accidents.victime` et `accidents.description` sont des donn\u00e9es personnelles, potentiellement des donn\u00e9es sur la sant\u00e9 (donn\u00e9es sensibles au sens de la nLPD).\n\nSorties brutes : `revue-sql.md` (10 signaux), `config.md` (12), `dependances.md` (3), `versions.txt`. Valeurs de secrets caviard\u00e9es (4 premiers caract\u00e8res).\n\n## Signaux qualifi\u00e9s\n\n### Confirm\u00e9s\n\n| # | Signal | Catalogue | CWE | Preuve (fichier:ligne, sortie) | Suite |\n|---|---|---|---|---|---|\n| 1 | `accidents` lisible par tous, y compris `anon` : policy `using (true)` sans `TO`. Toutes les victimes et descriptions de toutes les entreprises. | V-DB-02 | CWE-862 | supabase/migrations/20260901120000_init.sql:5 ; revue-sql.md | Finding + test RLS anon / tenant B en phase 6 |\n| 2 | `membres` sans RLS : lecture de toutes les appartenances et **\u00e9criture** possible (s'ajouter \u00e0 n'importe quelle entreprise avec `role = 'admin'`). Exploitable avec les droits par d\u00e9faut de Supabase sur `public`. | V-DB-01, V-DB-09 | CWE-862 | 20260901120000_init.sql:2 (aucun `enable row level security`) | Finding + test d'auto-promotion en phase 6 |\n| 3 | `entreprises` sans RLS : liste de toutes les entreprises clientes et de leurs `id` (qui alimentent les signaux 5 et 7). | V-DB-01 | CWE-862 | 20260901120000_init.sql:1 | Finding |\n| 4 | Edge Function `export-pdf` : `verify_jwt = false`, cl\u00e9 secr\u00e8te (contourne la RLS), `entreprise_id` lu dans le corps de la requ\u00eate, CORS `*`. N'importe qui sur Internet exporte les accidents de n'importe quelle entreprise. | V-AUTH-05, V-API-01 | CWE-306 | supabase/config.toml:6-7 ; supabase/functions/export-pdf/index.ts:3-6 | Finding + test anonyme en labo |\n| 5 | Cl\u00e9 secr\u00e8te Supabase (`sb_s\u2026[caviard\u00e9]`, 44 caract\u00e8res) commit\u00e9e dans `.env` (commit 9950d5b), supprim\u00e9e en f9accd9 mais toujours dans l'historique. | V-SEC-03 | CWE-798 | `git show 9950d5b:.env` ligne 2 | **Rotation imm\u00e9diate** + finding |\n| 6 | JWT `role: service_role` en dur dans le bundle versionn\u00e9, et affich\u00e9 par `console.log`. Il vise le Supabase local (`127.0.0.1:54321`, ref `labo\u2026[caviard\u00e9]`) : cl\u00e9 de labo \u00e0 premi\u00e8re vue, pas de prod. Mais le build injecte une cl\u00e9 `service_role` dans le code client : un build avec l'environnement de prod ferait fuiter la vraie. Source du bundle (`src/main.tsx`, d'apr\u00e8s la source map) absente du d\u00e9p\u00f4t. | V-SEC-01 | CWE-798 | dist/assets/index-abc123.js:1 (commit 9950d5b) | Finding ; v\u00e9rifier le bundle de prod en observation passive ; trouver la variable inject\u00e9e |\n| 7 | `stats_entreprise` : `SECURITY DEFINER`, `EXECUTE` accord\u00e9 \u00e0 `anon`, aucun contr\u00f4le de l'appelant, `search_path` non fix\u00e9. Statistiques d'accidents de n'importe quelle entreprise (les `id` sont lisibles via le signal 3). | V-DB-08 | CWE-862 | supabase/migrations/20260915090000_storage_rpc.sql:3-7 | Finding (gravit\u00e9 moindre : agr\u00e9gats) |\n| 8 | Bucket `photos-accidents` public, plus policy `photos_read` sans `TO` ni crit\u00e8re d'utilisateur : toute photo d'accident lisible par URL, et le bucket est listable par `anon`. | V-DB-10 | CWE-862 | 20260915090000_storage_rpc.sql:1-2 | Finding + test de listage anon en labo |\n| 9 | `accidents` publi\u00e9e en Realtime avec une lecture ouverte : tout abonn\u00e9, m\u00eame anonyme, re\u00e7oit les nouvelles d\u00e9clarations de toutes les entreprises. | V-DB-11 | CWE-862 | 20260915090000_storage_rpc.sql:8 + signal 1 | Finding (se corrige avec le signal 1) |\n| 10 | D\u00e9pendance `reactt-router` introuvable sur npm (404) : faute de frappe de `react-router`. Nom libre qu'un attaquant peut enregistrer (typosquat). | V-SC-01 | CWE-829 | package.json:1 ; dependances.md | Retirer, remplacer par `react-router` |\n| 11 | D\u00e9pendance `supabase-helpers-pro` introuvable sur npm (404) : paquet probablement hallucin\u00e9 (slopsquatting). | V-SC-01 | CWE-829 | package.json:1 ; dependances.md | Retirer ; v\u00e9rifier qu'il n'a jamais \u00e9t\u00e9 install\u00e9 |\n| 12 | Aucun lockfile : versions install\u00e9es non reproductibles. npm local en 10.9.9, donc scripts d'installation non bloqu\u00e9s par d\u00e9faut. | V-SC-03 | (\u00e0 v\u00e9rifier) | racine du d\u00e9p\u00f4t ; dependances.md | G\u00e9n\u00e9rer et versionner `package-lock.json` apr\u00e8s correction des signaux 10-11 |\n\n### Probables\n\n| # | Signal | Catalogue | CWE | Preuve | Suite |\n|---|---|---|---|---|---|\n| 13 | XSS : `resumeIa` (r\u00e9sum\u00e9 produit par un LLM) inject\u00e9 via `dangerouslySetInnerHTML` sans d\u00e9sinfection. Le r\u00e9sum\u00e9 d\u00e9rive vraisemblablement de la description saisie par l'utilisateur, donc injection de prompt possible vers du HTML stock\u00e9. Origine de `resumeIa` absente du d\u00e9p\u00f4t. | V-FE-01 | CWE-79 | src/components/Rapport.tsx:2 | Test de charge utile en labo (phase 6) |\n| 14 | Auth locale : inscription ouverte et confirmation d'e-mail d\u00e9sactiv\u00e9e. Combin\u00e9 au signal 2, n'importe qui cr\u00e9e un compte avec n'importe quelle adresse puis se rattache \u00e0 une entreprise. R\u00e9glage prod (Dashboard) inconnu. | V-AUTH-02, V-AUTH-03 | CWE-287 | supabase/config.toml:3,5 | Comparer avec le Dashboard de prod, en lecture |\n\n### Th\u00e9oriques\n\n| # | Signal | Catalogue | Preuve | Suite |\n|---|---|---|---|---|\n| 15 | Garde de r\u00f4le admin c\u00f4t\u00e9 client seulement (commentaire explicite). Aucun contr\u00f4le serveur visible pour l'administration ; `useUser` absent du d\u00e9p\u00f4t. | V-AUTH-01 (CWE-602) | src/pages/Admin.tsx:4 | Matrice d'autorisation en phase 6 |\n| 16 | MFA TOTP non activ\u00e9 (\u00e0 exiger pour les admins). | V-AUTH-03 | config.toml (section absente) | Recommandation |\n| 17 | Aucun `vercel.json` : aucun en-t\u00eate de s\u00e9curit\u00e9 versionn\u00e9 (CSP, etc.). | V-FE-02 | racine | Observation passive des en-t\u00eates en phase 6 |\n\n### Faux positifs et doublons\n\n| Signal brut | Raison |\n|---|---|\n| V-SEC-05 source map dans `dist/` | La map ne contient que `\"sources\":[\"../src/main.tsx\"]`, sans `sourcesContent` : aucun code expos\u00e9. Ne pas d\u00e9ployer les `.map` reste conseill\u00e9. |\n| V-SEC-03 sur dist/assets/index-abc123.js:1 (config.md) | Doublon du signal 6. |\n| V-DB-02 et V-DB-05 sur `photos_read` | Fusionn\u00e9s dans le signal 8. |\n| V-DB-03 `accidents` sans policy INSERT/UPDATE/DELETE | Refus par d\u00e9faut : sain tant que l'\u00e9criture passe par un chemin contr\u00f4l\u00e9 (\u00e0 revoir si l'app \u00e9crit avec la cl\u00e9 secr\u00e8te). |\n| `VITE_SUPABASE_URL` dans l'historique | Pas un secret (et pointe vers le local). |\n\n## Test\u00e9 sans anomalie\n\n- `src/lib/supabase.ts` : client front cr\u00e9\u00e9 avec la cl\u00e9 publishable (`VITE_SUPABASE_PUBLISHABLE_KEY`), con\u00e7ue pour \u00eatre publique.\n- Aucune variable `VITE_` au nom de secret dans `src/`.\n- Edge Function : la cl\u00e9 secr\u00e8te est lue dans `Deno.env`, pas \u00e9crite en dur (le d\u00e9faut est ailleurs, signal 4).\n- Pas de `fetch` d'URL fournie par la requ\u00eate (SSRF), pas d'erreur technique renvoy\u00e9e brute.\n- `.env` d\u00e9sormais ignor\u00e9 (`.gitignore`).\n- Historique : aucun autre motif de secret (cl\u00e9 priv\u00e9e, `sk_live`, `AKIA`, `sb_publishable_`) ; une seule branche, pas de stash.\n- `@supabase/supabase-js`, `react`, `react-dom`, `vite` existent sur npm.\n\n## Non couvert (et pourquoi)\n\n- **TruffleHog** non install\u00e9 : historique balay\u00e9 par `git log --all -p` + grep sur des motifs choisis. Couverture inf\u00e9rieure aux ~800 d\u00e9tecteurs de TruffleHog. Installer : `brew install trufflehog` puis `trufflehog git file://. --no-verification --json > security/05-statique/trufflehog.json`.\n- **Semgrep CE / Opengrep** non install\u00e9s : r\u00e8gles maison de `semgrep-vibecoding.yml` \u00e9mul\u00e9es par grep, r\u00e8gles `p/typescript` et `p/react` non pass\u00e9es. Installer : `pipx install semgrep` (ou Opengrep) puis la commande de `outils-phase5.md`, section 4.\n- **osv-scanner, npm audit, Socket CLI** : non install\u00e9s pour les deux premiers et le troisi\u00e8me ; `npm audit` impossible sans lockfile. CVE connues et EPSS/KEV donc non \u00e9valu\u00e9s. Installer : `brew install osv-scanner`, `npm i -g socket`.\n- **`supabase db advisors --type security`** : CLI Supabase absente et labo non d\u00e9marr\u00e9.\n- **zizmor** : sans objet, pas de `.github/workflows/`.\n- **Fichiers absents du d\u00e9p\u00f4t** : `src/main.tsx` (source du bundle), `src/lib/useUser`, g\u00e9n\u00e9ration de `resumeIa`. Le d\u00e9p\u00f4t ne correspond pas enti\u00e8rement au `dist/` versionn\u00e9.\n- **Prod** : Dashboard Supabase (policies ajout\u00e9es \u00e0 la main, Auth), config Vercel et bundle public non consult\u00e9s (aucune requ\u00eate vers l'app).\n\n## Versions des outils\n\nVoir `versions.txt` : Python 3.13.18, git 2.43.0, node 22.23.5, npm 10.9.9, PyYAML 6.0.3, scripts du skill `appsec-tests-statiques`. CWE r\u00e9cup\u00e9r\u00e9s avec `scripts/partage/ref_lookup.py`.\n"}, {"name": "chantier-pro/security/05-statique/versions.txt", "type": "text", "content": "Date : 2026-11-23, commit analys\u00e9 f9accd9c60d0e943cc2035e1e58be7e1323e0d07\nPython 3.13.18\ngit version 2.43.0\nnode v22.23.5, npm 10.9.9\nPyYAML 6.0.3\nScripts du skill appsec-tests-statiques : revue_sql.py, scan_config.py, deps_check.py (--registre), ref_lookup.py\nNon install\u00e9s : trufflehog, semgrep, opengrep, osv-scanner, socket, gitleaks, zizmor, supabase CLI\nSubstitut historique git : git log --all -p + grep (motifs sb_secret_, sb_publishable_, eyJ\u2026, SECRET, service_role, PRIVATE KEY, sk_live, AKIA)\n"}, {"name": "chantier-pro/security/09-mitigation/PROMPT-IA.md", "type": "text", "content": "\u003c!-- gabarit appsec : non rempli -->\n# Prompt pour l'IA de d\u00e9veloppement\n\n\u003cg\u00e9n\u00e9r\u00e9 par appsec-mitigation-retest>\n"}, {"name": "chantier-pro/security/09-mitigation/mitigation-pack.yaml", "type": "text", "content": "# Format : references/partage/formats.md, section 3\n"}, {"name": "chantier-pro/security/10-retest/retest-plan.yaml", "type": "text", "content": "# Format : references/partage/formats.md, section 5\n[]\n"}, {"name": "chantier-pro/security/journal.md", "type": "text", "content": "# Journal de mission : chantier-pro\n\n| Date | Phase | \u00c9v\u00e9nement ou d\u00e9cision | Par |\n|---|---|---|---|\n| 2026-11-23 | 0 | Arborescence security/ initialis\u00e9e (10 fichiers cr\u00e9\u00e9s), ASVS L2 | appsec-chef-de-mission |\n| 2026-11-23 | 5 | Tests statiques sur le commit f9accd9 (sans plan : contr\u00f4les 1 \u00e0 5). Signaux : 12 confirm\u00e9s, 2 probables, 3 th\u00e9oriques, 5 faux positifs ou doublons. Rotation de la cl\u00e9 secr\u00e8te Supabase de l'historique demand\u00e9e. Non couverts : TruffleHog, Semgrep, osv-scanner, advisors (outils absents). Synth\u00e8se : security/05-statique/synthese.md | appsec-tests-statiques |\n"}, {"name": "chantier-pro/src/components/Rapport.tsx", "type": "text", "content": "export function Rapport({ resumeIa }: { resumeIa: string }) {\n  return \u003csection dangerouslySetInnerHTML={{ __html: resumeIa }} />\n}\n"}, {"name": "chantier-pro/src/lib/supabase.ts", "type": "text", "content": "import { createClient } from '@supabase/supabase-js'\nexport const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY)\n"}, {"name": "chantier-pro/src/pages/Admin.tsx", "type": "text", "content": "import { useUser } from '../lib/useUser'\nexport default function Admin() {\n  const { profile } = useUser()\n  if (profile?.role !== 'admin') return null   // garde c\u00f4t\u00e9 client uniquement\n  return \u003cdiv>Administration des entreprises\u003c/div>\n}\n"}, {"name": "chantier-pro/supabase/config.toml", "type": "text", "content": "project_id = \"chantier-pro\"\n[auth]\nenable_signup = true\n[auth.email]\nenable_confirmations = false\n[functions.export-pdf]\nverify_jwt = false\n"}, {"name": "chantier-pro/supabase/functions/export-pdf/index.ts", "type": "text", "content": "import { createClient } from \"npm:@supabase/supabase-js@2\"\nDeno.serve(async (req) => {\n  const { entreprise_id } = await req.json()\n  const admin = createClient(Deno.env.get(\"SUPABASE_URL\")!, Deno.env.get(\"SUPABASE_SECRET_KEY\")!)\n  const { data } = await admin.from(\"accidents\").select(\"*\").eq(\"entreprise_id\", entreprise_id)\n  return new Response(JSON.stringify(data), { headers: { \"Access-Control-Allow-Origin\": \"*\" } })\n})\n"}, {"name": "chantier-pro/supabase/migrations/20260901120000_init.sql", "type": "text", "content": "create table public.entreprises (id uuid primary key default gen_random_uuid(), nom text not null);\ncreate table public.membres (user_id uuid references auth.users, entreprise_id uuid references public.entreprises, role text default 'membre');\ncreate table public.accidents (id uuid primary key default gen_random_uuid(), entreprise_id uuid references public.entreprises, victime text, description text, gravite int, created_at timestamptz default now());\nalter table public.accidents enable row level security;\ncreate policy accidents_select on public.accidents for select using (true);\n"}, {"name": "chantier-pro/supabase/migrations/20260915090000_storage_rpc.sql", "type": "text", "content": "insert into storage.buckets (id, name, public) values ('photos-accidents', 'photos-accidents', true);\ncreate policy photos_read on storage.objects for select using (bucket_id = 'photos-accidents');\ncreate or replace function public.stats_entreprise(p_entreprise uuid) returns json\nlanguage sql security definer as $$\n  select json_build_object('nb', count(*), 'graves', count(*) filter (where gravite >= 3)) from public.accidents where entreprise_id = p_entreprise;\n$$;\ngrant execute on function public.stats_entreprise(uuid) to anon, authenticated;\nalter publication supabase_realtime add table public.accidents;\n"}, {"name": "reponse.md", "type": "text", "content": "\u00c7a craint s\u00e9rieusement : 12 signaux confirm\u00e9s, dont 4 qui laissent n'importe qui sur Internet lire les d\u00e9clarations d'accidents de toutes les entreprises, et une cl\u00e9 secr\u00e8te Supabase dans l'historique git.\n\nJe n'ai fait que lire le d\u00e9p\u00f4t (commit f9accd9, `dist/` compris). Aucune requ\u00eate vers l'app ni vers Supabase. Seule sortie : le registre npm, pour v\u00e9rifier que les paquets existent.\n\n## \u00c0 faire tout de suite\n\n**Fais tourner la cl\u00e9 secr\u00e8te Supabase.** Elle a \u00e9t\u00e9 commit\u00e9e dans `.env` (commit 9950d5b, `sb_s\u2026[caviard\u00e9]`). Tu l'as supprim\u00e9e au commit suivant, mais elle reste dans l'historique : quiconque a le d\u00e9p\u00f4t l'a. Supprimer le fichier ne suffit pas, il faut la r\u00e9voquer et en g\u00e9n\u00e9rer une nouvelle. Le `.env` pointait vers `127.0.0.1` : si c'est la cl\u00e9 par d\u00e9faut du Supabase local, dis-le-moi et on l\u00e8ve l'alerte. Sinon, on la consid\u00e8re comme compromise.\n\n## Les plus graves (confirm\u00e9s)\n\n1. **Tous les accidents sont lisibles par tout le monde.** La policy `accidents_select` est `using (true)` sans `TO`, donc elle vaut aussi pour les visiteurs anonymes. Nom de la victime et description, toutes entreprises confondues. Ce sont des donn\u00e9es sensibles au sens de la nLPD. (`20260901120000_init.sql:5`)\n2. **`membres` et `entreprises` n'ont pas de RLS.** Avec les droits par d\u00e9faut de Supabase, n'importe quel compte peut s'inscrire dans `membres` avec `role = 'admin'` pour l'entreprise de son choix. Et la liste de toutes tes entreprises clientes est publique. (`init.sql:1-2`)\n3. **L'Edge Function `export-pdf` est une porte ouverte.** `verify_jwt = false`, elle utilise la cl\u00e9 secr\u00e8te (qui contourne la RLS), prend l'`entreprise_id` dans la requ\u00eate et r\u00e9pond en CORS `*`. R\u00e9sultat : un export complet des accidents de n'importe quelle entreprise, sans compte. (`config.toml:6-7`, `functions/export-pdf/index.ts:3-6`)\n4. **Les photos d'accidents sont publiques.** Le bucket `photos-accidents` est `public: true`, et la policy de lecture permet en plus aux anonymes de lister tous les fichiers. (`20260915090000_storage_rpc.sql:1-2`)\n5. **Realtime diffuse les accidents \u00e0 tout abonn\u00e9**, m\u00eame anonyme, \u00e0 cause du point 1. (`storage_rpc.sql:8`)\n6. **La fonction `stats_entreprise`** est en `SECURITY DEFINER`, ex\u00e9cutable par `anon`, sans contr\u00f4le de l'appelant ni `search_path` fix\u00e9. Elle donne les statistiques de n'importe quelle entreprise. C'est moins grave : ce ne sont que des agr\u00e9gats. (`storage_rpc.sql:3-7`)\n7. **Le bundle versionn\u00e9 contient un JWT `service_role`**, et l'affiche dans la console. Il vise ton Supabase local (`127.0.0.1:54321`), donc a priori une cl\u00e9 de labo. Mais \u00e7a prouve que ton build met une cl\u00e9 `service_role` dans le code client : avec les variables de prod, c'est la vraie cl\u00e9 qui partirait. La source du bundle (`src/main.tsx`) n'est pas dans le d\u00e9p\u00f4t, donc je n'ai pas trouv\u00e9 quelle variable l'injecte. (`dist/assets/index-abc123.js:1`)\n8. **Deux d\u00e9pendances n'existent pas sur npm.** `reactt-router` est une faute de frappe de `react-router`, et `supabase-helpers-pro` est probablement invent\u00e9 par l'IA. N'importe qui peut publier un paquet sous ces noms (slopsquatting), et ton `npm install` l'installerait. Retire-les. Il n'y a pas non plus de lockfile.\n\n## Probables (\u00e0 confirmer en labo)\n\n- **XSS par le r\u00e9sum\u00e9 IA** : `Rapport.tsx:2` injecte `resumeIa` en HTML brut. Si ce r\u00e9sum\u00e9 vient de la description saisie par un utilisateur, une injection de prompt peut produire du HTML malveillant.\n- **Auth** : l'inscription est ouverte et la confirmation d'e-mail est d\u00e9sactiv\u00e9e (`config.toml`). Combin\u00e9 au point 2, n'importe qui cr\u00e9e un compte et se rattache \u00e0 une entreprise. Il faut v\u00e9rifier le r\u00e9glage dans le Dashboard de prod.\n\nTh\u00e9oriques : la page Admin n'est prot\u00e9g\u00e9e que c\u00f4t\u00e9 interface (`Admin.tsx:4`), le MFA admin n'est pas activ\u00e9, et il n'y a pas de `vercel.json` pour les en-t\u00eates de s\u00e9curit\u00e9.\n\nJ'ai \u00e9cart\u00e9 un signal : la source map ne contient pas de code (pas de `sourcesContent`).\n\n## Test\u00e9 sans anomalie\n\n- Le client front utilise la cl\u00e9 publishable, et aucune variable `VITE_` ne porte un nom de secret.\n- L'Edge Function lit sa cl\u00e9 dans l'environnement, elle n'est pas \u00e9crite en dur.\n- Pas de SSRF ni d'erreur brute renvoy\u00e9e au client.\n- `.env` est maintenant ignor\u00e9, et l'historique ne contient pas d'autre secret parmi les motifs cherch\u00e9s.\n\n## Pas couvert\n\n- TruffleHog, Semgrep/Opengrep, osv-scanner et la CLI Supabase ne sont pas install\u00e9s ici.\n- Pour l'historique, j'ai fait un balayage par grep, moins complet que TruffleHog.\n- Les r\u00e8gles maison Semgrep ont \u00e9t\u00e9 \u00e9mul\u00e9es par grep.\n- Les CVE des d\u00e9pendances et les advisors Supabase n'ont pas \u00e9t\u00e9 v\u00e9rifi\u00e9s.\n- Le Dashboard de prod et le bundle en ligne n'ont pas \u00e9t\u00e9 consult\u00e9s.\n- Il manque des fichiers au d\u00e9p\u00f4t (`src/main.tsx`, `useUser`, la g\u00e9n\u00e9ration de `resumeIa`).\n\nLes commandes d'installation sont dans la synth\u00e8se.\n\n## La suite\n\nAvant le labo, corrige au moins les points 1 \u00e0 4 et fais la rotation de la cl\u00e9 : tester en labo ce qu'on sait d\u00e9j\u00e0 ouvert ne t'apprendra rien. Ensuite :\n- `appsec-rapports` transforme les 12 signaux confirm\u00e9s en findings cot\u00e9s ;\n- `appsec-tests-dynamiques` confirme les probables en labo (XSS du r\u00e9sum\u00e9 IA, auto-promotion admin, export anonyme).\n\nFichiers dans `chantier-pro/security/05-statique/` : `synthese.md` (tableau complet, avec fichier:ligne et CWE), `revue-sql.md`, `config.md`, `dependances.md` et `versions.txt`. Une ligne a \u00e9t\u00e9 ajout\u00e9e \u00e0 `security/journal.md`.\n"}], "grading": {"expectations": [{"text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "summary": {"passed": 9, "failed": 0, "total": 9, "pass_rate": 1.0}}}, {"id": "scan-depot-pieges-without_skill", "prompt": "/statique scanne le d\u00e9p\u00f4t de chantier-pro (dans ./chantier-pro, le build est d\u00e9j\u00e0 dans dist/). Je veux savoir ce qui craint avant de passer aux tests sur le labo.\n\nInput files: chantier-pro/", "eval_id": null, "outputs": [{"name": "chantier-pro/.gitignore", "type": "binary", "mime": "application/octet-stream", "data_uri": "data:application/octet-stream;base64,LmVudgo="}, {"name": "chantier-pro/README.md", "type": "text", "content": "# chantier-pro\\nSaaS SST multi-tenant : d\u00e9clarations d'accidents par entreprise.\n"}, {"name": "chantier-pro/dist/assets/index-abc123.js", "type": "text", "content": "(()=>{const u=\"http://127.0.0.1:54321\",k=\"eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogInNlcnZpY2Vfcm9sZSIsICJpc3MiOiAic3VwYWJhc2UiLCAicmVmIjogImxhYm9maWN0aWYwMDAwMDAwMDAwIn0.c2lnbmF0dXJlLWZpY3RpdmUtcG91ci1sZXMtdGVzdHM\";console.log(u,k)})();\n"}, {"name": "chantier-pro/dist/assets/index-abc123.js.map", "type": "binary", "mime": "application/octet-stream", "data_uri": "data:application/octet-stream;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9tYWluLnRzeCJdfQo="}, {"name": "chantier-pro/package.json", "type": "text", "content": "{\"name\":\"chantier-pro\",\"private\":true,\"dependencies\":{\"@supabase/supabase-js\":\"^2.45.0\",\"react\":\"^18.3.1\",\"react-dom\":\"^18.3.1\",\"supabase-helpers-pro\":\"^1.2.0\",\"reactt-router\":\"^6.0.0\"},\"devDependencies\":{\"vite\":\"^5.4.0\"}}\n"}, {"name": "chantier-pro/security/05-statique/brut/dependances.txt", "type": "text", "content": "# D\u00e9pendances d\u00e9clar\u00e9es (package.json) ; aucun lockfile pr\u00e9sent\ndependencies @supabase/supabase-js ^2.45.0\ndependencies react ^18.3.1\ndependencies react-dom ^18.3.1\ndependencies supabase-helpers-pro ^1.2.0\ndependencies reactt-router ^6.0.0\ndevDependencies vite ^5.4.0\n\n# npm view (m\u00e9tadonn\u00e9es registre public npmjs, aucune installation), 2026-11-23\nreactt-router        -> E404 n'existe pas sur npmjs (typo de react-router)\nsupabase-helpers-pro -> E404 n'existe pas sur npmjs (nom vraisemblablement hallucin\u00e9)\nreact-router         -> existe (paquet l\u00e9gitime, cr\u00e9\u00e9 2014)\nls: cannot access 'package-lock.json': No such file or directory\nls: cannot access 'pnpm-lock.yaml': No such file or directory\nls: cannot access 'yarn.lock': No such file or directory\n"}, {"name": "chantier-pro/security/05-statique/brut/sast-grep.txt", "type": "text", "content": "# Motifs SAST (grep) sur src/ et supabase/\nsrc/components/Rapport.tsx:2:  return \u003csection dangerouslySetInnerHTML={{ __html: resumeIa }} />\nsrc/pages/Admin.tsx:4:  if (profile?.role !== 'admin') return null   // garde c\u00f4t\u00e9 client uniquement\nsupabase/migrations/20260915090000_storage_rpc.sql:4:language sql security definer as $$\nsupabase/migrations/20260915090000_storage_rpc.sql:7:grant execute on function public.stats_entreprise(uuid) to anon, authenticated;\nsupabase/migrations/20260915090000_storage_rpc.sql:8:alter publication supabase_realtime add table public.accidents;\nsupabase/migrations/20260901120000_init.sql:5:create policy accidents_select on public.accidents for select using (true);\nsupabase/config.toml:5:enable_confirmations = false\nsupabase/config.toml:7:verify_jwt = false\nsupabase/functions/export-pdf/index.ts:4:  const admin = createClient(Deno.env.get(\"SUPABASE_URL\")!, Deno.env.get(\"SUPABASE_SECRET_KEY\")!)\nsupabase/functions/export-pdf/index.ts:6:  return new Response(JSON.stringify(data), { headers: { \"Access-Control-Allow-Origin\": \"*\" } })\n\n# Tables cr\u00e9\u00e9es vs RLS activ\u00e9e\ncreate table public.entreprises\ncreate table public.membres\ncreate table public.accidents\nalter table public.accidents enable row level security\n"}, {"name": "chantier-pro/security/05-statique/brut/secrets-bundle.txt", "type": "text", "content": "# Secrets dans dist/ (bundle livr\u00e9), valeurs masqu\u00e9es\ndist/assets/index-abc123.js:1:http://127.0.0.1:54321\ndist/assets/index-abc123.js:1:eyJhbGciO\u2026[MASQU\u00c9]\n\n# D\u00e9codage du JWT trouv\u00e9 dans dist/assets/index-abc123.js (en-t\u00eate + charge utile, signature non reproduite)\n{\"alg\":\"HS256\",\"typ\":\"JWT\"} . {\"role\":\"service_role\",\"iss\":\"supabase\",\"ref\":\"labofictif0000000000\"}\n"}, {"name": "chantier-pro/security/05-statique/brut/secrets-historique.txt", "type": "text", "content": "# Secrets dans tout l'historique git (git log -p --all), valeurs masqu\u00e9es\n14:-SUPABASE_SECRET_KEY=sb_secret_\u2026[MASQU\u00c9]\n36:+SUPABASE_SECRET_KEY=sb_secret_\u2026[MASQU\u00c9]\n50:+(()=>{const u=\"http://127.0.0.1:54321\",k=\"eyJhbGciO\u2026[MASQU\u00c9]\";console.log(u,k)})();\n116:+  const admin = createClient(Deno.env.get(\"SUPABASE_URL\")!, Deno.env.get(\"SUPABASE_SECRET_KEY\")!)\n"}, {"name": "chantier-pro/security/05-statique/synthese.md", "type": "text", "content": "# chantier-pro : synth\u00e8se des tests statiques\n\n- Date : 2026-11-23\n- P\u00e9rim\u00e8tre : d\u00e9p\u00f4t `chantier-pro` (branche `master`, 2 commits `9950d5b` et `0e5d2d8`), y compris tout l'historique git et le build `dist/` d\u00e9j\u00e0 pr\u00e9sent.\n- M\u00e9thode : lecture compl\u00e8te des 12 fichiers suivis, `git log -p --all`, recherche par motifs (grep), d\u00e9codage du JWT trouv\u00e9 dans le bundle (python3), `npm view` sur le registre public npm (m\u00e9tadonn\u00e9es seulement, rien n'est install\u00e9). Aucune requ\u00eate n'a \u00e9t\u00e9 envoy\u00e9e \u00e0 l'application ni \u00e0 Supabase. Aucune cl\u00e9 n'a \u00e9t\u00e9 essay\u00e9e.\n- Outils absents de la machine : semgrep, gitleaks, trufflehog, osv-scanner. Ils n'ont donc pas \u00e9t\u00e9 lanc\u00e9s. Leurs \u00e9quivalents ont \u00e9t\u00e9 faits \u00e0 la main avec grep et python3 (voir \u00ab Limites \u00bb).\n- Sorties brutes, avec les secrets masqu\u00e9s : `brut/secrets-historique.txt`, `brut/secrets-bundle.txt`, `brut/sast-grep.txt`, `brut/dependances.txt`.\n\nContexte m\u00e9tier : SaaS SST multi-tenant de d\u00e9clarations d'accidents. Les tables `accidents.victime` et `accidents.description`, ainsi que les photos, contiennent probablement des donn\u00e9es sur la sant\u00e9, des donn\u00e9es sensibles au sens de la LPD (art. 5 let. c). Toute fuite entre tenants est donc grave.\n\nLa cotation ci-dessous est provisoire. Elle repose sur la lecture statique et doit \u00eatre confirm\u00e9e au labo.\n\n## Constats\n\n| # | Gravit\u00e9 | Constat | Emplacement |\n|---|---|---|---|\n| S-01 | Critique | Un JWT `role: service_role` est pr\u00e9sent dans le bundle client livr\u00e9 | `dist/assets/index-abc123.js` |\n| S-02 | Critique | La fonction Edge `export-pdf` est sans authentification (`verify_jwt = false`), utilise la cl\u00e9 secr\u00e8te et accepte un `entreprise_id` libre, avec CORS `*` : tous les accidents de n'importe quel tenant peuvent \u00eatre extraits | `supabase/functions/export-pdf/index.ts`, `supabase/config.toml` |\n| S-03 | Critique | La policy `accidents_select ... using (true)` n'a pas de clause `TO`. N'importe qui, `anon` compris, lit tous les accidents de tous les tenants | `20260901120000_init.sql:5` |\n| S-04 | Critique | RLS n'est pas activ\u00e9e sur `entreprises` ni sur `membres`. Avec les droits par d\u00e9faut de Supabase, `anon` et `authenticated` peuvent lire et \u00e9crire ces tables. On peut alors s'ins\u00e9rer dans `membres` avec `role = 'admin'` dans n'importe quelle entreprise | `20260901120000_init.sql:1-2` |\n| S-05 | Critique | Paquets inexistants sur npm : `reactt-router` (faute de frappe de `react-router`) et `supabase-helpers-pro` (nom probablement hallucin\u00e9). N'importe qui peut les enregistrer : c'est le risque de slopsquatting, qui donne une ex\u00e9cution de code \u00e0 l'installation | `package.json` |\n| S-06 | \u00c9lev\u00e9e | Un secret Supabase `sb_secret_\u2026` se trouve dans l'historique git. Le commit `0e5d2d8` l'a retir\u00e9 de l'arbre, mais il reste lisible dans `9950d5b` | historique, `.env` |\n| S-07 | \u00c9lev\u00e9e | Le bucket `photos-accidents` est `public = true` et sa policy de lecture n'est pas filtr\u00e9e par tenant. Les photos d'accidents sont lisibles sans authentification | `20260915090000_storage_rpc.sql:1-2` |\n| S-08 | \u00c9lev\u00e9e | La fonction `stats_entreprise` est en `SECURITY DEFINER`, sans `set search_path`, et `anon` peut l'ex\u00e9cuter. Elle ne v\u00e9rifie pas l'appartenance au tenant : les statistiques de n'importe quelle entreprise sont accessibles (IDOR) | `20260915090000_storage_rpc.sql:3-7` |\n| S-09 | \u00c9lev\u00e9e | La table `accidents` est publi\u00e9e dans `supabase_realtime`. Avec S-03, chaque nouvel accident de tous les tenants est diffus\u00e9 \u00e0 tout abonn\u00e9 | `20260915090000_storage_rpc.sql:8` |\n| S-10 | \u00c9lev\u00e9e | XSS : le r\u00e9sum\u00e9 produit par l'IA est inject\u00e9 en HTML brut (`dangerouslySetInnerHTML`). Une injection de prompt dans une description d'accident devient un XSS stock\u00e9 | `src/components/Rapport.tsx:2` |\n| S-11 | Moyenne | Inscription ouverte et sans confirmation d'e-mail. N'importe qui obtient un compte `authenticated` en une requ\u00eate, ce qui d\u00e9multiplie S-04 et S-08 | `supabase/config.toml` |\n| S-12 | Moyenne | La garde admin existe seulement c\u00f4t\u00e9 client. Ce n'est pas une faille en soi, mais aucun contr\u00f4le c\u00f4t\u00e9 serveur n'est visible (pas de policy li\u00e9e \u00e0 `membres.role`) | `src/pages/Admin.tsx:4` |\n| S-13 | Basse | Hygi\u00e8ne : aucun lockfile, `dist/` versionn\u00e9 dans git, source map livr\u00e9e, pas de `vercel.json` (donc pas d'en-t\u00eates de s\u00e9curit\u00e9 ni de CSP), pas de CI de s\u00e9curit\u00e9 | racine |\n\n## D\u00e9tails importants\n\n**S-01, la cl\u00e9 service_role dans le bundle.** Le JWT d\u00e9cod\u00e9 contient `{\"role\":\"service_role\",\"iss\":\"supabase\",\"ref\":\"labofictif0000000000\"}`. L'URL est `http://127.0.0.1:54321` et la signature d\u00e9cod\u00e9e vaut litt\u00e9ralement \u00ab signature-fictive-pour-les-tests \u00bb. C'est donc une cl\u00e9 de labo fictive, pas une cl\u00e9 de prod. Le probl\u00e8me de construction reste r\u00e9el : le `dist/` **ne correspond pas aux sources**. `src/lib/supabase.ts` utilise `VITE_SUPABASE_PUBLISHABLE_KEY`, alors que le bundle embarque une cl\u00e9 service_role. Il existe donc un build (ou un `.env` de build) qui injecte la cl\u00e9 admin dans le client. Le `src/lib/useUser` import\u00e9 par `Admin.tsx` et le `src/main.tsx` cit\u00e9 par la source map sont aussi absents du d\u00e9p\u00f4t : ce `dist/` n'a pas pu \u00eatre produit \u00e0 partir de ce d\u00e9p\u00f4t. \u00c0 faire : trouver la commande et les variables du vrai build, v\u00e9rifier le bundle de prod, et faire tourner la cl\u00e9 si une vraie cl\u00e9 a suivi le m\u00eame chemin.\n\n**S-06, le secret dans l'historique.** Lui aussi est marqu\u00e9 `FICTIF-POUR-TEST`. Retirer le `.env` dans un commit ne suffit pas. Si une vraie cl\u00e9 a \u00e9t\u00e9 versionn\u00e9e de la m\u00eame fa\u00e7on, il faut d'abord la faire tourner, puis r\u00e9\u00e9crire l'historique (git filter-repo) en dernier recours.\n\n**S-02, l'encha\u00eenement complet.** `verify_jwt = false`, aucune lecture de l'en-t\u00eate `Authorization`, un client cr\u00e9\u00e9 avec `SUPABASE_SECRET_KEY` (qui contourne RLS), un filtre sur un `entreprise_id` fourni par l'appelant et CORS `*`. N'importe quelle page web peut donc vider la table `accidents` d'un tenant dont elle conna\u00eet ou devine l'UUID. Les UUID fuient d'ailleurs d\u00e9j\u00e0 par S-03 et S-04.\n\n## Hypoth\u00e8ses \u00e0 confirmer au labo (par ordre de priorit\u00e9)\n\n1. S-03 et S-09 : avec la cl\u00e9 publishable seule (`anon`), `select` sur `accidents`, puis abonnement Realtime. On s'attend \u00e0 voir les lignes des deux tenants.\n2. S-04 : en `anon`, puis en `authenticated` tenant A, `select`, `insert` et `update` sur `membres` et `entreprises`. V\u00e9rifier que l'auto-promotion admin chez le tenant B fonctionne.\n3. S-02 : POST sur `export-pdf` sans en-t\u00eate `Authorization`, avec l'`entreprise_id` du tenant B.\n4. S-08 : RPC `stats_entreprise` en `anon` avec l'UUID du tenant B.\n5. S-07 : GET d'un objet du bucket `photos-accidents` sans jeton.\n6. S-10 : description d'accident contenant `\u003cimg src=x onerror=...>` ou une consigne qui pousse l'IA \u00e0 produire du HTML, puis affichage du rapport.\n7. S-11 : inscription avec une adresse jetable, puis session obtenue imm\u00e9diatement.\n\n## Corrections attendues (r\u00e9sum\u00e9)\n\n- **Bundle :** n'utiliser que `VITE_SUPABASE_URL` et la cl\u00e9 publishable c\u00f4t\u00e9 client. Ajouter une v\u00e9rification en CI : refuser le build si `service_role` ou `sb_secret_` appara\u00eet dans `dist/`. Retirer `dist/` de git.\n- **RLS :** activer RLS sur toutes les tables de `public`. \u00c9crire des policies par tenant avec `TO authenticated` et une condition du type `entreprise_id in (select entreprise_id from membres where user_id = (select auth.uid()))`, avec `WITH CHECK` sur les \u00e9critures. `membres` ne doit pas \u00eatre modifiable par l'utilisateur lui-m\u00eame.\n- **export-pdf :** `verify_jwt = true`. Cr\u00e9er le client avec le JWT de l'appelant, pour que RLS s'applique, au lieu de la cl\u00e9 secr\u00e8te. Limiter CORS \u00e0 l'origine de l'app.\n- **stats_entreprise :** passer en `security invoker`, ou contr\u00f4ler l'appartenance de `auth.uid()` au tenant. Ajouter `set search_path = ''`, appliquer `revoke execute ... from public, anon`.\n- **Bucket :** `public = false`, policy par tenant fond\u00e9e sur le chemin (`storage.foldername(name)`), URL sign\u00e9es.\n- **Realtime :** retirer `accidents` de la publication tant que RLS n'est pas corrig\u00e9e.\n- **Rapport.tsx :** afficher le texte brut, ou passer par DOMPurify avec une liste blanche stricte. Ajouter une CSP dans `vercel.json`.\n- **D\u00e9pendances :** supprimer `reactt-router` et `supabase-helpers-pro` (utiliser `react-router-dom` si besoin). Committer un lockfile. **Ne pas lancer `npm install` avant.**\n- **Auth :** `enable_confirmations = true`. Envisager l'invitation plut\u00f4t que l'inscription libre pour un SaaS B2B.\n\n## Limites\n\n- semgrep, gitleaks, trufflehog et osv-scanner ne sont pas install\u00e9s. La recherche de secrets et le SAST ont \u00e9t\u00e9 faits par grep, ce qui donne une couverture moindre que des r\u00e8gles d\u00e9di\u00e9es. Sans lockfile, aucune analyse de CVE des d\u00e9pendances n'a \u00e9t\u00e9 possible.\n- Le d\u00e9p\u00f4t est incomplet : `useUser`, `main.tsx` et les pages manquent. Le code applicatif r\u00e9ellement livr\u00e9 n'a donc pas pu \u00eatre relu.\n- Ce qui ne figure pas dans les migrations n'a pas \u00e9t\u00e9 vu : droits effectifs, policies cr\u00e9\u00e9es dans le dashboard, r\u00e9glages Auth de la prod.\n- Pour la v\u00e9rification des paquets, `npm view` a interrog\u00e9 `registry.npmjs.org` (lecture seule). npm a \u00e9crit son journal habituel dans `/root/.npm/_logs/`, hors du dossier de travail.\n"}, {"name": "chantier-pro/src/components/Rapport.tsx", "type": "text", "content": "export function Rapport({ resumeIa }: { resumeIa: string }) {\n  return \u003csection dangerouslySetInnerHTML={{ __html: resumeIa }} />\n}\n"}, {"name": "chantier-pro/src/lib/supabase.ts", "type": "text", "content": "import { createClient } from '@supabase/supabase-js'\nexport const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY)\n"}, {"name": "chantier-pro/src/pages/Admin.tsx", "type": "text", "content": "import { useUser } from '../lib/useUser'\nexport default function Admin() {\n  const { profile } = useUser()\n  if (profile?.role !== 'admin') return null   // garde c\u00f4t\u00e9 client uniquement\n  return \u003cdiv>Administration des entreprises\u003c/div>\n}\n"}, {"name": "chantier-pro/supabase/config.toml", "type": "text", "content": "project_id = \"chantier-pro\"\n[auth]\nenable_signup = true\n[auth.email]\nenable_confirmations = false\n[functions.export-pdf]\nverify_jwt = false\n"}, {"name": "chantier-pro/supabase/functions/export-pdf/index.ts", "type": "text", "content": "import { createClient } from \"npm:@supabase/supabase-js@2\"\nDeno.serve(async (req) => {\n  const { entreprise_id } = await req.json()\n  const admin = createClient(Deno.env.get(\"SUPABASE_URL\")!, Deno.env.get(\"SUPABASE_SECRET_KEY\")!)\n  const { data } = await admin.from(\"accidents\").select(\"*\").eq(\"entreprise_id\", entreprise_id)\n  return new Response(JSON.stringify(data), { headers: { \"Access-Control-Allow-Origin\": \"*\" } })\n})\n"}, {"name": "chantier-pro/supabase/migrations/20260901120000_init.sql", "type": "text", "content": "create table public.entreprises (id uuid primary key default gen_random_uuid(), nom text not null);\ncreate table public.membres (user_id uuid references auth.users, entreprise_id uuid references public.entreprises, role text default 'membre');\ncreate table public.accidents (id uuid primary key default gen_random_uuid(), entreprise_id uuid references public.entreprises, victime text, description text, gravite int, created_at timestamptz default now());\nalter table public.accidents enable row level security;\ncreate policy accidents_select on public.accidents for select using (true);\n"}, {"name": "chantier-pro/supabase/migrations/20260915090000_storage_rpc.sql", "type": "text", "content": "insert into storage.buckets (id, name, public) values ('photos-accidents', 'photos-accidents', true);\ncreate policy photos_read on storage.objects for select using (bucket_id = 'photos-accidents');\ncreate or replace function public.stats_entreprise(p_entreprise uuid) returns json\nlanguage sql security definer as $$\n  select json_build_object('nb', count(*), 'graves', count(*) filter (where gravite >= 3)) from public.accidents where entreprise_id = p_entreprise;\n$$;\ngrant execute on function public.stats_entreprise(uuid) to anon, authenticated;\nalter publication supabase_realtime add table public.accidents;\n"}, {"name": "reponse.md", "type": "text", "content": "J'ai scann\u00e9 `chantier-pro` sans rien lancer contre l'app : tous les fichiers, tout l'historique git et le `dist/`. **\u00c7a craint pas mal : 5 constats critiques et 5 \u00e9lev\u00e9s.** Le plus urgent : n'importe qui, m\u00eame sans compte, peut lire les accidents de toutes les entreprises.\n\nsemgrep, gitleaks, trufflehog et osv-scanner ne sont pas install\u00e9s. J'ai donc fait la recherche de secrets et l'analyse du code avec grep et python3, et v\u00e9rifi\u00e9 les paquets sur le registre npm (lecture seule). La cotation est provisoire tant que le labo ne l'a pas confirm\u00e9e.\n\n## Critiques\n1. **Cl\u00e9 `service_role` dans le bundle livr\u00e9** (`dist/assets/index-abc123.js`). Le JWT d\u00e9cod\u00e9 dit bien `role: service_role`. Ici c'est une cl\u00e9 de labo fictive (`127.0.0.1`, signature \u00ab fictive-pour-les-tests \u00bb). Mais le `dist/` ne correspond pas aux sources : `src/` utilise la cl\u00e9 publishable. Quelque part, un build injecte donc la cl\u00e9 admin c\u00f4t\u00e9 client. Va voir comment le vrai build est fait et contr\u00f4le le bundle de prod.\n2. **Fonction `export-pdf` ouverte \u00e0 tous** : `verify_jwt = false`, cl\u00e9 secr\u00e8te (qui contourne RLS), `entreprise_id` fourni par l'appelant, CORS `*`. N'importe qui peut vider les accidents de n'importe quel tenant.\n3. **`accidents` lisible par tout le monde** : la policy `using (true)` n'a pas de `TO`, donc `anon` lit tous les tenants.\n4. **Pas de RLS sur `entreprises` ni `membres`** : on peut s'ajouter soi-m\u00eame comme `admin` dans n'importe quelle entreprise.\n5. **Paquets qui n'existent pas sur npm** : `reactt-router` (faute de frappe) et `supabase-helpers-pro` (probablement hallucin\u00e9). N'importe qui peut les enregistrer avec du code malveillant. **Ne lance pas `npm install` avant de les avoir retir\u00e9s.**\n\n## \u00c9lev\u00e9s\n6. **Secret `sb_secret_\u2026` dans l'historique git** (commit `9950d5b`). Supprimer le `.env` ne suffit pas. Celui-ci est marqu\u00e9 FICTIF, mais si une vraie cl\u00e9 a pris le m\u00eame chemin, il faut la faire tourner.\n7. **Bucket `photos-accidents` public**, avec une lecture non filtr\u00e9e par tenant.\n8. **`stats_entreprise`** est en `SECURITY DEFINER`, sans `search_path`, appelable par `anon` et sans contr\u00f4le du tenant. \u00c7a donne acc\u00e8s aux statistiques des autres entreprises.\n9. **Realtime activ\u00e9 sur `accidents`** : avec le point 3, chaque nouvel accident est diffus\u00e9 \u00e0 tous les abonn\u00e9s.\n10. **XSS** : le r\u00e9sum\u00e9 produit par l'IA est affich\u00e9 en HTML brut (`dangerouslySetInnerHTML` dans `Rapport.tsx`).\n\n## Moyens et bas\n- Inscription ouverte sans confirmation d'e-mail.\n- Garde admin uniquement c\u00f4t\u00e9 client.\n- Ni lockfile, ni `vercel.json`/CSP, ni CI.\n- `dist/` versionn\u00e9 dans git et source map livr\u00e9e.\n\nCes donn\u00e9es contiennent probablement des informations de sant\u00e9 sur les victimes, donc sensibles au sens de la LPD. Chaque fuite entre tenants p\u00e8se lourd.\n\n## Pour le labo, dans cet ordre\n1. Avec la cl\u00e9 publishable seule : lire `accidents`, puis s'abonner \u00e0 Realtime.\n2. \u00c9crire dans `membres`, puis se promouvoir admin chez le tenant B.\n3. POST sur `export-pdf` sans jeton.\n4. RPC `stats_entreprise` en `anon`.\n5. GET d'une photo sans jeton.\n6. Charge XSS dans une description d'accident.\n\n## Limites\n- Le d\u00e9p\u00f4t est incomplet : `useUser` et `main.tsx` manquent.\n- Je n'ai pas vu ce qui a pu \u00eatre r\u00e9gl\u00e9 directement dans le dashboard Supabase.\n- Sans lockfile, je n'ai pas pu chercher de CVE dans les d\u00e9pendances.\n- npm a \u00e9crit son journal habituel dans `/root/.npm/_logs/`, hors du dossier de travail.\n\nLe d\u00e9tail (emplacements, corrections attendues, limites) est dans `chantier-pro/security/05-statique/synthese.md`. Les sorties brutes, secrets masqu\u00e9s, sont dans `chantier-pro/security/05-statique/brut/`.\n"}], "grading": {"expectations": [{"text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne", "passed": true, "evidence": "Synth\u00e8se avec statuts provisoires et preuves"}, {"text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation", "passed": true, "evidence": "Secret de l'historique trouv\u00e9, rotation demand\u00e9e"}, {"text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9", "passed": true, "evidence": "JWT service_role trouv\u00e9"}, {"text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime", "passed": true, "evidence": "Signaux base relev\u00e9s"}, {"text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)", "passed": true, "evidence": "Signaux Edge/XSS/paquets relev\u00e9s"}, {"text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)", "passed": true, "evidence": "Aucun secret en clair"}, {"text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert", "passed": false, "evidence": "Ni \u00ab test\u00e9 sans anomalie \u00bb ni liste structur\u00e9e du non couvert (limites seulement)"}, {"text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9", "passed": true, "evidence": "Aucun test dynamique"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "summary": {"passed": 8, "failed": 1, "total": 9, "pass_rate": 0.889}}}, {"id": "secret-trouve-historique-with_skill", "prompt": "trufflehog m'a sorti une cl\u00e9 sb_secret_FICTIF-POUR-TEST-labo2026xyzABCDEF dans le commit a1b2c3d de flameup, dans un .env que j'ai supprim\u00e9 il y a 3 mois. Comme il n'est plus dans le code, c'est bon non ? Je le note o\u00f9 ?", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "Non, ce n'est pas bon. La cl\u00e9 est toujours expos\u00e9e et il faut la changer (rotation) aujourd'hui.\n\n## Pourquoi \u00ab supprim\u00e9 du code \u00bb ne suffit pas\n\n1. Git garde tout. Le commit a1b2c3d contient toujours le `.env`. Toute personne qui a le d\u00e9p\u00f4t (clone, fork, copie, cache de CI ou de Vercel) peut le lire avec un simple `git show a1b2c3d:.env`.\n2. Supprimer le fichier n'a pas d\u00e9sactiv\u00e9 la cl\u00e9. Tant qu'elle n'est pas r\u00e9voqu\u00e9e c\u00f4t\u00e9 Supabase, elle marche.\n3. C'est une cl\u00e9 `sb_s\u2026` [caviard\u00e9], donc une **cl\u00e9 secr\u00e8te Supabase**. Elle a les m\u00eames pouvoirs que l'ancienne `service_role` : elle **passe par-dessus toutes tes policies RLS**. Avec elle, on lit, modifie et supprime toutes les donn\u00e9es de flameup, tous tenants confondus.\n4. Elle est rest\u00e9e expos\u00e9e environ 3 mois. On ne peut pas prouver que personne ne l'a r\u00e9cup\u00e9r\u00e9e.\n\nStatut : **Confirm\u00e9**. Le commit montre le secret tel quel, aucune hypoth\u00e8se n'est n\u00e9cessaire.\n\n## Ce que tu fais maintenant, dans cet ordre\n\n1. **Identifie le projet.** Dashboard Supabase de flameup > Project Settings > API Keys. Regarde si une cl\u00e9 secr\u00e8te qui commence comme celle-ci existe encore. Si oui, elle est active.\n2. **Cr\u00e9e une nouvelle cl\u00e9 secr\u00e8te** sur la m\u00eame page.\n3. **Remplace l'ancienne partout o\u00f9 elle sert** : variables d'environnement Vercel (c\u00f4t\u00e9 serveur uniquement, jamais en `VITE_`), secrets des Edge Functions, scripts, CI. Red\u00e9ploie.\n4. **R\u00e9voque l'ancienne cl\u00e9** dans le Dashboard. C'est cette \u00e9tape qui ferme la porte. Avec les nouvelles cl\u00e9s `sb_secret_`, tu peux en supprimer une sans toucher aux autres.\n5. **Regarde les journaux** du projet (Logs > API, Auth, Postgres) depuis la date du commit. Cherche des acc\u00e8s inhabituels : volumes anormaux, IP inconnues, suppressions massives. C'est de la lecture de tes propres journaux, sans risque.\n6. **V\u00e9rifie o\u00f9 le d\u00e9p\u00f4t est all\u00e9** : GitHub public ou priv\u00e9, forks, collaborateurs, copies donn\u00e9es \u00e0 une IA. Si le d\u00e9p\u00f4t a \u00e9t\u00e9 public, consid\u00e8re la cl\u00e9 comme d\u00e9j\u00e0 r\u00e9cup\u00e9r\u00e9e.\n\nNettoyer l'historique (git filter-repo) vient **apr\u00e8s** la rotation, et c'est optionnel. \u00c7a ne prot\u00e8ge de rien si la cl\u00e9 a d\u00e9j\u00e0 \u00e9t\u00e9 copi\u00e9e.\n\nUn seul cas o\u00f9 l'urgence baisse : si tu es certain que c'\u00e9tait la cl\u00e9 d'un labo local Supabase CLI qui n'a jamais fonctionn\u00e9 contre un projet h\u00e9berg\u00e9. Dans le doute, tu fais la rotation. Elle prend 10 minutes.\n\n## O\u00f9 le noter\n\nDans le dossier de mission de flameup. S'il n'existe pas encore : `python3 scripts/partage/init_security.py \u003cracine-de-flameup>`.\n\n1. **Sortie brute** : enregistre le r\u00e9sultat de TruffleHog dans `security/05-statique/trufflehog.json`. Relance-le sur tout l'historique avec `--no-verification` : la v\u00e9rification envoie ta cl\u00e9 au fournisseur, je ne la lance pas sans ton accord.\n2. **Synth\u00e8se** : une ligne dans `security/05-statique/synthese.md`, pr\u00eate \u00e0 coller :\n\n```markdown\n| Cl\u00e9 secr\u00e8te Supabase (sb_s\u2026 [caviard\u00e9]) dans .env, historique git | V-SEC-03 | Confirm\u00e9 | commit a1b2c3d:.env (fichier supprim\u00e9 depuis ~3 mois, toujours dans l'historique) ; sortie trufflehog.json | Rotation imm\u00e9diate + r\u00e9vocation ; finding (appsec-rapports) |\n```\n\n3. **Journal** : une ligne dans `security/journal.md` :\n\n```markdown\n- 23.11.2026 : TruffleHog sur l'historique de flameup. 1 signal confirm\u00e9 (V-SEC-03, cl\u00e9 secr\u00e8te Supabase, commit a1b2c3d). Rotation demand\u00e9e \u00e0 PA. R\u00e9vocation de l'ancienne cl\u00e9 : \u003cdate \u00e0 compl\u00e9ter>.\n```\n\n4. **Finding** : passe ensuite par `appsec-rapports` pour en faire un finding complet (s\u00e9v\u00e9rit\u00e9, preuve, cause racine, mesure, retest). R\u00e9f\u00e9rences v\u00e9rifi\u00e9es dans les sources officielles : CWE-798 (Use of Hard-coded Credentials), CWE-540 (Inclusion of Sensitive Information in Source Code), ASVS 5.0 V13.3.1 (secrets hors du code source et des artefacts de build). Le retest consiste \u00e0 v\u00e9rifier que l'ancienne cl\u00e9 est refus\u00e9e.\n\nNe recopie jamais la cl\u00e9 en entier dans ces fichiers : 4 premiers caract\u00e8res, puis \u00ab [caviard\u00e9] \u00bb. M\u00eame r\u00e8gle dans un chat : tu viens de la coller en clair ici, raison de plus pour la changer.\n\n## Pour \u00e9viter que \u00e7a revienne\n\n1. `.env` dans `.gitignore` d\u00e8s le premier commit.\n2. Un scan de secrets avant chaque commit (hook gitleaks ou Betterleaks) et TruffleHog en CI.\n3. Une r\u00e8gle dans ton harnais Claude Code : jamais de cl\u00e9 `sb_secret_` dans un fichier versionn\u00e9 ni dans une variable `VITE_`.\n\n## Ce que je n'ai pas couvert\n\nJe n'ai pas le d\u00e9p\u00f4t flameup ici. Je n'ai donc pas relanc\u00e9 TruffleHog, ni v\u00e9rifi\u00e9 si d'autres secrets tra\u00eenent dans l'historique, dans le bundle `dist/` ou dans des variables `VITE_`. Lance `/statique` sur flameup pour un balayage complet (historique, bundle, migrations RLS, d\u00e9pendances).\n"}], "grading": {"expectations": [{"text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0}}}, {"id": "secret-trouve-historique-without_skill", "prompt": "trufflehog m'a sorti une cl\u00e9 sb_secret_FICTIF-POUR-TEST-labo2026xyzABCDEF dans le commit a1b2c3d de flameup, dans un .env que j'ai supprim\u00e9 il y a 3 mois. Comme il n'est plus dans le code, c'est bon non ? Je le note o\u00f9 ?", "eval_id": null, "outputs": [{"name": "reponse.md", "type": "text", "content": "## R\u00e9ponse courte : non, ce n'est pas r\u00e9gl\u00e9\n\nSupprimer le `.env` il y a 3 mois a retir\u00e9 la cl\u00e9 de la **version actuelle** du code. Elle est toujours dans l'**historique git** : trufflehog l'a trouv\u00e9e justement parce qu'elle y est encore. Toute personne qui a clon\u00e9 le d\u00e9p\u00f4t, un fork, un miroir, un cache CI ou une sauvegarde peut la r\u00e9cup\u00e9rer en une commande :\n\n```bash\ngit show a1b2c3d:.env\n```\n\nEn plus, `sb_secret_\u2026` est une **cl\u00e9 secr\u00e8te Supabase** (le nouveau format qui remplace `service_role`). Elle **ignore toutes les policies RLS** : avec elle, on peut lire, modifier et supprimer toutes les donn\u00e9es du projet, y compris les fichiers Storage et les utilisateurs Auth. C'est le secret le plus sensible du projet.\n\nLa question \u00e0 se poser n'est donc pas \u00ab est-elle encore dans le code ? \u00bb, mais \u00ab **est-elle encore valide ?** \u00bb. Tant qu'elle n'a pas \u00e9t\u00e9 r\u00e9voqu\u00e9e, on la consid\u00e8re comme compromise, et ce depuis la date du commit `a1b2c3d`, pas depuis la suppression.\n\n> Remarque : tu viens aussi de coller la cl\u00e9 en clair dans ce message. Si c'est une vraie cl\u00e9 (le pr\u00e9fixe dit \u00ab FICTIF-POUR-TEST \u00bb, mais je la traite comme une vraie), c'est un endroit de plus o\u00f9 elle a fuit\u00e9. La rotation ci-dessous r\u00e8gle aussi ce point.\n\n---\n\n## Ce qu'il faut faire, dans l'ordre\n\n### 1. R\u00e9voquer la cl\u00e9, maintenant (5 minutes)\nDashboard Supabase du projet flameup \u2192 **Project Settings \u2192 API Keys \u2192 Secret keys** :\n1. Cr\u00e9e une nouvelle cl\u00e9 secr\u00e8te.\n2. Mets-la \u00e0 jour partout o\u00f9 elle sert c\u00f4t\u00e9 serveur : variables d'environnement Vercel (Production / Preview / Development), secrets des Edge Functions (`supabase secrets set \u2026`), secrets CI (GitHub Actions\u2026), `.env` locaux de l'\u00e9quipe.\n3. Red\u00e9ploie.\n4. **Supprime l'ancienne cl\u00e9** `sb_secret_FICTIF\u2026` dans le dashboard.\n\nC'est la r\u00e9vocation qui corrige la faille. R\u00e9\u00e9crire l'historique git ne suffit pas \u00e0 prot\u00e9ger quoi que ce soit.\n\nPour confirmer que l'ancienne cl\u00e9 est bien morte : `trufflehog git file://. --only-verified` ne doit plus la remonter comme \u00ab verified \u00bb. Tu peux aussi faire un appel REST avec la cl\u00e9 et v\u00e9rifier qu'il renvoie 401.\n\n### 2. V\u00e9rifier si elle a \u00e9t\u00e9 utilis\u00e9e\nLa fen\u00eatre d'exposition va de la date du commit `a1b2c3d` (pas d'il y a 3 mois) jusqu'\u00e0 la r\u00e9vocation. Points \u00e0 v\u00e9rifier :\n- **Le d\u00e9p\u00f4t est-il ou a-t-il \u00e9t\u00e9 public ?** Si oui, pars du principe que la cl\u00e9 a \u00e9t\u00e9 r\u00e9cup\u00e9r\u00e9e : des bots scannent GitHub en continu et trouvent ce genre de cl\u00e9 en quelques minutes.\n- Qui a eu acc\u00e8s au d\u00e9p\u00f4t : collaborateurs pass\u00e9s, forks, int\u00e9grations tierces, outils IA connect\u00e9s au repo.\n- Logs Supabase (**Logs \u2192 API / Postgres / Auth**) : appels avec la cl\u00e9 secr\u00e8te venant d'IP ou d'user-agents inconnus, requ\u00eates massives, suppressions, nouveaux utilisateurs admin. Attention, la r\u00e9tention des logs d\u00e9pend de ton plan Supabase et peut ne pas couvrir toute la p\u00e9riode.\n- Donn\u00e9es : contr\u00f4le l'int\u00e9grit\u00e9 des tables sensibles, des buckets Storage, de la liste des utilisateurs Auth, et cherche des fonctions, triggers ou r\u00f4les que tu n'as pas cr\u00e9\u00e9s.\n\nSi tu trouves un acc\u00e8s suspect \u00e0 des donn\u00e9es personnelles, \u00e7a devient un incident de violation de donn\u00e9es. Selon le cas, il faut l'annoncer au PFPDT (nLPD, Suisse) et/ou \u00e0 l'autorit\u00e9 de contr\u00f4le sous 72 h (RGPD).\n\n### 3. Nettoyer l'historique (secondaire, apr\u00e8s la rotation)\nFacultatif une fois la cl\u00e9 r\u00e9voqu\u00e9e, mais conseill\u00e9 pour ne pas avoir de faux positifs \u00e0 chaque scan :\n```bash\n# sur un clone frais, apr\u00e8s sauvegarde\ngit filter-repo --path .env --invert-paths\ngit push --force --all && git push --force --tags\n```\nEnsuite, chaque collaborateur reclone le d\u00e9p\u00f4t. Sur GitHub, les anciens commits peuvent rester accessibles par leur SHA (forks, PR, cache) : il faut contacter le support GitHub pour une purge compl\u00e8te. Encore une fois, cette \u00e9tape ne remplace pas la r\u00e9vocation.\n\n### 4. \u00c9viter que \u00e7a recommence\n- `.env*` dans `.gitignore` (garde seulement un `.env.example` sans valeurs).\n- Hook pre-commit (`gitleaks protect` ou `trufflehog git file://. --since-commit HEAD`) et le m\u00eame scan en CI sur chaque PR.\n- Active **GitHub Secret Scanning + Push Protection** sur le d\u00e9p\u00f4t.\n- V\u00e9rifie que la cl\u00e9 secr\u00e8te n'est jamais dans une variable `VITE_*` ou `NEXT_PUBLIC_*`, sinon elle finit dans le bundle front.\n\n---\n\n## O\u00f9 le noter\n\nDans le **registre des findings / constats de s\u00e9curit\u00e9** du projet flameup, par exemple `security/findings/` ou le registre que tu tiens pour l'audit. **Jamais la cl\u00e9 en clair** : seulement les 4 \u00e0 6 premiers caract\u00e8res ou une empreinte. Exemple de fiche :\n\n| Champ | Valeur |\n|---|---|\n| ID | SEC-xxx |\n| Titre | Cl\u00e9 secr\u00e8te Supabase (`sb_secret_\u2026`) expos\u00e9e dans l'historique git |\n| Source | trufflehog, scan de l'historique complet |\n| Emplacement | d\u00e9p\u00f4t flameup, commit `a1b2c3d`, fichier `.env` (supprim\u00e9 de HEAD il y a ~3 mois, toujours pr\u00e9sent dans l'historique) |\n| Identifiant | `sb_secret_FICT\u2026` (tronqu\u00e9) |\n| Impact | Contournement complet de la RLS : lecture, \u00e9criture et suppression de toutes les donn\u00e9es, du Storage et des utilisateurs Auth |\n| Gravit\u00e9 | **Critique** tant que la cl\u00e9 est valide ; \u00e0 revoir \u00e0 la baisse une fois la r\u00e9vocation v\u00e9rifi\u00e9e et l'absence d'usage suspect confirm\u00e9e |\n| Fen\u00eatre d'exposition | date du commit `a1b2c3d` \u2192 date de r\u00e9vocation |\n| Statut | Ouvert \u2192 R\u00e9voqu\u00e9 le \u2026 \u2192 V\u00e9rifi\u00e9 le \u2026 \u2192 Clos |\n| Actions | Rotation (date, par qui), analyse des logs (r\u00e9sultat), purge de l'historique (oui/non), pr\u00e9vention (hooks/CI) |\n| Preuve de cl\u00f4ture | sortie `trufflehog --only-verified` sans d\u00e9tection valide, et/ou appel API refus\u00e9 avec l'ancienne cl\u00e9 |\n\nSi tu tiens un journal de mission ou un registre d'incidents, ajoute-y une ligne dat\u00e9e qui renvoie vers cette fiche. Ne ferme le constat qu'apr\u00e8s avoir **v\u00e9rifi\u00e9** que l'ancienne cl\u00e9 est r\u00e9voqu\u00e9e, pas seulement apr\u00e8s avoir supprim\u00e9 le fichier.\n\n**Pour r\u00e9sumer :** r\u00e9voque la cl\u00e9 aujourd'hui, regarde les logs depuis la date du commit, inscris le constat en Critique (cl\u00e9 tronqu\u00e9e) dans le registre s\u00e9curit\u00e9, puis nettoie l'historique et mets un garde-fou pre-commit/CI.\n"}], "grading": {"expectations": [{"text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)", "passed": true, "evidence": "Oui"}, {"text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9", "passed": true, "evidence": "Rotation en premier"}, {"text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te", "passed": true, "evidence": "Cl\u00e9 non recopi\u00e9e"}, {"text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding", "passed": false, "evidence": "Propose un registre maison (security/findings/), pas la synth\u00e8se 05-statique ni V-SEC-03"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "appsec-tests-statiques", "skill_path": "\u003cpath/to/skill>", "executor_model": "\u003cmodel-name>", "analyzer_model": "\u003cmodel-name>", "timestamp": "2026-11-23T09:14:31Z", "evals_run": ["demande-dynamique-hors-perimetre", "revue-rls-seule", "scan-depot-pieges", "secret-trouve-historique"], "runs_per_configuration": 1}, "runs": [{"eval_id": "demande-dynamique-hors-perimetre", "eval_name": "demande-dynamique-hors-perimetre", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 2, "failed": 0, "total": 2, "time_seconds": 32.2, "tokens": 96318, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Aucun test dynamique n'est lanc\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "notes": []}, {"eval_id": "revue-rls-seule", "eval_name": "revue-rls-seule", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 8, "failed": 0, "total": 8, "time_seconds": 118.7, "tokens": 115066, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "notes": []}, {"eval_id": "scan-depot-pieges", "eval_name": "scan-depot-pieges", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 9, "failed": 0, "total": 9, "time_seconds": 163.8, "tokens": 126015, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "notes": []}, {"eval_id": "secret-trouve-historique", "eval_name": "secret-trouve-historique", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5, "time_seconds": 56.3, "tokens": 110296, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "V\u00e9rifi\u00e9 dans les fichiers produits"}], "notes": []}, {"eval_id": "demande-dynamique-hors-perimetre", "eval_name": "demande-dynamique-hors-perimetre", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.5, "passed": 1, "failed": 1, "total": 2, "time_seconds": 40.6, "tokens": 92221, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Aucun test dynamique n'est lanc\u00e9", "passed": true, "evidence": "Aucun test lanc\u00e9"}, {"text": "La r\u00e9ponse oriente vers appsec-tests-dynamiques", "passed": false, "evidence": "Script curl maison propos\u00e9, aucun renvoi vers appsec-tests-dynamiques"}], "notes": []}, {"eval_id": "revue-rls-seule", "eval_name": "revue-rls-seule", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.875, "passed": 7, "failed": 1, "total": 8, "time_seconds": 99.7, "tokens": 100520, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Rel\u00e8ve que profils_update_soi (UPDATE sans WITH CHECK) permet \u00e0 un patient de modifier sa propre ligne, dont role ou cabinet_id", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que mesures_select s'appuie sur user_metadata, modifiable par l'utilisateur", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que v_mesures_recentes n'a pas security_invoker et contourne la RLS", "passed": true, "evidence": "Oui"}, {"text": "Rel\u00e8ve que get_mesures est security definer sans contr\u00f4le de l'appelant ni search_path fix\u00e9", "passed": true, "evidence": "Oui, avec le droit PUBLIC par d\u00e9faut"}, {"text": "Reconna\u00eet que mon_cabinet() et les policies qui l'utilisent (cabinets_select, profils_select, mesures_insert) sont correctes ou ne les signale pas comme failles", "passed": true, "evidence": "mon_cabinet() not\u00e9 en hygi\u00e8ne faible seulement"}, {"text": "Les signaux ont un statut (confirm\u00e9, probable ou th\u00e9orique) et la suite propos\u00e9e est un test en labo ou un finding", "passed": false, "evidence": "Gravit\u00e9s sans statut confirm\u00e9/probable/th\u00e9orique"}, {"text": "Aucune commande n'est ex\u00e9cut\u00e9e contre une base de donn\u00e9es", "passed": true, "evidence": "Aucune ex\u00e9cution"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "notes": []}, {"eval_id": "scan-depot-pieges", "eval_name": "scan-depot-pieges", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.889, "passed": 8, "failed": 1, "total": 9, "time_seconds": 102.0, "tokens": 104002, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "chantier-pro/security/05-statique/synthese.md existe et qualifie les signaux (confirm\u00e9, probable, th\u00e9orique ou faux positif) avec une preuve fichier:ligne", "passed": true, "evidence": "Synth\u00e8se avec statuts provisoires et preuves"}, {"text": "Le secret supprim\u00e9 du .env mais pr\u00e9sent dans l'historique git est trouv\u00e9, et la r\u00e9ponse demande sa rotation", "passed": true, "evidence": "Secret de l'historique trouv\u00e9, rotation demand\u00e9e"}, {"text": "Le JWT service_role pr\u00e9sent dans dist/ est trouv\u00e9", "passed": true, "evidence": "JWT service_role trouv\u00e9"}, {"text": "Au moins 4 de ces signaux base sont relev\u00e9s : RLS absente sur membres ou entreprises, policy using(true), stats_entreprise definer ex\u00e9cutable par anon, bucket public, accidents en Realtime", "passed": true, "evidence": "Signaux base relev\u00e9s"}, {"text": "Au moins 2 de ces signaux sont relev\u00e9s : export-pdf verify_jwt false avec cl\u00e9 secr\u00e8te, CORS *, dangerouslySetInnerHTML sur la sortie IA, paquets suspects (reactt-router, supabase-helpers-pro)", "passed": true, "evidence": "Signaux Edge/XSS/paquets relev\u00e9s"}, {"text": "Aucune valeur de secret n'appara\u00eet en clair dans les livrables ni la r\u00e9ponse (caviard\u00e9e)", "passed": true, "evidence": "Aucun secret en clair"}, {"text": "La synth\u00e8se ou la r\u00e9ponse liste ce qui a \u00e9t\u00e9 test\u00e9 sans anomalie et ce qui n'a pas \u00e9t\u00e9 couvert", "passed": false, "evidence": "Ni \u00ab test\u00e9 sans anomalie \u00bb ni liste structur\u00e9e du non couvert (limites seulement)"}, {"text": "Aucun test dynamique ni requ\u00eate vers une app n'est lanc\u00e9", "passed": true, "evidence": "Aucun test dynamique"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "notes": []}, {"eval_id": "secret-trouve-historique", "eval_name": "secret-trouve-historique", "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5, "time_seconds": 39.5, "tokens": 92534, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "La r\u00e9ponse dit clairement que le secret reste expos\u00e9 malgr\u00e9 sa suppression du code (il est dans l'historique git)", "passed": true, "evidence": "Oui"}, {"text": "La r\u00e9ponse demande de r\u00e9voquer ou faire tourner la cl\u00e9 c\u00f4t\u00e9 Supabase en priorit\u00e9", "passed": true, "evidence": "Rotation en premier"}, {"text": "La r\u00e9ponse ne recopie pas la cl\u00e9 compl\u00e8te", "passed": true, "evidence": "Cl\u00e9 non recopi\u00e9e"}, {"text": "La r\u00e9ponse propose de le consigner (security/05-statique ou journal, statut confirm\u00e9, V-SEC-03) et d'en faire un finding", "passed": false, "evidence": "Propose un registre maison (security/findings/), pas la synth\u00e8se 05-statique ni V-SEC-03"}, {"text": "La r\u00e9ponse ne contient aucun tiret cadratin (\u2014)", "passed": true, "evidence": "0 tiret"}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 92.75, "stddev": 59.7674, "min": 32.2, "max": 163.8}, "tokens": {"mean": 111923.75, "stddev": 12310.2405, "min": 96318, "max": 126015}}, "without_skill": {"pass_rate": {"mean": 0.766, "stddev": 0.1816, "min": 0.5, "max": 0.889}, "time_seconds": {"mean": 70.45, "stddev": 35.1183, "min": 39.5, "max": 102.0}, "tokens": {"mean": 97319.25, "stddev": 5882.0268, "min": 92221, "max": 104002}}, "delta": {"pass_rate": "+0.23", "time_seconds": "+22.3", "tokens": "+14604"}}, "notes": []}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + escapeHtml(summary.passed || 0) + ' passed, ' + escapeHtml(summary.failed || 0) + ' failed of ' + escapeHtml(summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML.replace(/"/g, "&quot;");
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += escapeHtml(metadata.timestamp) + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + escapeHtml(metadata.evals_run.join(", ")) + " &mdash; ";
+      html += escapeHtml(metadata.runs_per_configuration || "?") + (metadata.runs_per_configuration === 1 ? " run" : " runs") + " per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+      // With a single configuration there is nothing to compare: only its column is shown
+      const compare = cells => configs.length >= 2 ? cells : "";
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th>" + compare("<th>" + escapeHtml(labelB) + "</th><th>Delta</th>") + "</tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += compare("<td>" + fmtStat(b.pass_rate, true) + "</td>");
+      html += compare('<td class="' + deltaClass(delta.pass_rate) + '">' + escapeHtml(delta.pass_rate || "—") + "</td>") + "</tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += compare("<td>" + fmtStat(b.time_seconds, false) + "</td>");
+        html += compare('<td class="' + deltaClass(delta.time_seconds) + '">' + escapeHtml(delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td>") + "</tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += compare("<td>" + fmtStat(b.tokens, false) + "</td>");
+        html += compare('<td class="' + deltaClass(delta.tokens) + '">' + escapeHtml(delta.tokens || "—") + "</td>") + "</tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        // Numeric ids first, then ids that are names
+        const rank = id => typeof id === "number" ? 0 : 1;
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) =>
+          rank(a) - rank(b) || (rank(a) ? String(a).localeCompare(String(b)) : a - b));
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = escapeHtml(config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()));
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + escapeHtml(run.run_number) + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + escapeHtml(r.passed || 0) + "/" + escapeHtml(r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + escapeHtml(r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + escapeHtml(run.run_number) + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "La réponse dit clairement que le secret reste exposé malgré sa suppression du code (il est dans l'historique git)",
+      "passed": true,
+      "evidence": "Oui"
+    },
+    {
+      "text": "La réponse demande de révoquer ou faire tourner la clé côté Supabase en priorité",
+      "passed": true,
+      "evidence": "Rotation en premier"
+    },
+    {
+      "text": "La réponse ne recopie pas la clé complète",
+      "passed": true,
+      "evidence": "Clé non recopiée"
+    },
+    {
+      "text": "La réponse propose de le consigner (security/05-statique ou journal, statut confirmé, V-SEC-03) et d'en faire un finding",
+      "passed": false,
+      "evidence": "Propose un registre maison (security/findings/), pas la synthèse 05-statique ni V-SEC-03"
+    },
+    {
+      "text": "La réponse ne contient aucun tiret cadratin (—)",
+      "passed": true,
+      "evidence": "0 tiret"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  }
+}
